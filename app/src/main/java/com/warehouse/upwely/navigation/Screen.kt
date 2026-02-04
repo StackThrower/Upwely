@@ -8,4 +8,5 @@ object Screen {
     const val ADD_WAREHOUSE = "add_warehouse"
     const val USER_PROFILE = "user_profile"
     const val EDIT_PROFILE = "edit_profile"
+    const val WAREHOUSE_PLANNING = "warehouse_planning"
 }

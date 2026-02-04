@@ -28,6 +28,7 @@ import com.warehouse.upwely.ui.theme.*
 fun WarehouseScreen(
     onPickupClick: () -> Unit = {},
     onReceivingClick: () -> Unit = {},
+    onPlanningClick: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -80,6 +81,7 @@ fun WarehouseScreen(
                         icon = Icons.Outlined.GridView,
                         title = "Warehouse Planning",
                         subtitle = "Layout & organization",
+                        onClick = onPlanningClick,
                     )
                 }
             }
