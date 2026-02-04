@@ -11,6 +11,7 @@ import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Checklist
 import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.outlined.Inventory2
+import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,6 +29,7 @@ import com.warehouse.upwely.ui.theme.*
 fun WarehouseScreen(
     onPickupClick: () -> Unit = {},
     onReceivingClick: () -> Unit = {},
+    onOrdersClick: () -> Unit = {},
     onPlanningClick: () -> Unit = {},
 ) {
     Column(
@@ -76,6 +78,12 @@ fun WarehouseScreen(
                         title = "Receiving",
                         subtitle = "8 items to process",
                         onClick = onReceivingClick,
+                    )
+                    OperationItem(
+                        icon = Icons.Outlined.ShoppingCart,
+                        title = "Orders",
+                        subtitle = "5 active orders",
+                        onClick = onOrdersClick,
                     )
                     OperationItem(
                         icon = Icons.Outlined.GridView,

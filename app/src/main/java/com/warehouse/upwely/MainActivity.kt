@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
                 val currentRoute = backStackEntry?.destination?.route
 
                 val showBottomBar = currentRoute in BottomNavItem.items.map { it.route } +
-                        listOf(Screen.PICKUP, Screen.RECEIVE, Screen.WAREHOUSE_PLANNING)
+                        listOf(Screen.PICKUP, Screen.RECEIVE, Screen.WAREHOUSE_PLANNING, Screen.ORDERS)
 
                 Scaffold(
                     containerColor = DarkBackground,
@@ -60,6 +60,7 @@ class MainActivity : ComponentActivity() {
                             WarehouseScreen(
                                 onPickupClick = { navController.navigate(Screen.PICKUP) },
                                 onReceivingClick = { navController.navigate(Screen.RECEIVE) },
+                                onOrdersClick = { navController.navigate(Screen.ORDERS) },
                                 onPlanningClick = { navController.navigate(Screen.WAREHOUSE_PLANNING) },
                             )
                         }
@@ -75,6 +76,11 @@ class MainActivity : ComponentActivity() {
                         // Sub-screens
                         composable(Screen.PICKUP) { PickupScreen() }
                         composable(Screen.RECEIVE) { ReceivingScreen() }
+                        composable(Screen.ORDERS) {
+                            OrdersScreen(
+                                onBack = { navController.popBackStack() },
+                            )
+                        }
                         composable(Screen.WAREHOUSE_PLANNING) {
                             WarehousePlanningScreen(
                                 onBack = { navController.popBackStack() },
@@ -135,7 +141,7 @@ fun BottomTabBar(navController: NavHostController) {
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            val warehouseChildRoutes = listOf(Screen.PICKUP, Screen.RECEIVE, Screen.WAREHOUSE_PLANNING)
+            val warehouseChildRoutes = listOf(Screen.PICKUP, Screen.RECEIVE, Screen.ORDERS, Screen.WAREHOUSE_PLANNING)
 
             BottomNavItem.items.forEach { item ->
                 val selected = currentRoute == item.route ||
