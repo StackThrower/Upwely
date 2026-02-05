@@ -1,0 +1,53 @@
+{
+  "orders": [
+    {
+      "id": "ORD-2401",
+      "supplier": "TechSupply UA",
+      "status": "new",
+      "items": [
+        { "id": "oi-001", "name": "Навушники Sony WH-1000XM5", "sku": "WH-4892", "quantity": 5, "shelfId": "rp1" },
+        { "id": "oi-002", "name": "USB-C Кабель 2м", "sku": "L8-1320", "quantity": 10, "shelfId": "rp5" },
+        { "id": "oi-003", "name": "Чохол Samsung Galaxy S24", "sku": "SG-2241", "quantity": 15, "shelfId": "rp3" }
+      ]
+    },
+    {
+      "id": "ORD-2402",
+      "supplier": "Нова Пошта Логістика",
+      "status": "new",
+      "items": [
+        { "id": "oi-004", "name": "MagSafe зарядка 15W", "sku": "M5-3391", "quantity": 8, "shelfId": "rp10" },
+        { "id": "oi-005", "name": "Миша Logitech MX Master", "sku": "L1-8923", "quantity": 6, "shelfId": "HHHH" },
+        { "id": "oi-006", "name": "Клавіатура Keychron K2", "sku": "K5-5567", "quantity": 4, "shelfId": "rp9" }
+      ]
+    },
+    {
+      "id": "ORD-2403",
+      "supplier": "ElectroHub",
+      "status": "new",
+      "items": [
+        { "id": "oi-007", "name": "Повербанк Anker 20000mAh", "sku": "AN-3201", "quantity": 20, "shelfId": "rp13" },
+        { "id": "oi-008", "name": "Samsung SSD 1TB", "sku": "S5-6910", "quantity": 12, "shelfId": "DDDD" },
+        { "id": "oi-009", "name": "Термопаста MX-4", "sku": "TP-1102", "quantity": 30, "shelfId": "rp11" },
+        { "id": "oi-010", "name": "DisplayPort кабель 3м", "sku": "DP-2201", "quantity": 10, "shelfId": "rp14" }
+      ]
+    },
+    {
+      "id": "ORD-2404",
+      "supplier": "GlobalParts Inc.",
+      "status": "new",
+      "items": [
+        { "id": "oi-011", "name": "Вебкамера Logitech C920", "sku": "WC-7721", "quantity": 3, "shelfId": "rp2" },
+        { "id": "oi-012", "name": "USB хаб 7 портів", "sku": "UH-4410", "quantity": 7, "shelfId": "rp6" }
+      ]
+    },
+    {
+      "id": "ORD-2405",
+      "supplier": "Компоненти.UA",
+      "status": "new",
+      "items": [
+        { "id": "oi-013", "name": "Ethernet кабель Cat6 5м", "sku": "EC-8833", "quantity": 15, "shelfId": "rp7" },
+        { "id": "oi-014", "name": "HDMI кабель 2м", "sku": "HD-5501", "quantity": 12, "shelfId": "rp4" }
+      ]
+    }
+  ]
+}

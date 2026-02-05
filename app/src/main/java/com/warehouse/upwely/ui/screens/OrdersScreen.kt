@@ -18,9 +18,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.warehouse.upwely.data.loadOrdersConfig
 import com.warehouse.upwely.ui.components.*
 import com.warehouse.upwely.ui.theme.*
 
@@ -38,24 +40,35 @@ private data class OrderItem(
     val status: OrderStatus,
 )
 
-private val orders = listOf(
-    OrderItem("ORD-2401", "TechSupply UA", 24, OrderStatus.DELIVERED),
-    OrderItem("ORD-2402", "Нова Пошта Логістика", 18, OrderStatus.IN_TRANSIT),
-    OrderItem("ORD-2403", "ElectroHub", 36, OrderStatus.PROCESSING),
-    OrderItem("ORD-2404", "GlobalParts Inc.", 12, OrderStatus.NEW),
-    OrderItem("ORD-2405", "Компоненти.UA", 8, OrderStatus.NEW),
-)
-
 @Composable
 fun OrdersScreen(
     onBack: () -> Unit = {},
     onOrderClick: () -> Unit = {},
+    onTakeToWork: (List<String>) -> Unit = {},
 ) {
+    val context = LocalContext.current
+    val ordersData = remember { loadOrdersConfig(context) }
+    val orders = remember(ordersData) {
+        ordersData.orders.map { config ->
+            OrderItem(
+                id = config.id,
+                supplier = config.supplier,
+                itemCount = config.items.size,
+                status = when (config.status) {
+                    "delivered" -> OrderStatus.DELIVERED
+                    "in_transit" -> OrderStatus.IN_TRANSIT
+                    "processing" -> OrderStatus.PROCESSING
+                    else -> OrderStatus.NEW
+                },
+            )
+        }
+    }
+
     var selectedFilter by remember { mutableIntStateOf(0) }
     var selectedIds by remember { mutableStateOf(setOf<String>()) }
     var inWorkIds by remember { mutableStateOf(setOf<String>()) }
 
-    val filteredOrders = remember(selectedFilter) {
+    val filteredOrders = remember(selectedFilter, orders) {
         when (selectedFilter) {
             1 -> orders.filter { it.status != OrderStatus.DELIVERED }
             2 -> orders.filter { it.status == OrderStatus.DELIVERED }
@@ -202,8 +215,7 @@ fun OrdersScreen(
                         .clip(RoundedCornerShape(8.dp))
                         .background(Cyan)
                         .clickable {
-                            inWorkIds = inWorkIds + selectedIds
-                            selectedIds = emptySet()
+                            onTakeToWork(selectedIds.toList())
                         }
                         .padding(horizontal = 20.dp, vertical = 12.dp),
                     contentAlignment = Alignment.Center,

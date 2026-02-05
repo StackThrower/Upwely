@@ -162,6 +162,9 @@ class MainActivity : ComponentActivity() {
                             OrdersScreen(
                                 onBack = { navController.popBackStack() },
                                 onOrderClick = { navController.navigate(Screen.RECEIVE) },
+                                onTakeToWork = { selectedIds ->
+                                    navController.navigate(Screen.placingMapRoute(selectedIds))
+                                },
                             )
                         }
                         composable(Screen.WAREHOUSE_PLANNING) {
@@ -221,6 +224,20 @@ class MainActivity : ComponentActivity() {
                             val shipmentIds = shipmentIdsString.split(",").filter { it.isNotBlank() }
                             PickingMapScreen(
                                 shipmentIds = shipmentIds,
+                                beaconViewModel = beaconViewModel,
+                                onFinished = { navController.popBackStack() },
+                            )
+                        }
+                        composable(
+                            route = Screen.PLACING_MAP,
+                            arguments = listOf(
+                                navArgument("orderIds") { type = NavType.StringType }
+                            ),
+                        ) { backStackEntry ->
+                            val orderIdsString = backStackEntry.arguments?.getString("orderIds") ?: ""
+                            val orderIds = orderIdsString.split(",").filter { it.isNotBlank() }
+                            PlacingMapScreen(
+                                orderIds = orderIds,
                                 beaconViewModel = beaconViewModel,
                                 onFinished = { navController.popBackStack() },
                             )
