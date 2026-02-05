@@ -1,0 +1,59 @@
+{
+  "shipments": [
+    {
+      "id": "SHP-3201",
+      "destination": "Київ, Нова Пошта #12",
+      "status": "pending",
+      "items": [
+        { "id": "item-001", "name": "Навушники Sony WH-1000XM5", "sku": "WH-4892", "quantity": 1, "shelfId": "rp1" },
+        { "id": "item-002", "name": "USB-C Кабель 2м", "sku": "L8-1320", "quantity": 3, "shelfId": "rp5" }
+      ]
+    },
+    {
+      "id": "SHP-3202",
+      "destination": "Львів, Укрпошта",
+      "status": "pending",
+      "items": [
+        { "id": "item-003", "name": "Чохол iPhone 15 Pro", "sku": "C3-9731", "quantity": 1, "shelfId": "HHHH" },
+        { "id": "item-004", "name": "MagSafe зарядка 15W", "sku": "M5-3391", "quantity": 2, "shelfId": "rp10" },
+        { "id": "item-005", "name": "Миша Logitech MX Master", "sku": "L1-8923", "quantity": 1, "shelfId": "rp3" }
+      ]
+    },
+    {
+      "id": "SHP-3203",
+      "destination": "Одеса, Meest Express",
+      "status": "pending",
+      "items": [
+        { "id": "item-006", "name": "Клавіатура Keychron K2", "sku": "K5-5567", "quantity": 1, "shelfId": "rp9" },
+        { "id": "item-007", "name": "Повербанк Anker 20000mAh", "sku": "AN-3201", "quantity": 4, "shelfId": "rp13" }
+      ]
+    },
+    {
+      "id": "SHP-3204",
+      "destination": "Харків, SAT",
+      "status": "pending",
+      "items": [
+        { "id": "item-008", "name": "Samsung SSD 1TB", "sku": "S5-6910", "quantity": 1, "shelfId": "DDDD" },
+        { "id": "item-009", "name": "DisplayPort кабель 3м", "sku": "DP-2201", "quantity": 2, "shelfId": "rp14" }
+      ]
+    },
+    {
+      "id": "SHP-3205",
+      "destination": "Дніпро, Нова Пошта #45",
+      "status": "pending",
+      "items": [
+        { "id": "item-010", "name": "Вебкамера Logitech C920", "sku": "WC-7721", "quantity": 1, "shelfId": "rp2" }
+      ]
+    },
+    {
+      "id": "SHP-3206",
+      "destination": "Запоріжжя, Justin",
+      "status": "pending",
+      "items": [
+        { "id": "item-011", "name": "USB хаб 7 портів", "sku": "UH-4410", "quantity": 1, "shelfId": "rp6" },
+        { "id": "item-012", "name": "Ethernet кабель Cat6 5м", "sku": "EC-8833", "quantity": 2, "shelfId": "rp7" },
+        { "id": "item-013", "name": "Термопаста MX-4", "sku": "TP-1102", "quantity": 1, "shelfId": "rp11" }
+      ]
+    }
+  ]
+}

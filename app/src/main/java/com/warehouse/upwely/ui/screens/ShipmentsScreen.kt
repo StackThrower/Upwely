@@ -16,9 +16,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.warehouse.upwely.data.loadShipmentsConfig
 import com.warehouse.upwely.ui.components.*
 import com.warehouse.upwely.ui.theme.*
 
@@ -36,22 +38,27 @@ private data class ShipmentItem(
     val status: ShipmentStatus,
 )
 
-private val shipments = listOf(
-    ShipmentItem("SHP-3201", "Київ, Нова Пошта #12", 18, ShipmentStatus.DELIVERED),
-    ShipmentItem("SHP-3202", "Львів, Укрпошта", 24, ShipmentStatus.SHIPPED),
-    ShipmentItem("SHP-3203", "Одеса, Meest Express", 12, ShipmentStatus.SHIPPED),
-    ShipmentItem("SHP-3204", "Харків, SAT", 36, ShipmentStatus.PACKING),
-    ShipmentItem("SHP-3205", "Дніпро, Нова Пошта #45", 8, ShipmentStatus.PENDING),
-    ShipmentItem("SHP-3206", "Запоріжжя, Justin", 15, ShipmentStatus.PENDING),
-)
-
 @Composable
 fun ShipmentsScreen(
     onBack: () -> Unit = {},
     onShipmentClick: () -> Unit = {},
+    onTakeToWork: (List<String>) -> Unit = {},
 ) {
+    val context = LocalContext.current
+    val shipmentsData = remember { loadShipmentsConfig(context) }
+    val shipments = remember(shipmentsData) {
+        shipmentsData.shipments.map { config ->
+            ShipmentItem(
+                id = config.id,
+                destination = config.destination,
+                itemCount = config.items.size,
+                status = ShipmentStatus.PENDING,
+            )
+        }
+    }
+
     var selectedTab by remember { mutableIntStateOf(0) }
-    val filteredShipments = remember(selectedTab) {
+    val filteredShipments = remember(selectedTab, shipments) {
         when (selectedTab) {
             1 -> shipments.filter { it.status == ShipmentStatus.PENDING || it.status == ShipmentStatus.PACKING }
             2 -> shipments.filter { it.status == ShipmentStatus.SHIPPED }
@@ -72,7 +79,7 @@ fun ShipmentsScreen(
         ) {
             ScreenHeader(
                 title = "Shipments",
-                subtitle = "6 відвантажень",
+                subtitle = "${shipments.size} відвантажень",
                 actionIcon = Icons.Outlined.LocalShipping,
             )
 
@@ -196,8 +203,7 @@ fun ShipmentsScreen(
                         .clip(RoundedCornerShape(8.dp))
                         .background(Cyan)
                         .clickable {
-                            inWorkIds = inWorkIds + selectedIds
-                            selectedIds = emptySet()
+                            onTakeToWork(selectedIds.toList())
                         }
                         .padding(horizontal = 20.dp, vertical = 12.dp),
                     contentAlignment = Alignment.Center,

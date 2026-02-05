@@ -32,10 +32,12 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.warehouse.upwely.navigation.BottomNavItem
 import com.warehouse.upwely.navigation.Screen
 import com.warehouse.upwely.ui.BeaconViewModel
@@ -171,6 +173,9 @@ class MainActivity : ComponentActivity() {
                             ShipmentsScreen(
                                 onBack = { navController.popBackStack() },
                                 onShipmentClick = { navController.navigate(Screen.PICKUP) },
+                                onTakeToWork = { selectedIds ->
+                                    navController.navigate(Screen.pickingMapRoute(selectedIds))
+                                },
                             )
                         }
                         composable(Screen.WAREHOUSE_SELECTION) {
@@ -204,6 +209,20 @@ class MainActivity : ComponentActivity() {
                             CalibrationScreen(
                                 beaconViewModel = beaconViewModel,
                                 onBack = { navController.popBackStack() },
+                            )
+                        }
+                        composable(
+                            route = Screen.PICKING_MAP,
+                            arguments = listOf(
+                                navArgument("shipmentIds") { type = NavType.StringType }
+                            ),
+                        ) { backStackEntry ->
+                            val shipmentIdsString = backStackEntry.arguments?.getString("shipmentIds") ?: ""
+                            val shipmentIds = shipmentIdsString.split(",").filter { it.isNotBlank() }
+                            PickingMapScreen(
+                                shipmentIds = shipmentIds,
+                                beaconViewModel = beaconViewModel,
+                                onFinished = { navController.popBackStack() },
                             )
                         }
                     }
