@@ -2,7 +2,10 @@ package com.warehouse.upwely.data
 
 import android.content.Context
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import org.json.JSONArray
 import org.json.JSONObject
+import java.io.File
 import java.io.IOException
 
 data class PlanRoom(
@@ -46,13 +49,100 @@ data class WarehousePlan(
     val sequences: List<PointSequence>,
 )
 
+private const val PLAN_FILE_NAME = "warehouse_plan.json"
+
 fun loadWarehousePlan(context: Context): WarehousePlan {
+    val file = File(context.filesDir, PLAN_FILE_NAME)
     val json = try {
-        context.assets.open("flat_plan.json").bufferedReader().use { it.readText() }
+        if (file.exists()) {
+            file.readText()
+        } else {
+            context.assets.open("flat_plan.json").bufferedReader().use { it.readText() }
+        }
     } catch (e: IOException) {
         return WarehousePlan(emptyList(), emptyList(), emptyList(), emptyList(), 30f, 22f, emptyList())
     }
     return parseWarehousePlan(json)
+}
+
+fun saveWarehousePlan(context: Context, plan: WarehousePlan) {
+    val json = serializeWarehousePlan(plan)
+    File(context.filesDir, PLAN_FILE_NAME).writeText(json)
+}
+
+fun serializeWarehousePlan(plan: WarehousePlan): String {
+    val obj = JSONObject()
+
+    obj.put("planWidthMeters", plan.widthMeters.toDouble())
+    obj.put("planHeightMeters", plan.heightMeters.toDouble())
+
+    obj.put("rooms", JSONArray().apply {
+        for (room in plan.rooms) {
+            put(JSONObject().apply {
+                put("name", room.name)
+                put("x", room.x.toDouble())
+                put("y", room.y.toDouble())
+                put("width", room.width.toDouble())
+                put("height", room.height.toDouble())
+                val argb = room.color.toArgb()
+                put("color", String.format("#%02X%02X%02X",
+                    (argb shr 16) and 0xFF,
+                    (argb shr 8) and 0xFF,
+                    argb and 0xFF))
+            })
+        }
+    })
+
+    obj.put("doors", JSONArray().apply {
+        for (door in plan.doors) {
+            put(JSONObject().apply {
+                put("id", door.id)
+                put("roomA", door.roomA)
+                put("roomB", door.roomB)
+                put("x", door.x.toDouble())
+                put("y", door.y.toDouble())
+            })
+        }
+    })
+
+    obj.put("random_points", JSONArray().apply {
+        for (shelf in plan.shelves) {
+            put(JSONObject().apply {
+                put("id", shelf.id)
+                put("x", shelf.x.toDouble())
+                put("y", shelf.y.toDouble())
+                put("room", shelf.room)
+                put("rect_x", shelf.rectX.toDouble())
+                put("rect_y", shelf.rectY.toDouble())
+                put("rect_width", shelf.rectWidth.toDouble())
+                put("rect_height", shelf.rectHeight.toDouble())
+                shelf.row?.let { put("row", it) }
+                shelf.cell?.let { put("cell", it) }
+            })
+        }
+    })
+
+    obj.put("beacon_positions", JSONArray().apply {
+        for (beacon in plan.beacons) {
+            put(JSONObject().apply {
+                put("id", beacon.id)
+                put("x", beacon.x.toDouble())
+                put("y", beacon.y.toDouble())
+            })
+        }
+    })
+
+    obj.put("random_point_sequences", JSONArray().apply {
+        for (seq in plan.sequences) {
+            put(JSONObject().apply {
+                put("sequence_id", seq.id)
+                put("point_ids", JSONArray(seq.pointIds))
+                put("delivery_ids", JSONArray(seq.deliveryIds))
+            })
+        }
+    })
+
+    return obj.toString(2)
 }
 
 fun parseWarehousePlan(json: String): WarehousePlan {
