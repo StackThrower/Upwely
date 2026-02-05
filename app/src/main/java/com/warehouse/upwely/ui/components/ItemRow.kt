@@ -1,6 +1,7 @@
 package com.warehouse.upwely.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -22,6 +23,7 @@ fun ItemRow(
     status: ItemStatus,
     title: String,
     subtitle: String,
+    onClick: (() -> Unit)? = null,
 ) {
     val (statusChar, statusColor) = when (status) {
         ItemStatus.DONE -> "✓" to Cyan
@@ -34,6 +36,7 @@ fun ItemRow(
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
             .background(ItemBackground)
+            .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
             .padding(horizontal = 16.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),

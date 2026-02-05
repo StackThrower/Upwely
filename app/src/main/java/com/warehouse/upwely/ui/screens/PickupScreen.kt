@@ -9,6 +9,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.QrCodeScanner
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,6 +39,10 @@ private val pickupItems = listOf(
 
 @Composable
 fun PickupScreen() {
+    val items = remember { mutableStateListOf(*pickupItems.toTypedArray()) }
+    val doneCount = items.count { it.status == ItemStatus.DONE }
+    val totalCount = items.size
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -57,7 +63,7 @@ fun PickupScreen() {
         ) {
             // Progress Section
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                SectionLabel(label = "PROGRESS", value = "3/8")
+                SectionLabel(label = "PROGRESS", value = "$doneCount/$totalCount")
 
                 // Progress bar
                 Box(
@@ -67,19 +73,21 @@ fun PickupScreen() {
                         .clip(RoundedCornerShape(4.dp))
                         .background(CardBackground),
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth(3f / 8f)
-                            .fillMaxHeight()
-                            .clip(RoundedCornerShape(4.dp))
-                            .background(Cyan),
-                    )
+                    if (doneCount > 0) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth(doneCount.toFloat() / totalCount)
+                                .fillMaxHeight()
+                                .clip(RoundedCornerShape(4.dp))
+                                .background(Cyan),
+                        )
+                    }
                 }
             }
 
             // Items List
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                SectionLabel(label = "ITEMS", value = "[3/8]")
+                SectionLabel(label = "ITEMS", value = "[$doneCount/$totalCount]")
 
                 Column(
                     modifier = Modifier
@@ -89,11 +97,19 @@ fun PickupScreen() {
                         .padding(4.dp),
                     verticalArrangement = Arrangement.spacedBy(2.dp),
                 ) {
-                    pickupItems.forEach { item ->
+                    items.forEachIndexed { index, item ->
                         ItemRow(
                             status = item.status,
                             title = item.name,
                             subtitle = item.sku,
+                            onClick = {
+                                val newStatus = if (item.status == ItemStatus.DONE) {
+                                    ItemStatus.PENDING
+                                } else {
+                                    ItemStatus.DONE
+                                }
+                                items[index] = item.copy(status = newStatus)
+                            },
                         )
                     }
                 }
