@@ -360,13 +360,6 @@ private fun OrderRow(
             }
         }
 
-        Text(
-            text = statusChar,
-            fontFamily = JetBrainsMonoFamily,
-            fontWeight = if (order.status == OrderStatus.DELIVERED || order.status == OrderStatus.IN_TRANSIT) FontWeight.Bold else FontWeight.Normal,
-            fontSize = 14.sp,
-            color = statusColor,
-        )
         Column(
             verticalArrangement = Arrangement.spacedBy(2.dp),
             modifier = Modifier.weight(1f),

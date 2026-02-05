@@ -354,13 +354,6 @@ private fun ShipmentRow(
             }
         }
 
-        Text(
-            text = statusChar,
-            fontFamily = JetBrainsMonoFamily,
-            fontWeight = if (shipment.status == ShipmentStatus.DELIVERED || shipment.status == ShipmentStatus.SHIPPED) FontWeight.Bold else FontWeight.Normal,
-            fontSize = 14.sp,
-            color = statusColor,
-        )
         Column(
             verticalArrangement = Arrangement.spacedBy(2.dp),
             modifier = Modifier.weight(1f),

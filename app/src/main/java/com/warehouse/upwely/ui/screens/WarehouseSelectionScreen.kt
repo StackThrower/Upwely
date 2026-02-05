@@ -134,7 +134,7 @@ fun WarehouseSelectionScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(72.dp)
+                            .height(74.dp)
                             .clip(RoundedCornerShape(12.dp))
                             .then(
                                 if (isSelected) Modifier
@@ -157,7 +157,7 @@ fun WarehouseSelectionScreen(
                                 tint = if (isSelected) Cyan else IconLight,
                                 modifier = Modifier.size(24.dp),
                             )
-                            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                            Column(verticalArrangement = Arrangement.spacedBy(0.dp)) {
                                 Text(
                                     text = warehouse.name,
                                     fontFamily = InterFamily,
