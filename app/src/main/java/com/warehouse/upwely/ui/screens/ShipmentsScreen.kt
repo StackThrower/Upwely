@@ -50,9 +50,18 @@ fun ShipmentsScreen(
     onBack: () -> Unit = {},
     onShipmentClick: () -> Unit = {},
 ) {
+    var selectedTab by remember { mutableIntStateOf(0) }
+    val filteredShipments = remember(selectedTab) {
+        when (selectedTab) {
+            1 -> shipments.filter { it.status == ShipmentStatus.PENDING || it.status == ShipmentStatus.PACKING }
+            2 -> shipments.filter { it.status == ShipmentStatus.SHIPPED }
+            3 -> shipments.filter { it.status == ShipmentStatus.DELIVERED }
+            else -> shipments
+        }
+    }
     var selectedIds by remember { mutableStateOf(setOf<String>()) }
     var inWorkIds by remember { mutableStateOf(setOf<String>()) }
-    val allIds = remember { shipments.map { it.id }.toSet() }
+    val allIds = remember(filteredShipments) { filteredShipments.map { it.id }.toSet() }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -74,7 +83,13 @@ fun ShipmentsScreen(
                 verticalArrangement = Arrangement.spacedBy(24.dp),
             ) {
                 // Segmented Control
-                ShipmentSegmentedControl()
+                ShipmentSegmentedControl(
+                    selected = selectedTab,
+                    onSelectedChange = {
+                        selectedTab = it
+                        selectedIds = emptySet()
+                    },
+                )
 
                 // Metrics Row
                 Row(
@@ -83,14 +98,14 @@ fun ShipmentsScreen(
                 ) {
                     ShipmentMetricCard(
                         label = "TOTAL",
-                        value = "6",
+                        value = "${filteredShipments.size}",
                         subtitle = "відвантажень",
                         highlight = false,
                         modifier = Modifier.weight(1f),
                     )
                     ShipmentMetricCard(
                         label = "SHIPPED",
-                        value = "3",
+                        value = "${filteredShipments.count { it.status == ShipmentStatus.SHIPPED }}",
                         subtitle = "в дорозі",
                         highlight = true,
                         modifier = Modifier.weight(1f),
@@ -106,7 +121,7 @@ fun ShipmentsScreen(
                     ) {
                         SectionLabel(
                             label = "SHIPMENTS",
-                            value = "[${shipments.count { it.status == ShipmentStatus.DELIVERED }}/${shipments.size}]",
+                            value = "[${filteredShipments.count { it.status == ShipmentStatus.DELIVERED }}/${filteredShipments.size}]",
                         )
                         Text(
                             text = if (selectedIds.size == allIds.size) "зняти все" else "вибрати все",
@@ -131,7 +146,7 @@ fun ShipmentsScreen(
                             .padding(4.dp),
                         verticalArrangement = Arrangement.spacedBy(2.dp),
                     ) {
-                        shipments.forEach { shipment ->
+                        filteredShipments.forEach { shipment ->
                             ShipmentRow(
                                 shipment = shipment,
                                 isSelected = shipment.id in selectedIds,
@@ -201,8 +216,10 @@ fun ShipmentsScreen(
 }
 
 @Composable
-private fun ShipmentSegmentedControl() {
-    var selected by remember { mutableIntStateOf(0) }
+private fun ShipmentSegmentedControl(
+    selected: Int,
+    onSelectedChange: (Int) -> Unit,
+) {
     val segments = listOf("all", "pending", "shipped", "delivered")
 
     Row(
@@ -223,7 +240,8 @@ private fun ShipmentSegmentedControl() {
                     .clip(RoundedCornerShape(6.dp))
                     .then(
                         if (isSelected) Modifier.background(Cyan) else Modifier
-                    ),
+                    )
+                    .clickable { onSelectedChange(index) },
                 contentAlignment = Alignment.Center,
             ) {
                 Text(

@@ -51,9 +51,26 @@ fun OrdersScreen(
     onBack: () -> Unit = {},
     onOrderClick: () -> Unit = {},
 ) {
+    var selectedFilter by remember { mutableIntStateOf(0) }
     var selectedIds by remember { mutableStateOf(setOf<String>()) }
     var inWorkIds by remember { mutableStateOf(setOf<String>()) }
-    val allIds = remember { orders.map { it.id }.toSet() }
+
+    val filteredOrders = remember(selectedFilter) {
+        when (selectedFilter) {
+            1 -> orders.filter { it.status != OrderStatus.DELIVERED }
+            2 -> orders.filter { it.status == OrderStatus.DELIVERED }
+            else -> orders
+        }
+    }
+    val filteredIds = remember(filteredOrders) { filteredOrders.map { it.id }.toSet() }
+
+    // Clear selection when switching tabs
+    LaunchedEffect(selectedFilter) {
+        selectedIds = emptySet()
+    }
+
+    val activeCount = orders.count { it.status != OrderStatus.DELIVERED }
+    val inTransitCount = filteredOrders.count { it.status == OrderStatus.IN_TRANSIT }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -64,7 +81,7 @@ fun OrdersScreen(
         ) {
             ScreenHeader(
                 title = "Orders",
-                subtitle = "5 активних замовлень",
+                subtitle = "$activeCount активних замовлень",
                 actionIcon = Icons.Outlined.ShoppingCart,
             )
 
@@ -75,7 +92,10 @@ fun OrdersScreen(
                 verticalArrangement = Arrangement.spacedBy(24.dp),
             ) {
                 // Segmented Control
-                OrderSegmentedControl()
+                OrderSegmentedControl(
+                    selected = selectedFilter,
+                    onSelectedChange = { selectedFilter = it },
+                )
 
                 // Metrics Row
                 Row(
@@ -84,14 +104,14 @@ fun OrdersScreen(
                 ) {
                     OrderMetricCard(
                         label = "TOTAL",
-                        value = "5",
+                        value = "${filteredOrders.size}",
                         subtitle = "замовлень",
                         highlight = false,
                         modifier = Modifier.weight(1f),
                     )
                     OrderMetricCard(
                         label = "IN TRANSIT",
-                        value = "1",
+                        value = "$inTransitCount",
                         subtitle = "в дорозі",
                         highlight = true,
                         modifier = Modifier.weight(1f),
@@ -107,10 +127,10 @@ fun OrdersScreen(
                     ) {
                         SectionLabel(
                             label = "ORDERS",
-                            value = "[${orders.count { it.status == OrderStatus.DELIVERED }}/${orders.size}]",
+                            value = "[${filteredOrders.count { it.status == OrderStatus.DELIVERED }}/${filteredOrders.size}]",
                         )
                         Text(
-                            text = if (selectedIds.size == allIds.size) "зняти все" else "вибрати все",
+                            text = if (selectedIds.containsAll(filteredIds)) "зняти все" else "вибрати все",
                             fontFamily = JetBrainsMonoFamily,
                             fontWeight = FontWeight.Medium,
                             fontSize = 11.sp,
@@ -118,7 +138,7 @@ fun OrdersScreen(
                             modifier = Modifier
                                 .clip(RoundedCornerShape(4.dp))
                                 .clickable {
-                                    selectedIds = if (selectedIds.size == allIds.size) emptySet() else allIds
+                                    selectedIds = if (selectedIds.containsAll(filteredIds)) emptySet() else filteredIds
                                 }
                                 .padding(horizontal = 8.dp, vertical = 4.dp),
                         )
@@ -132,7 +152,7 @@ fun OrdersScreen(
                             .padding(4.dp),
                         verticalArrangement = Arrangement.spacedBy(2.dp),
                     ) {
-                        orders.forEach { order ->
+                        filteredOrders.forEach { order ->
                             OrderRow(
                                 order = order,
                                 isSelected = order.id in selectedIds,
@@ -202,8 +222,10 @@ fun OrdersScreen(
 }
 
 @Composable
-private fun OrderSegmentedControl() {
-    var selected by remember { mutableIntStateOf(0) }
+private fun OrderSegmentedControl(
+    selected: Int,
+    onSelectedChange: (Int) -> Unit,
+) {
     val segments = listOf("all", "active", "delivered")
 
     Row(
@@ -224,7 +246,8 @@ private fun OrderSegmentedControl() {
                     .clip(RoundedCornerShape(6.dp))
                     .then(
                         if (isSelected) Modifier.background(Cyan) else Modifier
-                    ),
+                    )
+                    .clickable { onSelectedChange(index) },
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
