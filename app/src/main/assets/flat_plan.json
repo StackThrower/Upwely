@@ -1,0 +1,84 @@
+{
+  "rooms": [
+    {"name": "Central Room", "x": 5.5, "y": 15.0, "width": 3.4, "height": 5.2, "color": "#FFD6E0"},
+    {"name": "Corridor 2",  "x": 8.9, "y": 15.7, "width": 1.6, "height": 2.8, "color": "#E0E0E0"},
+    {"name": "Corridor 3",  "x": 10.5, "y": 15.3, "width": 2.8, "height": 1.5, "color": "#E0E0E0"},
+    {"name": "Room 1", "x": 8.9, "y": 11.9, "width": 3.5, "height": 3.4, "color": "#B3C6FF"},
+    {"name": "Room 2", "x": 12.4, "y": 11.9, "width": 3.5, "height": 3.4, "color": "#B3C6FF"}
+  ],
+  "doors": [
+    {"id": "d1", "roomA": "Balcony", "roomB": "Central Room", "x": 8.0, "y": 15.0},
+    {"id": "d2", "roomA": "Corridor 2", "roomB": "Central Room", "x": 8.9, "y": 17.0},
+    {"id": "d3", "roomA": "Corridor 2", "roomB": "Corridor 3", "x": 10.5, "y": 16.4},
+    {"id": "d4", "roomA": "Corridor 3", "roomB": "Room 1", "x": 11.2, "y": 15.3},
+    {"id": "d5", "roomA": "Corridor 3", "roomB": "Room 2", "x": 13.0, "y": 15.3}
+  ],
+  "random_points": [
+    {"id": "rp1", "x": 6.0, "y": 15.5, "room": "Central Room", "rect_x": 5.5, "rect_y": 15.0, "rect_width": 1.0, "rect_height": 1.0, "row": 1, "cell": 1, "color": "#FFD6E0"},
+    {"id": "rp2", "x": 6.0, "y": 16.5, "room": "Central Room", "rect_x": 5.5, "rect_y": 16.0, "rect_width": 1.0, "rect_height": 1.0, "row": 1, "cell": 1, "color": "#FFD6E0"},
+    {"id": "rp3", "x": 6.0, "y": 17.5, "room": "Central Room", "rect_x": 5.5, "rect_y": 17.0, "rect_width": 1.0, "rect_height": 1.0, "row": 1, "cell": 1, "color": "#FFD6E0"},
+    {"id": "rp4", "x": 6.0, "y": 18.5, "room": "Central Room", "rect_x": 5.5, "rect_y": 18.0, "rect_width": 1.0, "rect_height": 1.0, "row": 1, "cell": 1, "color": "#FFD6E0"},
+
+    {"id": "rp5", "x": 7.5, "y": 16.5, "room": "Central Room", "rect_x": 7.0, "rect_y": 16.0, "rect_width": 1.0, "rect_height": 1.0, "row": 1, "cell": 1, "color": "#FFD6E0"},
+    {"id": "rp6", "x": 7.5, "y": 17.5, "room": "Central Room", "rect_x": 7.0, "rect_y": 17.0, "rect_width": 1.0, "rect_height": 1.0, "row": 1, "cell": 1, "color": "#FFD6E0"},
+    {"id": "rp7", "x": 7.5, "y": 18.5, "room": "Central Room", "rect_x": 7.0, "rect_y": 18.0, "rect_width": 1.0, "rect_height": 1.0, "row": 1, "cell": 1, "color": "#FFD6E0"},
+
+    {"id": "HHHH", "x": 9.4, "y": 12.4, "room": "Room 1", "rect_x": 8.9, "rect_y": 11.9, "rect_width": 1.0, "rect_height": 1.0, "row": 1, "cell": 2, "color": "#B3C6FF"},
+    {"id": "rp9", "x": 10.4, "y": 12.4, "room": "Room 1", "rect_x": 9.9, "rect_y": 11.9, "rect_width": 1.0, "rect_height": 1.0, "row": 1, "cell": 2, "color": "#B3C6FF"},
+
+    {"id": "rp10", "x": 9.4, "y": 13.9, "room": "Room 1", "rect_x": 8.9, "rect_y": 13.5, "rect_width": 1.0, "rect_height": 1.0, "row": 1, "cell": 2, "color": "#B3C6FF"},
+    {"id": "rp11", "x": 10.4, "y": 13.9, "room": "Room 1", "rect_x": 9.9, "rect_y": 13.5, "rect_width": 1.0, "rect_height": 1.0, "row": 1, "cell": 2, "color": "#B3C6FF"},
+
+
+    {"id": "DDDD", "x": 15.0, "y": 12.4, "room": "Room 2", "rect_x": 14.5, "rect_y": 11.9, "rect_width": 1.0, "rect_height": 1.0, "row": 1, "cell": 2, "color": "#B3C6FF"},
+
+    {"id": "rp13", "x": 10.0, "y": 17.0, "room": "Corridor 2", "rect_x": 9.6, "rect_y": 16.6, "rect_width": 0.8, "rect_height": 0.8, "row": 1, "cell": 1, "color": "#E0E0E0"},
+    {"id": "rp14", "x": 12.5, "y": 16.4, "room": "Corridor 3", "rect_x": 12.1, "rect_y": 16.0, "rect_width": 0.8, "rect_height": 0.8, "row": 1, "cell": 1, "color": "#E0E0E0"}
+  ],
+  "beacon_positions": [
+    {"id": "0xe5a4a7e5a48f31323331", "x": 8.9, "y": 20.2},
+    {"id": "0xe5a4a7e5a48f31323332", "x": 8.9, "y": 15.0},
+    {"id": "0xe5a4a7e5a48f31323333", "x": 5.5, "y": 20.2},
+    {"id": "0xe5a4a7e5a48f31323334", "x": 5.5, "y": 15.0},
+
+    {"id": "0xe5a4a7e5a48f31323335", "x": 8.9, "y": 15.7},
+    {"id": "0xe5a4a7e5a48f31323336", "x": 10.5, "y": 15.7},
+    {"id": "0xe5a4a7e5a48f31323337", "x": 10.5, "y": 18.5},
+    {"id": "0xe5a4a7e5a48f31323338", "x": 8.9, "y": 18.5},
+
+    {"id": "0xe5a4a7e5a48f31323339", "x": 10.5, "y": 16.8},
+    {"id": "0xe5a4a7e5a48f31323340", "x": 10.5, "y": 15.3},
+    {"id": "0xe5a4a7e5a48f31323341", "x": 13.3, "y": 15.3},
+    {"id": "0xe5a4a7e5a48f31323342", "x": 13.3, "y": 16.8},
+
+    {"id": "0xe5a4a7e5a48f31323343", "x": 12.4, "y": 15.3},
+    {"id": "0xe5a4a7e5a48f31323344", "x": 8.9, "y": 15.3},
+    {"id": "0xe5a4a7e5a48f31323345", "x": 8.9, "y": 11.9},
+    {"id": "0xe5a4a7e5a48f31323346", "x": 12.4, "y": 11.9}
+
+  ],
+  "planWidthMeters": 20.0,
+  "planHeightMeters": 10.0,
+  "random_point_sequences": [
+    {
+      "sequence_id": "1",
+      "point_ids": ["rp1", "rp2", "rp3", "rp4", "rp5", "rp6"],
+      "delivery_ids": ["d101", "d102", "d103", "d104", "d105", "d106"]
+    },
+    {
+      "sequence_id": "2",
+      "point_ids": ["rp8", "rp10", "rp11"],
+      "delivery_ids": ["r1-208", "r1-210", "r1-211"]
+    },
+    {
+      "sequence_id": "3",
+      "point_ids": ["rp13", "rp14"],
+      "delivery_ids": ["c-15", "c-16"]
+    },
+    {
+      "sequence_id": "4",
+      "point_ids": ["rp12"],
+      "delivery_ids": ["p-12"]
+    }
+  ]
+} 

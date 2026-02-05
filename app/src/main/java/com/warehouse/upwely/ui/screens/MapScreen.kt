@@ -1,9 +1,12 @@
 package com.warehouse.upwely.ui.screens
 
+import android.graphics.Paint
+import android.graphics.Typeface
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,47 +20,84 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.warehouse.upwely.data.PlanDoor
+import com.warehouse.upwely.data.PlanRoom
+import com.warehouse.upwely.data.WarehousePlan
+import com.warehouse.upwely.data.loadWarehousePlan
 import com.warehouse.upwely.ui.components.ScreenHeader
 import com.warehouse.upwely.ui.theme.*
 
 private data class Destination(
+    val shelfId: String,
+    val label: String,
+    val room: String,
+    val deliveryId: String,
     val x: Float,
     val y: Float,
-    val label: String,
-    val shelf: String,
-    val sku: String,
-    val distance: String,
-)
-
-private val destinations = listOf(
-    Destination(0.82f, 0.4f, "D1-B7", "Стелаж D1, Полиця 07", "SKU: WH-4892 · Навушники Sony", "~24m · 2 хв"),
-    Destination(0.62f, 0.18f, "C1-A3", "Стелаж C1, Полиця 03", "SKU: WH-2110 · Клавіатура Logitech", "~18m · 1 хв"),
-    Destination(0.33f, 0.54f, "B2-D5", "Стелаж B2, Полиця 05", "SKU: WH-7734 · Монітор Dell 27\"", "~12m · 1 хв"),
-    Destination(0.12f, 0.18f, "A1-C2", "Стелаж A1, Полиця 02", "SKU: WH-5501 · Мишка Razer", "~8m · 1 хв"),
-    Destination(0.82f, 0.54f, "D2-A1", "Стелаж D2, Полиця 01", "SKU: WH-3348 · Навушники JBL", "~28m · 3 хв"),
+    val row: Int?,
+    val cell: Int?,
 )
 
 @Composable
 fun MapScreen() {
-    var currentIndex by remember { mutableIntStateOf(0) }
-    val dest = destinations[currentIndex]
+    val context = LocalContext.current
+    val plan = remember { loadWarehousePlan(context) }
 
-    val animatedX by animateFloatAsState(targetValue = dest.x, animationSpec = tween(500))
-    val animatedY by animateFloatAsState(targetValue = dest.y, animationSpec = tween(500))
+    // Build destinations from all plan sequences
+    val allDestinations = remember(plan) {
+        plan.sequences.flatMap { seq ->
+            seq.pointIds.mapIndexedNotNull { index, pointId ->
+                val shelf = plan.shelves.find { it.id == pointId }
+                if (shelf != null) {
+                    val deliveryId = seq.deliveryIds.getOrElse(index) { "" }
+                    Destination(
+                        shelfId = pointId,
+                        label = pointId,
+                        room = shelf.room,
+                        deliveryId = deliveryId,
+                        x = shelf.x,
+                        y = shelf.y,
+                        row = shelf.row,
+                        cell = shelf.cell,
+                    )
+                } else null
+            }
+        }
+    }
+
+    if (allDestinations.isEmpty()) return
+
+    var currentIndex by remember { mutableIntStateOf(0) }
+    val dest = allDestinations[currentIndex]
+
+    val animDestX by animateFloatAsState(targetValue = dest.x, animationSpec = tween(500))
+    val animDestY by animateFloatAsState(targetValue = dest.y, animationSpec = tween(500))
+
+    // User position inside Central Room (near bottom)
+    val userX = 7.0f
+    val userY = 19.0f
 
     Column(
         modifier = Modifier
@@ -67,11 +107,10 @@ fun MapScreen() {
     ) {
         ScreenHeader(
             title = "Warehouse A-12",
-            subtitle = "Зона B · Рядок 7 · Секція 3",
+            subtitle = "${dest.room} · row ${dest.row ?: "-"} · cell ${dest.cell ?: "-"}",
             actionIcon = Icons.Outlined.Notifications,
         )
 
-        // Map Section
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -86,7 +125,16 @@ fun MapScreen() {
                 color = TextSecondary,
                 letterSpacing = 2.sp,
             )
-            WarehouseMap(destX = animatedX, destY = animatedY, destLabel = dest.label)
+            WarehouseFloorMap(
+                plan = plan,
+                destX = animDestX,
+                destY = animDestY,
+                destLabel = dest.label,
+                destRoom = dest.room,
+                userX = userX,
+                userY = userY,
+                selectedShelfId = dest.shelfId,
+            )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -118,21 +166,21 @@ fun MapScreen() {
             }
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(
-                    text = dest.distance,
+                    text = "Delivery: ${dest.deliveryId}",
                     fontFamily = JetBrainsMonoFamily,
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp,
                     color = Cyan,
                 )
                 Text(
-                    text = dest.shelf,
+                    text = "${dest.room} · ${dest.label}",
                     fontFamily = InterFamily,
                     fontWeight = FontWeight.Medium,
                     fontSize = 13.sp,
                     color = White,
                 )
                 Text(
-                    text = dest.sku,
+                    text = "row: ${dest.row ?: "-"}, cell: ${dest.cell ?: "-"}",
                     fontFamily = JetBrainsMonoFamily,
                     fontWeight = FontWeight.Normal,
                     fontSize = 11.sp,
@@ -152,7 +200,7 @@ fun MapScreen() {
         ) {
             Button(
                 onClick = {
-                    currentIndex = (currentIndex + 1) % destinations.size
+                    currentIndex = (currentIndex + 1) % allDestinations.size
                 },
                 modifier = Modifier
                     .weight(1f)
@@ -173,7 +221,7 @@ fun MapScreen() {
 
             Button(
                 onClick = {
-                    currentIndex = (currentIndex + 1) % destinations.size
+                    currentIndex = (currentIndex + 1) % allDestinations.size
                 },
                 modifier = Modifier
                     .weight(1f)
@@ -197,129 +245,303 @@ fun MapScreen() {
     }
 }
 
+// ── BFS pathfinding through room-door graph (like storagebeacon Dijkstra) ──
+
+private fun findRoomAt(x: Float, y: Float, rooms: List<PlanRoom>): String? {
+    return rooms.find { r ->
+        x >= r.x && x <= r.x + r.width &&
+            y >= r.y && y <= r.y + r.height
+    }?.name
+}
+
+private fun findDoorPath(
+    startRoom: String?,
+    endRoom: String?,
+    doors: List<PlanDoor>,
+): List<PlanDoor> {
+    if (startRoom == null || endRoom == null || startRoom == endRoom) return emptyList()
+
+    // Build adjacency
+    val adj = mutableMapOf<String, MutableList<Pair<String, PlanDoor>>>()
+    for (door in doors) {
+        adj.getOrPut(door.roomA) { mutableListOf() }.add(door.roomB to door)
+        adj.getOrPut(door.roomB) { mutableListOf() }.add(door.roomA to door)
+    }
+
+    // BFS
+    val prev = mutableMapOf<String, PlanDoor?>()
+    val visited = mutableSetOf(startRoom)
+    val queue = ArrayDeque<String>()
+    queue.add(startRoom)
+
+    while (queue.isNotEmpty()) {
+        val current = queue.removeFirst()
+        if (current == endRoom) break
+        for ((neighbor, door) in adj[current] ?: emptyList()) {
+            if (neighbor !in visited) {
+                visited.add(neighbor)
+                prev[neighbor] = door
+                queue.add(neighbor)
+            }
+        }
+    }
+
+    // Reconstruct path
+    val path = mutableListOf<PlanDoor>()
+    var u: String? = endRoom
+    while (u != null && u != startRoom) {
+        val door = prev[u] ?: break
+        path.add(door)
+        u = if (door.roomA == u) door.roomB else door.roomA
+    }
+    return path.reversed()
+}
+
+// ── Map composable ──
+
 @Composable
-private fun WarehouseMap(destX: Float, destY: Float, destLabel: String) {
+private fun WarehouseFloorMap(
+    plan: WarehousePlan,
+    destX: Float,
+    destY: Float,
+    destLabel: String,
+    destRoom: String,
+    userX: Float,
+    userY: Float,
+    selectedShelfId: String,
+) {
+    var scale by remember { mutableFloatStateOf(1f) }
+    var offset by remember { mutableStateOf(Offset.Zero) }
+
+    // Pre-compute route door path
+    val userRoom = remember(userX, userY, plan) {
+        findRoomAt(userX, userY, plan.rooms)
+    }
+    val doorPath = remember(userRoom, destRoom, plan) {
+        findDoorPath(userRoom, destRoom, plan.doors)
+    }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(360.dp)
+            .height(400.dp)
             .clip(RoundedCornerShape(12.dp))
-            .background(CardBackground),
+            .background(Color(0xFF080D19))
+            .clipToBounds()
+            .pointerInput(Unit) {
+                detectTransformGestures { _, pan, zoom, _ ->
+                    scale = (scale * zoom).coerceIn(0.8f, 3f)
+                    if (scale > 1f) {
+                        val maxX = size.width * (scale - 1) / 2
+                        val maxY = size.height * (scale - 1) / 2
+                        offset = Offset(
+                            x = (offset.x + pan.x).coerceIn(-maxX, maxX),
+                            y = (offset.y + pan.y).coerceIn(-maxY, maxY),
+                        )
+                    } else {
+                        offset = Offset.Zero
+                    }
+                }
+            },
     ) {
-        Canvas(modifier = Modifier.fillMaxSize()) {
+        Canvas(
+            modifier = Modifier
+                .fillMaxSize()
+                .graphicsLayer(
+                    scaleX = scale,
+                    scaleY = scale,
+                    translationX = offset.x,
+                    translationY = offset.y,
+                ),
+        ) {
             val w = size.width
             val h = size.height
-            val shelfColor = Color(0xFF0F172A)
-            val cyanColor = Color(0xFF22D3EE)
-            val cyanGlow = Color(0x3322D3EE)
 
-            // Grid lines
-            val gridColor = Color(0x26FFFFFF)
-            val gridSpacingX = w / 8f
-            val gridSpacingY = h / 8f
-            for (i in 1..7) {
-                drawLine(gridColor, Offset(gridSpacingX * i, 0f), Offset(gridSpacingX * i, h))
-                drawLine(gridColor, Offset(0f, gridSpacingY * i), Offset(w, gridSpacingY * i))
-            }
+            // Calculate bounding box of all content for auto-fit
+            val allXCoords = plan.rooms.flatMap { listOf(it.x, it.x + it.width) } +
+                plan.beacons.map { it.x } + listOf(userX, destX)
+            val allYCoords = plan.rooms.flatMap { listOf(it.y, it.y + it.height) } +
+                plan.beacons.map { it.y } + listOf(userY, destY)
 
-            // Shelf dimensions (relative)
-            val shelfW = w * 0.155f
-            val shelfH = h * 0.27f
-            val margin = w * 0.055f
+            val contentMinX = allXCoords.min()
+            val contentMaxX = allXCoords.max()
+            val contentMinY = allYCoords.min()
+            val contentMaxY = allYCoords.max()
+            val contentW = contentMaxX - contentMinX
+            val contentH = contentMaxY - contentMinY
 
-            data class Shelf(val x: Float, val y: Float, val label: String)
+            val pad = 20f
+            val s = minOf((w - pad * 2) / contentW, (h - pad * 2) / contentH)
+            val ox = (w - contentW * s) / 2f - contentMinX * s
+            val oy = (h - contentH * s) / 2f - contentMinY * s
 
-            val shelves = listOf(
-                Shelf(margin, h * 0.08f, "A1"),
-                Shelf(margin + shelfW + margin, h * 0.08f, "A2"),
-                Shelf(margin, h * 0.44f, "B1"),
-                Shelf(margin + shelfW + margin, h * 0.44f, "B2"),
-                Shelf(w * 0.55f, h * 0.08f, "C1"),
-                Shelf(w * 0.55f, h * 0.44f, "C2"),
-                Shelf(w * 0.77f, h * 0.08f, "D1"),
-                Shelf(w * 0.77f, h * 0.44f, "D2"),
-            )
+            fun mx(m: Float) = m * s + ox
+            fun my(m: Float) = m * s + oy
 
-            shelves.forEach { shelf ->
+            // 1. Draw rooms
+            plan.rooms.forEach { room ->
                 drawRoundRect(
-                    color = shelfColor,
-                    topLeft = Offset(shelf.x, shelf.y),
-                    size = Size(shelfW, shelfH),
-                    cornerRadius = CornerRadius(4.dp.toPx()),
+                    color = room.color,
+                    topLeft = Offset(mx(room.x), my(room.y)),
+                    size = Size(room.width * s, room.height * s),
+                    cornerRadius = CornerRadius(4f),
+                )
+                drawRoundRect(
+                    color = Color(0xFF334155),
+                    topLeft = Offset(mx(room.x), my(room.y)),
+                    size = Size(room.width * s, room.height * s),
+                    cornerRadius = CornerRadius(4f),
+                    style = Stroke(width = 1f),
                 )
             }
 
-            val userPos = Offset(w * 0.24f, h * 0.9f)
-            val destPos = Offset(w * destX, h * destY)
+            // 2. Room name labels
+            val roomLabelPaint = Paint().apply {
+                color = android.graphics.Color.parseColor("#55667788")
+                textSize = (0.35f * s).coerceIn(10f, 22f)
+                textAlign = Paint.Align.CENTER
+                isAntiAlias = true
+                typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+            }
+            plan.rooms.forEach { room ->
+                drawContext.canvas.nativeCanvas.drawText(
+                    room.name,
+                    mx(room.x + room.width / 2f),
+                    my(room.y + room.height / 2f) + roomLabelPaint.textSize / 3f,
+                    roomLabelPaint,
+                )
+            }
 
-            // Route path (dashed) — from user to destination via right-angle segments
+            // 3. Draw doors
+            plan.doors.forEach { door ->
+                val dx = 0.4f * s
+                drawLine(
+                    color = Color(0xFF475569),
+                    start = Offset(mx(door.x) - dx, my(door.y)),
+                    end = Offset(mx(door.x) + dx, my(door.y)),
+                    strokeWidth = 3f,
+                )
+            }
+
+            // 4. Draw shelves / random points
+            plan.shelves.forEach { shelf ->
+                val isSelected = shelf.id == selectedShelfId
+
+                drawRoundRect(
+                    color = if (isSelected) Color(0xFF22D3EE).copy(alpha = 0.12f) else Color(0xFF0F172A),
+                    topLeft = Offset(mx(shelf.rectX), my(shelf.rectY)),
+                    size = Size(shelf.rectWidth * s, shelf.rectHeight * s),
+                    cornerRadius = CornerRadius(3f),
+                )
+                drawRoundRect(
+                    color = if (isSelected) Color(0xFF22D3EE) else Color(0xFF334155),
+                    topLeft = Offset(mx(shelf.rectX), my(shelf.rectY)),
+                    size = Size(shelf.rectWidth * s, shelf.rectHeight * s),
+                    cornerRadius = CornerRadius(3f),
+                    style = Stroke(width = if (isSelected) 2f else 1f),
+                )
+
+                // Shelf center dot
+                val dotColor = if (isSelected) Color(0xFF22D3EE) else Color(0xFF475569)
+                drawCircle(
+                    color = dotColor,
+                    radius = 0.06f * s,
+                    center = Offset(mx(shelf.x), my(shelf.y)),
+                )
+            }
+
+            // 5. Draw beacons (blue dots with glow — like storagebeacon drawBeacons)
+            val beaconColor = Color(0xFF3B82F6)
+            val beaconRadius = 0.15f * s
+            plan.beacons.forEach { beacon ->
+                drawCircle(
+                    color = beaconColor.copy(alpha = 0.2f),
+                    radius = beaconRadius * 2.5f,
+                    center = Offset(mx(beacon.x), my(beacon.y)),
+                )
+                drawCircle(
+                    color = beaconColor,
+                    radius = beaconRadius,
+                    center = Offset(mx(beacon.x), my(beacon.y)),
+                )
+            }
+
+            // 6. Draw route through doors (like storagebeacon buildPathPoints)
+            val cyanColor = Color(0xFF22D3EE)
             val dash = PathEffect.dashPathEffect(floatArrayOf(8f, 6f))
-            val midY = (userPos.y + destPos.y) / 2f
-            val routePoints = listOf(
-                userPos,
-                Offset(userPos.x, midY),
-                Offset(destPos.x, midY),
-                destPos,
-            )
+
+            val routePoints = buildList {
+                add(Offset(mx(userX), my(userY)))
+                for (door in doorPath) {
+                    add(Offset(mx(door.x), my(door.y)))
+                }
+                add(Offset(mx(destX), my(destY)))
+            }
             for (i in 0 until routePoints.size - 1) {
                 drawLine(
                     color = cyanColor,
                     start = routePoints[i],
                     end = routePoints[i + 1],
-                    strokeWidth = 2.dp.toPx(),
+                    strokeWidth = 2.5f,
                     pathEffect = dash,
                 )
             }
 
-            // User position
-            drawCircle(cyanGlow, radius = 11.dp.toPx(), center = userPos)
-            drawCircle(cyanColor, radius = 7.dp.toPx(), center = userPos)
-            drawCircle(shelfColor, radius = 5.dp.toPx(), center = userPos)
+            // 7. Draw user position
+            val userPos = Offset(mx(userX), my(userY))
+            drawCircle(color = cyanColor.copy(alpha = 0.2f), radius = 12f, center = userPos)
+            drawCircle(color = cyanColor, radius = 7f, center = userPos)
+            drawCircle(color = Color(0xFF080D19), radius = 4.5f, center = userPos)
 
-            // Destination
-            drawCircle(cyanGlow, radius = 13.dp.toPx(), center = destPos)
-            drawCircle(cyanColor, radius = 7.dp.toPx(), center = destPos)
-            drawCircle(Color.White, radius = 5.dp.toPx(), center = destPos)
+            drawContext.canvas.nativeCanvas.drawText(
+                "YOU",
+                mx(userX),
+                my(userY) + 20f,
+                Paint().apply {
+                    color = android.graphics.Color.parseColor("#22D3EE")
+                    textSize = 14f
+                    textAlign = Paint.Align.CENTER
+                    isAntiAlias = true
+                    letterSpacing = 0.1f
+                    typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+                },
+            )
 
-            // Destination label background
-            val lblW = w * 0.18f
-            val lblH = h * 0.06f
-            val lblX = (w * destX - lblW / 2f).coerceIn(0f, w - lblW)
-            val lblY = (h * destY - lblH - 14.dp.toPx()).coerceIn(0f, h - lblH)
+            // 8. Draw destination marker
+            val destPos = Offset(mx(destX), my(destY))
+            drawCircle(color = cyanColor.copy(alpha = 0.2f), radius = 14f, center = destPos)
+            drawCircle(color = cyanColor, radius = 7f, center = destPos)
+            drawCircle(color = Color.White, radius = 4.5f, center = destPos)
+
+            // Destination label badge
+            val lblPaint = Paint().apply {
+                textSize = 16f
+                textAlign = Paint.Align.CENTER
+                isAntiAlias = true
+                typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+            }
+            val lblW = lblPaint.measureText(destLabel) + 16f
+            val lblH = 22f
+            val lblX = mx(destX) - lblW / 2f
+            val lblY = my(destY) - lblH - 16f
             drawRoundRect(
                 color = cyanColor,
                 topLeft = Offset(lblX, lblY),
                 size = Size(lblW, lblH),
-                cornerRadius = CornerRadius(4.dp.toPx()),
+                cornerRadius = CornerRadius(4f),
+            )
+            drawContext.canvas.nativeCanvas.drawText(
+                destLabel,
+                mx(destX),
+                lblY + lblH - 5f,
+                Paint().apply {
+                    color = android.graphics.Color.parseColor("#080D19")
+                    textSize = 16f
+                    textAlign = Paint.Align.CENTER
+                    isAntiAlias = true
+                    typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+                },
             )
         }
-
-        // Destination label text — positioned via fraction-based offsets
-        Box(modifier = Modifier.fillMaxSize()) {
-            Text(
-                text = destLabel,
-                fontFamily = JetBrainsMonoFamily,
-                fontWeight = FontWeight.Bold,
-                fontSize = 11.sp,
-                color = DarkBackground,
-                modifier = Modifier
-                    .fillMaxWidth(destX)
-                    .fillMaxHeight(destY)
-                    .wrapContentSize(Alignment.BottomCenter)
-                    .offset(y = (-18).dp),
-            )
-        }
-
-        Text(
-            text = "YOU",
-            fontFamily = JetBrainsMonoFamily,
-            fontWeight = FontWeight.Bold,
-            fontSize = 9.sp,
-            color = Cyan,
-            letterSpacing = 1.sp,
-            modifier = Modifier
-                .align(Alignment.BottomStart)
-                .padding(start = 56.dp, bottom = 10.dp),
-        )
     }
 }
