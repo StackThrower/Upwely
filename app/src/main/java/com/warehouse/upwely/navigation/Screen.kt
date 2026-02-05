@@ -11,4 +11,5 @@ object Screen {
     const val WAREHOUSE_PLANNING = "warehouse_planning"
     const val ORDERS = "orders"
     const val SHIPMENTS = "shipments"
+    const val CALIBRATION = "calibration"
 }

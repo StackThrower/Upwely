@@ -34,6 +34,7 @@ fun SettingsScreen(
     onProfileClick: () -> Unit = {},
     onWarehouseClick: () -> Unit = {},
     onLanguageClick: () -> Unit = {},
+    onCalibrationClick: () -> Unit = {},
 ) {
     // Toggle states
     var darkModeOn by remember { mutableStateOf(true) }
@@ -153,6 +154,12 @@ fun SettingsScreen(
                         onClick = {
                             editDialogField = EditField("scannerMode", "Scanner Mode", scannerMode)
                         },
+                    )
+                    SettingsRow(
+                        icon = Icons.Outlined.Sensors,
+                        title = "Beacon Calibration",
+                        value = "signal fingerprinting",
+                        onClick = onCalibrationClick,
                     )
                     SettingsRow(
                         icon = Icons.Outlined.Vibration,

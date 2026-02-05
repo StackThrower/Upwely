@@ -1,23 +1,36 @@
 package com.warehouse.upwely
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -25,6 +38,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.warehouse.upwely.navigation.BottomNavItem
 import com.warehouse.upwely.navigation.Screen
+import com.warehouse.upwely.ui.BeaconViewModel
 import com.warehouse.upwely.ui.screens.*
 import com.warehouse.upwely.ui.theme.*
 
@@ -37,6 +51,70 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val backStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = backStackEntry?.destination?.route
+                val context = LocalContext.current
+
+                // Shared ViewModel scoped to the activity
+                val beaconViewModel: BeaconViewModel = viewModel()
+
+                // Permission handling
+                val permissionLauncher = rememberLauncherForActivityResult(
+                    ActivityResultContracts.RequestMultiplePermissions()
+                ) { results ->
+                    if (results.values.all { it }) {
+                        beaconViewModel.startScanning()
+                    }
+                }
+
+                fun hasBeaconPermissions(): Boolean {
+                    val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        listOf(
+                            Manifest.permission.BLUETOOTH_SCAN,
+                            Manifest.permission.BLUETOOTH_CONNECT,
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                        )
+                    } else {
+                        listOf(Manifest.permission.ACCESS_FINE_LOCATION)
+                    }
+                    return permissions.all {
+                        ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
+                    }
+                }
+
+                // Request permissions and start scanning
+                LaunchedEffect(Unit) {
+                    if (hasBeaconPermissions()) {
+                        beaconViewModel.startScanning()
+                    } else {
+                        val perms = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                            arrayOf(
+                                Manifest.permission.BLUETOOTH_SCAN,
+                                Manifest.permission.BLUETOOTH_CONNECT,
+                                Manifest.permission.ACCESS_FINE_LOCATION,
+                            )
+                        } else {
+                            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
+                        }
+                        permissionLauncher.launch(perms)
+                    }
+                }
+
+                // Manage scanning lifecycle
+                val lifecycleOwner = LocalLifecycleOwner.current
+                DisposableEffect(lifecycleOwner) {
+                    val observer = LifecycleEventObserver { _, event ->
+                        when (event) {
+                            Lifecycle.Event.ON_RESUME -> {
+                                if (hasBeaconPermissions()) {
+                                    beaconViewModel.startScanning()
+                                }
+                            }
+                            Lifecycle.Event.ON_PAUSE -> beaconViewModel.stopScanning()
+                            else -> {}
+                        }
+                    }
+                    lifecycleOwner.lifecycle.addObserver(observer)
+                    onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+                }
 
                 val showBottomBar = currentRoute in BottomNavItem.items.map { it.route } +
                         listOf(Screen.PICKUP, Screen.RECEIVE, Screen.WAREHOUSE_PLANNING, Screen.ORDERS, Screen.SHIPMENTS)
@@ -55,7 +133,9 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(innerPadding),
                     ) {
                         // Bottom nav screens
-                        composable(BottomNavItem.Map.route) { MapScreen() }
+                        composable(BottomNavItem.Map.route) {
+                            MapScreen(beaconViewModel = beaconViewModel)
+                        }
                         composable(BottomNavItem.Warehouse.route) {
                             WarehouseScreen(
                                 onOrdersClick = { navController.navigate(Screen.ORDERS) },
@@ -69,6 +149,7 @@ class MainActivity : ComponentActivity() {
                                 onProfileClick = { navController.navigate(Screen.USER_PROFILE) },
                                 onWarehouseClick = { navController.navigate(Screen.WAREHOUSE_SELECTION) },
                                 onLanguageClick = { navController.navigate(Screen.LANGUAGE_SELECTION) },
+                                onCalibrationClick = { navController.navigate(Screen.CALIBRATION) },
                             )
                         }
 
@@ -116,6 +197,12 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(Screen.EDIT_PROFILE) {
                             EditProfileScreen(
+                                onBack = { navController.popBackStack() },
+                            )
+                        }
+                        composable(Screen.CALIBRATION) {
+                            CalibrationScreen(
+                                beaconViewModel = beaconViewModel,
                                 onBack = { navController.popBackStack() },
                             )
                         }

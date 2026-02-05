@@ -19,6 +19,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
@@ -46,6 +47,7 @@ import com.warehouse.upwely.data.PlanDoor
 import com.warehouse.upwely.data.PlanRoom
 import com.warehouse.upwely.data.WarehousePlan
 import com.warehouse.upwely.data.loadWarehousePlan
+import com.warehouse.upwely.ui.BeaconViewModel
 import com.warehouse.upwely.ui.components.ScreenHeader
 import com.warehouse.upwely.ui.theme.*
 
@@ -61,7 +63,7 @@ private data class Destination(
 )
 
 @Composable
-fun MapScreen() {
+fun MapScreen(beaconViewModel: BeaconViewModel? = null) {
     val context = LocalContext.current
     val plan = remember { loadWarehousePlan(context) }
 
@@ -95,9 +97,10 @@ fun MapScreen() {
     val animDestX by animateFloatAsState(targetValue = dest.x, animationSpec = tween(500))
     val animDestY by animateFloatAsState(targetValue = dest.y, animationSpec = tween(500))
 
-    // User position inside Central Room (near bottom)
-    val userX = 7.0f
-    val userY = 19.0f
+    // User position from beacons (fallback to Central Room if no signal)
+    val beaconPosition = beaconViewModel?.position?.collectAsState()?.value
+    val userX = beaconPosition?.first ?: 7.0f
+    val userY = beaconPosition?.second ?: 19.0f
 
     Column(
         modifier = Modifier
@@ -477,7 +480,7 @@ private fun WarehouseFloorMap(
                     color = cyanColor,
                     start = routePoints[i],
                     end = routePoints[i + 1],
-                    strokeWidth = 2.5f,
+                    strokeWidth = 7.5f,
                     pathEffect = dash,
                 )
             }
