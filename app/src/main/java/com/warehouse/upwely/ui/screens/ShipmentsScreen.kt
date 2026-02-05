@@ -6,11 +6,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
-import androidx.compose.material.icons.outlined.ShoppingCart
+import androidx.compose.material.icons.outlined.LocalShipping
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,32 +19,33 @@ import androidx.compose.ui.unit.sp
 import com.warehouse.upwely.ui.components.*
 import com.warehouse.upwely.ui.theme.*
 
-private enum class OrderStatus(val label: String, val color: androidx.compose.ui.graphics.Color) {
+private enum class ShipmentStatus(val label: String, val color: androidx.compose.ui.graphics.Color) {
     DELIVERED("Доставлено", Cyan),
-    IN_TRANSIT("В дорозі", Cyan),
-    PROCESSING("Обробка", TextSecondary),
-    NEW("Нове", TextMuted),
+    SHIPPED("Відправлено", Cyan),
+    PACKING("Пакування", TextSecondary),
+    PENDING("Очікує", TextMuted),
 }
 
-private data class OrderItem(
+private data class ShipmentItem(
     val id: String,
-    val supplier: String,
+    val destination: String,
     val itemCount: Int,
-    val status: OrderStatus,
+    val status: ShipmentStatus,
 )
 
-private val orders = listOf(
-    OrderItem("ORD-2401", "TechSupply UA", 24, OrderStatus.DELIVERED),
-    OrderItem("ORD-2402", "Нова Пошта Логістика", 18, OrderStatus.IN_TRANSIT),
-    OrderItem("ORD-2403", "ElectroHub", 36, OrderStatus.PROCESSING),
-    OrderItem("ORD-2404", "GlobalParts Inc.", 12, OrderStatus.NEW),
-    OrderItem("ORD-2405", "Компоненти.UA", 8, OrderStatus.NEW),
+private val shipments = listOf(
+    ShipmentItem("SHP-3201", "Київ, Нова Пошта #12", 18, ShipmentStatus.DELIVERED),
+    ShipmentItem("SHP-3202", "Львів, Укрпошта", 24, ShipmentStatus.SHIPPED),
+    ShipmentItem("SHP-3203", "Одеса, Meest Express", 12, ShipmentStatus.SHIPPED),
+    ShipmentItem("SHP-3204", "Харків, SAT", 36, ShipmentStatus.PACKING),
+    ShipmentItem("SHP-3205", "Дніпро, Нова Пошта #45", 8, ShipmentStatus.PENDING),
+    ShipmentItem("SHP-3206", "Запоріжжя, Justin", 15, ShipmentStatus.PENDING),
 )
 
 @Composable
-fun OrdersScreen(
+fun ShipmentsScreen(
     onBack: () -> Unit = {},
-    onOrderClick: () -> Unit = {},
+    onShipmentClick: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -55,9 +54,9 @@ fun OrdersScreen(
             .verticalScroll(rememberScrollState()),
     ) {
         ScreenHeader(
-            title = "Orders",
-            subtitle = "5 активних замовлень",
-            actionIcon = Icons.Outlined.ShoppingCart,
+            title = "Shipments",
+            subtitle = "6 відвантажень",
+            actionIcon = Icons.Outlined.LocalShipping,
         )
 
         Column(
@@ -67,32 +66,35 @@ fun OrdersScreen(
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
             // Segmented Control
-            OrderSegmentedControl()
+            ShipmentSegmentedControl()
 
             // Metrics Row
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                OrderMetricCard(
+                ShipmentMetricCard(
                     label = "TOTAL",
-                    value = "5",
-                    subtitle = "замовлень",
+                    value = "6",
+                    subtitle = "відвантажень",
                     highlight = false,
                     modifier = Modifier.weight(1f),
                 )
-                OrderMetricCard(
-                    label = "IN TRANSIT",
-                    value = "1",
+                ShipmentMetricCard(
+                    label = "SHIPPED",
+                    value = "3",
                     subtitle = "в дорозі",
                     highlight = true,
                     modifier = Modifier.weight(1f),
                 )
             }
 
-            // Orders List
+            // Shipments List
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                SectionLabel(label = "ORDERS", value = "[${orders.count { it.status == OrderStatus.DELIVERED }}/${orders.size}]")
+                SectionLabel(
+                    label = "SHIPMENTS",
+                    value = "[${shipments.count { it.status == ShipmentStatus.DELIVERED }}/${shipments.size}]",
+                )
 
                 Column(
                     modifier = Modifier
@@ -102,8 +104,8 @@ fun OrdersScreen(
                         .padding(4.dp),
                     verticalArrangement = Arrangement.spacedBy(2.dp),
                 ) {
-                    orders.forEach { order ->
-                        OrderRow(order, onClick = onOrderClick)
+                    shipments.forEach { shipment ->
+                        ShipmentRow(shipment, onClick = onShipmentClick)
                     }
                 }
             }
@@ -114,9 +116,9 @@ fun OrdersScreen(
 }
 
 @Composable
-private fun OrderSegmentedControl() {
+private fun ShipmentSegmentedControl() {
     var selected by remember { mutableIntStateOf(0) }
-    val segments = listOf("all", "active", "delivered")
+    val segments = listOf("all", "pending", "shipped", "delivered")
 
     Row(
         modifier = Modifier
@@ -152,7 +154,7 @@ private fun OrderSegmentedControl() {
 }
 
 @Composable
-private fun OrderMetricCard(
+private fun ShipmentMetricCard(
     label: String,
     value: String,
     subtitle: String,
@@ -192,12 +194,12 @@ private fun OrderMetricCard(
 }
 
 @Composable
-private fun OrderRow(order: OrderItem, onClick: () -> Unit = {}) {
-    val (statusChar, statusColor) = when (order.status) {
-        OrderStatus.DELIVERED -> "✓" to Cyan
-        OrderStatus.IN_TRANSIT -> "◐" to Cyan
-        OrderStatus.PROCESSING -> "◐" to TextSecondary
-        OrderStatus.NEW -> "○" to TextMuted
+private fun ShipmentRow(shipment: ShipmentItem, onClick: () -> Unit = {}) {
+    val (statusChar, statusColor) = when (shipment.status) {
+        ShipmentStatus.DELIVERED -> "✓" to Cyan
+        ShipmentStatus.SHIPPED -> "◐" to Cyan
+        ShipmentStatus.PACKING -> "◐" to TextSecondary
+        ShipmentStatus.PENDING -> "○" to TextMuted
     }
 
     Row(
@@ -213,7 +215,7 @@ private fun OrderRow(order: OrderItem, onClick: () -> Unit = {}) {
         Text(
             text = statusChar,
             fontFamily = JetBrainsMonoFamily,
-            fontWeight = if (order.status == OrderStatus.DELIVERED || order.status == OrderStatus.IN_TRANSIT) FontWeight.Bold else FontWeight.Normal,
+            fontWeight = if (shipment.status == ShipmentStatus.DELIVERED || shipment.status == ShipmentStatus.SHIPPED) FontWeight.Bold else FontWeight.Normal,
             fontSize = 14.sp,
             color = statusColor,
         )
@@ -222,14 +224,14 @@ private fun OrderRow(order: OrderItem, onClick: () -> Unit = {}) {
             modifier = Modifier.weight(1f),
         ) {
             Text(
-                text = "${order.id} · ${order.supplier}",
+                text = "${shipment.id} · ${shipment.destination}",
                 fontFamily = InterFamily,
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.sp,
                 color = White,
             )
             Text(
-                text = "${order.itemCount} позицій · ${order.status.label}",
+                text = "${shipment.itemCount} позицій · ${shipment.status.label}",
                 fontFamily = JetBrainsMonoFamily,
                 fontWeight = FontWeight.Normal,
                 fontSize = 11.sp,

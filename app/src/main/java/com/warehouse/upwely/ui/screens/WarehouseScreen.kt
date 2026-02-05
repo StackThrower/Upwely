@@ -8,9 +8,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
-import androidx.compose.material.icons.outlined.Checklist
 import androidx.compose.material.icons.outlined.GridView
-import androidx.compose.material.icons.outlined.Inventory2
+import androidx.compose.material.icons.outlined.LocalShipping
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -27,10 +26,9 @@ import com.warehouse.upwely.ui.theme.*
 
 @Composable
 fun WarehouseScreen(
-    onPickupClick: () -> Unit = {},
-    onReceivingClick: () -> Unit = {},
     onOrdersClick: () -> Unit = {},
     onPlanningClick: () -> Unit = {},
+    onShipmentsClick: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -68,22 +66,16 @@ fun WarehouseScreen(
                     verticalArrangement = Arrangement.spacedBy(2.dp),
                 ) {
                     OperationItem(
-                        icon = Icons.Outlined.Inventory2,
-                        title = "Pickup List",
-                        subtitle = "12 items pending",
-                        onClick = onPickupClick,
-                    )
-                    OperationItem(
-                        icon = Icons.Outlined.Checklist,
-                        title = "Receiving",
-                        subtitle = "8 items to process",
-                        onClick = onReceivingClick,
-                    )
-                    OperationItem(
                         icon = Icons.Outlined.ShoppingCart,
                         title = "Orders",
                         subtitle = "5 active orders",
                         onClick = onOrdersClick,
+                    )
+                    OperationItem(
+                        icon = Icons.Outlined.LocalShipping,
+                        title = "Shipments",
+                        subtitle = "6 active shipments",
+                        onClick = onShipmentsClick,
                     )
                     OperationItem(
                         icon = Icons.Outlined.GridView,

@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
                 val currentRoute = backStackEntry?.destination?.route
 
                 val showBottomBar = currentRoute in BottomNavItem.items.map { it.route } +
-                        listOf(Screen.PICKUP, Screen.RECEIVE, Screen.WAREHOUSE_PLANNING, Screen.ORDERS)
+                        listOf(Screen.PICKUP, Screen.RECEIVE, Screen.WAREHOUSE_PLANNING, Screen.ORDERS, Screen.SHIPMENTS)
 
                 Scaffold(
                     containerColor = DarkBackground,
@@ -58,10 +58,9 @@ class MainActivity : ComponentActivity() {
                         composable(BottomNavItem.Map.route) { MapScreen() }
                         composable(BottomNavItem.Warehouse.route) {
                             WarehouseScreen(
-                                onPickupClick = { navController.navigate(Screen.PICKUP) },
-                                onReceivingClick = { navController.navigate(Screen.RECEIVE) },
                                 onOrdersClick = { navController.navigate(Screen.ORDERS) },
                                 onPlanningClick = { navController.navigate(Screen.WAREHOUSE_PLANNING) },
+                                onShipmentsClick = { navController.navigate(Screen.SHIPMENTS) },
                             )
                         }
                         composable(BottomNavItem.Agent.route) { AgentScreen() }
@@ -79,11 +78,18 @@ class MainActivity : ComponentActivity() {
                         composable(Screen.ORDERS) {
                             OrdersScreen(
                                 onBack = { navController.popBackStack() },
+                                onOrderClick = { navController.navigate(Screen.RECEIVE) },
                             )
                         }
                         composable(Screen.WAREHOUSE_PLANNING) {
                             WarehousePlanningScreen(
                                 onBack = { navController.popBackStack() },
+                            )
+                        }
+                        composable(Screen.SHIPMENTS) {
+                            ShipmentsScreen(
+                                onBack = { navController.popBackStack() },
+                                onShipmentClick = { navController.navigate(Screen.PICKUP) },
                             )
                         }
                         composable(Screen.WAREHOUSE_SELECTION) {
@@ -141,7 +147,7 @@ fun BottomTabBar(navController: NavHostController) {
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            val warehouseChildRoutes = listOf(Screen.PICKUP, Screen.RECEIVE, Screen.ORDERS, Screen.WAREHOUSE_PLANNING)
+            val warehouseChildRoutes = listOf(Screen.PICKUP, Screen.RECEIVE, Screen.ORDERS, Screen.WAREHOUSE_PLANNING, Screen.SHIPMENTS)
 
             BottomNavItem.items.forEach { item ->
                 val selected = currentRoute == item.route ||

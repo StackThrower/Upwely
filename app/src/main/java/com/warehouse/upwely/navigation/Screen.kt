@@ -10,4 +10,5 @@ object Screen {
     const val EDIT_PROFILE = "edit_profile"
     const val WAREHOUSE_PLANNING = "warehouse_planning"
     const val ORDERS = "orders"
+    const val SHIPMENTS = "shipments"
 }
