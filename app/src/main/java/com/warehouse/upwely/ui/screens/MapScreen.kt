@@ -428,7 +428,7 @@ private fun WarehouseFloorMap(
                 val isSelected = shelf.id == selectedShelfId
 
                 drawRoundRect(
-                    color = if (isSelected) Color(0xFF22D3EE).copy(alpha = 0.12f) else Color(0xFF0F172A),
+                    color = if (isSelected) Color(0xFF22D3EE).copy(alpha = 0.12f) else Color(0xFF0F172A).copy(alpha = 0.12f),
                     topLeft = Offset(mx(shelf.rectX), my(shelf.rectY)),
                     size = Size(shelf.rectWidth * s, shelf.rectHeight * s),
                     cornerRadius = CornerRadius(3f),
@@ -454,11 +454,6 @@ private fun WarehouseFloorMap(
             val beaconColor = Color(0xFF3B82F6)
             val beaconRadius = 0.15f * s
             plan.beacons.forEach { beacon ->
-                drawCircle(
-                    color = beaconColor.copy(alpha = 0.2f),
-                    radius = beaconRadius * 2.5f,
-                    center = Offset(mx(beacon.x), my(beacon.y)),
-                )
                 drawCircle(
                     color = beaconColor,
                     radius = beaconRadius,
