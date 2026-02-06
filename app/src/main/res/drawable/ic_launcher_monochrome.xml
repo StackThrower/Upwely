@@ -1,0 +1,12 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Location pin / spot marker -->
+    <path
+        android:fillColor="#000000"
+        android:pathData="M54,18 C38,18 25,31 25,47 C25,67 54,90 54,90 C54,90 83,67 83,47 C83,31 70,18 54,18 Z M54,65 C45.7,65 39,58.3 39,50 C39,41.7 45.7,35 54,35 C62.3,35 69,41.7 69,50 C69,58.3 62.3,65 54,65 Z" />
+
+</vector>
