@@ -17,9 +17,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.warehouse.upwely.R
 import com.warehouse.upwely.ui.theme.*
 
 @Composable
@@ -54,7 +56,7 @@ fun UserProfileScreen(
                     modifier = Modifier.size(24.dp),
                 )
                 Text(
-                    text = "User Profile",
+                    text = stringResource(R.string.user_profile),
                     fontFamily = InterFamily,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 20.sp,
@@ -77,7 +79,7 @@ fun UserProfileScreen(
                     modifier = Modifier.size(16.dp),
                 )
                 Text(
-                    text = "Edit",
+                    text = stringResource(R.string.edit),
                     fontFamily = InterFamily,
                     fontWeight = FontWeight.Medium,
                     fontSize = 14.sp,
@@ -121,7 +123,7 @@ fun UserProfileScreen(
                     color = White,
                 )
                 Text(
-                    text = "Warehouse Manager",
+                    text = stringResource(R.string.warehouse_manager),
                     fontFamily = InterFamily,
                     fontWeight = FontWeight.Normal,
                     fontSize = 14.sp,
@@ -130,23 +132,23 @@ fun UserProfileScreen(
             }
 
             // Personal Information
-            InfoSection(label = "PERSONAL INFORMATION") {
-                InfoRow(Icons.Outlined.Email, "Email", "viktor.shevchenko@warehouse.com")
-                InfoRow(Icons.Outlined.Phone, "Phone", "+380 67 123 4567")
-                InfoRow(Icons.Outlined.LocationOn, "Location", "Kyiv, Ukraine")
+            InfoSection(label = stringResource(R.string.section_personal_info)) {
+                InfoRow(Icons.Outlined.Email, stringResource(R.string.email), "viktor.shevchenko@warehouse.com")
+                InfoRow(Icons.Outlined.Phone, stringResource(R.string.phone), "+380 67 123 4567")
+                InfoRow(Icons.Outlined.LocationOn, stringResource(R.string.location), "Kyiv, Ukraine")
             }
 
             // Work Information
-            InfoSection(label = "WORK INFORMATION") {
-                InfoRow(Icons.Outlined.Badge, "Employee ID", "WH-2024-0342")
-                InfoRow(Icons.Outlined.Business, "Department", "Operations Management")
-                InfoRow(Icons.Outlined.CalendarToday, "Join Date", "March 15, 2021")
+            InfoSection(label = stringResource(R.string.section_work_info)) {
+                InfoRow(Icons.Outlined.Badge, stringResource(R.string.employee_id), "WH-2024-0342")
+                InfoRow(Icons.Outlined.Business, stringResource(R.string.department), "Operations Management")
+                InfoRow(Icons.Outlined.CalendarToday, stringResource(R.string.join_date), "March 15, 2021")
             }
 
             // Performance
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Text(
-                    text = "PERFORMANCE",
+                    text = stringResource(R.string.section_performance),
                     fontFamily = InterFamily,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 11.sp,
@@ -157,9 +159,9 @@ fun UserProfileScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    StatCard("98%", "Efficiency", Modifier.weight(1f))
-                    StatCard("1,247", "Tasks Done", Modifier.weight(1f))
-                    StatCard("4.8", "Rating", Modifier.weight(1f))
+                    StatCard("98%", stringResource(R.string.efficiency), Modifier.weight(1f))
+                    StatCard("1,247", stringResource(R.string.tasks_done), Modifier.weight(1f))
+                    StatCard("4.8", stringResource(R.string.rating), Modifier.weight(1f))
                 }
             }
         }

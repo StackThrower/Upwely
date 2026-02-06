@@ -21,11 +21,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.warehouse.upwely.R
+import com.warehouse.upwely.data.AppLanguage
+import com.warehouse.upwely.data.LocaleHelper
 import com.warehouse.upwely.ui.components.*
 import com.warehouse.upwely.ui.theme.*
 
@@ -36,6 +41,9 @@ fun SettingsScreen(
     onLanguageClick: () -> Unit = {},
     onCalibrationClick: () -> Unit = {},
 ) {
+    val context = LocalContext.current
+    val currentLanguage = LocaleHelper.getSelectedLanguage(context)
+
     // Toggle states
     var darkModeOn by remember { mutableStateOf(true) }
     var hapticFeedbackOn by remember { mutableStateOf(true) }
@@ -48,6 +56,10 @@ fun SettingsScreen(
 
     // Edit dialog state
     var editDialogField by remember { mutableStateOf<EditField?>(null) }
+
+    val scannerModeTitle = stringResource(R.string.scanner_mode)
+    val appVersionTitle = stringResource(R.string.app_version)
+    val serverTitle = stringResource(R.string.server)
 
     // Show dialog when editing
     editDialogField?.let { field ->
@@ -73,8 +85,8 @@ fun SettingsScreen(
             .verticalScroll(rememberScrollState()),
     ) {
         ScreenHeader(
-            title = "Settings",
-            subtitle = "v2.4.1 · warehouse-nav",
+            title = stringResource(R.string.settings),
+            subtitle = stringResource(R.string.settings_subtitle),
         )
 
         Column(
@@ -89,7 +101,7 @@ fun SettingsScreen(
             // General Section
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(
-                    text = "GENERAL",
+                    text = stringResource(R.string.section_general),
                     fontFamily = InterFamily,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 11.sp,
@@ -106,20 +118,20 @@ fun SettingsScreen(
                 ) {
                     SettingsRow(
                         icon = Icons.Outlined.Warehouse,
-                        title = "Warehouse",
-                        value = "Warehouse A-12 · Kyiv",
+                        title = stringResource(R.string.warehouse),
+                        value = stringResource(R.string.warehouse_title),
                         onClick = onWarehouseClick,
                     )
                     SettingsRow(
                         icon = Icons.Outlined.Language,
-                        title = "Language",
-                        value = "Українська",
+                        title = stringResource(R.string.language),
+                        value = currentLanguage.nativeName,
                         onClick = onLanguageClick,
                     )
                     SettingsRow(
                         icon = Icons.Outlined.DarkMode,
-                        title = "Dark Mode",
-                        value = if (darkModeOn) "on · auto" else "off",
+                        title = stringResource(R.string.dark_mode),
+                        value = if (darkModeOn) stringResource(R.string.dark_mode_on) else stringResource(R.string.off),
                         valueHighlight = darkModeOn,
                         hasChevron = false,
                         hasToggle = true,
@@ -132,7 +144,7 @@ fun SettingsScreen(
             // Scanner Section
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(
-                    text = "SCANNER",
+                    text = stringResource(R.string.section_scanner),
                     fontFamily = InterFamily,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 11.sp,
@@ -149,22 +161,22 @@ fun SettingsScreen(
                 ) {
                     SettingsRow(
                         icon = Icons.Outlined.QrCodeScanner,
-                        title = "Scanner Mode",
+                        title = stringResource(R.string.scanner_mode),
                         value = scannerMode,
                         onClick = {
-                            editDialogField = EditField("scannerMode", "Scanner Mode", scannerMode)
+                            editDialogField = EditField("scannerMode", scannerModeTitle, scannerMode)
                         },
                     )
                     SettingsRow(
                         icon = Icons.Outlined.Sensors,
-                        title = "Beacon Calibration",
-                        value = "signal fingerprinting",
+                        title = stringResource(R.string.beacon_calibration),
+                        value = stringResource(R.string.signal_fingerprinting),
                         onClick = onCalibrationClick,
                     )
                     SettingsRow(
                         icon = Icons.Outlined.Vibration,
-                        title = "Haptic Feedback",
-                        value = if (hapticFeedbackOn) "on · scan confirmation" else "off",
+                        title = stringResource(R.string.haptic_feedback),
+                        value = if (hapticFeedbackOn) stringResource(R.string.haptic_on) else stringResource(R.string.off),
                         valueHighlight = hapticFeedbackOn,
                         hasChevron = false,
                         hasToggle = true,
@@ -173,8 +185,8 @@ fun SettingsScreen(
                     )
                     SettingsRow(
                         icon = Icons.AutoMirrored.Outlined.VolumeUp,
-                        title = "Sound Effects",
-                        value = if (soundEffectsOn) "on" else "off",
+                        title = stringResource(R.string.sound_effects),
+                        value = if (soundEffectsOn) stringResource(R.string.on) else stringResource(R.string.off),
                         valueHighlight = soundEffectsOn,
                         hasChevron = false,
                         hasToggle = true,
@@ -187,7 +199,7 @@ fun SettingsScreen(
             // About Section
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(
-                    text = "ABOUT",
+                    text = stringResource(R.string.section_about),
                     fontFamily = InterFamily,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 11.sp,
@@ -204,21 +216,21 @@ fun SettingsScreen(
                 ) {
                     SettingsRow(
                         icon = Icons.Outlined.Info,
-                        title = "App Version",
+                        title = stringResource(R.string.app_version),
                         value = appVersion,
                         hasChevron = false,
                         onClick = {
-                            editDialogField = EditField("appVersion", "App Version", appVersion)
+                            editDialogField = EditField("appVersion", appVersionTitle, appVersion)
                         },
                     )
                     SettingsRow(
                         icon = Icons.Outlined.Dns,
-                        title = "Server",
+                        title = stringResource(R.string.server),
                         value = serverAddress,
                         valueHighlight = true,
                         hasChevron = false,
                         onClick = {
-                            editDialogField = EditField("server", "Server", serverAddress)
+                            editDialogField = EditField("server", serverTitle, serverAddress)
                         },
                     )
                 }
@@ -242,7 +254,7 @@ fun SettingsScreen(
                     modifier = Modifier.size(18.dp),
                 )
                 Text(
-                    text = "Log Out",
+                    text = stringResource(R.string.log_out),
                     fontFamily = InterFamily,
                     fontWeight = FontWeight.Medium,
                     fontSize = 14.sp,
@@ -312,7 +324,7 @@ private fun EditTextDialog(
                 horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.End),
             ) {
                 Text(
-                    text = "Cancel",
+                    text = stringResource(R.string.cancel),
                     fontFamily = InterFamily,
                     fontWeight = FontWeight.Medium,
                     fontSize = 14.sp,
@@ -323,7 +335,7 @@ private fun EditTextDialog(
                         .padding(horizontal = 16.dp, vertical = 8.dp),
                 )
                 Text(
-                    text = "Save",
+                    text = stringResource(R.string.save),
                     fontFamily = InterFamily,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 14.sp,
@@ -378,7 +390,7 @@ private fun ProfileCard(onClick: () -> Unit = {}) {
                 color = White,
             )
             Text(
-                text = "warehouse operator · shift A",
+                text = stringResource(R.string.warehouse_operator),
                 fontFamily = JetBrainsMonoFamily,
                 fontWeight = FontWeight.Normal,
                 fontSize = 11.sp,

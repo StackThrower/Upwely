@@ -18,9 +18,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.warehouse.upwely.R
 import com.warehouse.upwely.ui.components.ScreenHeader
 import com.warehouse.upwely.ui.theme.*
 
@@ -37,8 +39,8 @@ fun WarehouseScreen(
             .verticalScroll(rememberScrollState()),
     ) {
         ScreenHeader(
-            title = "Warehouse",
-            subtitle = "Management Center",
+            title = stringResource(R.string.warehouse),
+            subtitle = stringResource(R.string.management_center),
         )
 
         Column(
@@ -50,7 +52,7 @@ fun WarehouseScreen(
             // Operations Section
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Text(
-                    text = "OPERATIONS",
+                    text = stringResource(R.string.section_operations),
                     fontFamily = InterFamily,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 11.sp,
@@ -67,20 +69,20 @@ fun WarehouseScreen(
                 ) {
                     OperationItem(
                         icon = Icons.Outlined.ShoppingCart,
-                        title = "Orders",
-                        subtitle = "5 active orders",
+                        title = stringResource(R.string.orders),
+                        subtitle = stringResource(R.string.active_orders, 5),
                         onClick = onOrdersClick,
                     )
                     OperationItem(
                         icon = Icons.Outlined.LocalShipping,
-                        title = "Shipments",
-                        subtitle = "6 active shipments",
+                        title = stringResource(R.string.shipments),
+                        subtitle = stringResource(R.string.active_shipments, 6),
                         onClick = onShipmentsClick,
                     )
                     OperationItem(
                         icon = Icons.Outlined.GridView,
-                        title = "Warehouse Planning",
-                        subtitle = "Layout & organization",
+                        title = stringResource(R.string.warehouse_planning),
+                        subtitle = stringResource(R.string.layout_organization),
                         onClick = onPlanningClick,
                     )
                 }
@@ -89,7 +91,7 @@ fun WarehouseScreen(
             // Warehouse Metrics Section
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Text(
-                    text = "WAREHOUSE METRICS",
+                    text = stringResource(R.string.section_warehouse_metrics),
                     fontFamily = InterFamily,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 11.sp,
@@ -102,13 +104,13 @@ fun WarehouseScreen(
                 ) {
                     MetricBox(
                         value = "156",
-                        label = "Total Items",
+                        label = stringResource(R.string.total_items),
                         highlight = false,
                         modifier = Modifier.weight(1f),
                     )
                     MetricBox(
                         value = "89%",
-                        label = "Utilization",
+                        label = stringResource(R.string.utilization),
                         highlight = true,
                         modifier = Modifier.weight(1f),
                     )

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Upwely</string>
+
+    <!-- Bottom Navigation -->
+    <string name="nav_map">Карта</string>
+    <string name="nav_warehouse">Склад</string>
+    <string name="nav_agent">Агент</string>
+    <string name="nav_settings">Налаштування</string>
+
+    <!-- Common -->
+    <string name="save">Зберегти</string>
+    <string name="cancel">Скасувати</string>
+    <string name="edit">Редагувати</string>
+    <string name="add">Додати</string>
+    <string name="delete">Видалити</string>
+    <string name="clear">Очистити</string>
+    <string name="search">Пошук</string>
+    <string name="back">Назад</string>
+    <string name="on">увімк</string>
+    <string name="off">вимк</string>
+    <string name="select_all">вибрати все</string>
+    <string name="deselect_all">зняти все</string>
+    <string name="selected">Обрано: %d</string>
+    <string name="items">позицій</string>
+    <string name="positions">позицій</string>
+    <string name="you">ВИ</string>
+
+    <!-- Settings Screen -->
+    <string name="settings">Налаштування</string>
+    <string name="settings_subtitle">v2.4.1 · warehouse-nav</string>
+    <string name="section_general">ЗАГАЛЬНІ</string>
+    <string name="section_scanner">СКАНЕР</string>
+    <string name="section_about">ПРО ДОДАТОК</string>
+    <string name="warehouse">Склад</string>
+    <string name="language">Мова</string>
+    <string name="dark_mode">Темна тема</string>
+    <string name="dark_mode_on">увімк · авто</string>
+    <string name="scanner_mode">Режим сканера</string>
+    <string name="beacon_calibration">Калібрування маяків</string>
+    <string name="signal_fingerprinting">сигнатура сигналу</string>
+    <string name="haptic_feedback">Вібровідгук</string>
+    <string name="haptic_on">увімк · підтвердження сканування</string>
+    <string name="sound_effects">Звукові ефекти</string>
+    <string name="app_version">Версія додатку</string>
+    <string name="server">Сервер</string>
+    <string name="log_out">Вийти</string>
+    <string name="warehouse_operator">оператор складу · зміна А</string>
+
+    <!-- Language Selection -->
+    <string name="language_english">Англійська</string>
+    <string name="language_ukrainian">Українська</string>
+    <string name="language_polish">Польська</string>
+    <string name="language_german">Німецька</string>
+    <string name="language_french">Французька</string>
+    <string name="language_spanish">Іспанська</string>
+    <string name="language_romanian">Румунська</string>
+    <string name="language_native_english">English</string>
+    <string name="language_native_ukrainian">Українська</string>
+    <string name="language_native_polish">Polski</string>
+    <string name="language_native_german">Deutsch</string>
+    <string name="language_native_french">Français</string>
+    <string name="language_native_spanish">Español</string>
+    <string name="language_native_romanian">Română</string>
+
+    <!-- Map Screen -->
+    <string name="warehouse_title">Склад A-12</string>
+    <string name="plan_overview">Огляд плану</string>
+    <string name="map">КАРТА</string>
+
+    <!-- Warehouse Screen -->
+    <string name="management_center">Центр управління</string>
+    <string name="section_operations">ОПЕРАЦІЇ</string>
+    <string name="orders">Замовлення</string>
+    <string name="active_orders">%d активних замовлень</string>
+    <string name="shipments">Відвантаження</string>
+    <string name="active_shipments">%d активних відвантажень</string>
+    <string name="warehouse_planning">Планування складу</string>
+    <string name="layout_organization">Розміщення та організація</string>
+    <string name="section_warehouse_metrics">МЕТРИКИ СКЛАДУ</string>
+    <string name="total_items">Всього товарів</string>
+    <string name="utilization">Завантаженість</string>
+
+    <!-- Agent Screen -->
+    <string name="ai_assistant">AI Асистент</string>
+    <string name="warehouse_agent">Агент складу</string>
+    <string name="welcome_message">Привіт! Я ваш AI Асистент складу</string>
+    <string name="welcome_description">Я можу допомогти з інвентаризацією, навігацією, замовленнями та операціями складу. Як я можу вам допомогти сьогодні?</string>
+    <string name="ask_anything">Запитайте що завгодно...</string>
+    <string name="check_inventory">Перевірити запаси</string>
+    <string name="find_location">Знайти місце</string>
+    <string name="order_status">Статус замовлення</string>
+    <string name="agent">Агент</string>
+
+    <!-- Orders Screen -->
+    <string name="active_orders_count">%d активних замовлень</string>
+    <string name="filter_all">всі</string>
+    <string name="filter_active">активні</string>
+    <string name="filter_delivered">доставлені</string>
+    <string name="total">ВСЬОГО</string>
+    <string name="orders_count">замовлень</string>
+    <string name="in_transit">В ДОРОЗІ</string>
+    <string name="on_the_way">в дорозі</string>
+    <string name="section_orders">ЗАМОВЛЕННЯ</string>
+    <string name="take_to_work">Взяти в роботу</string>
+    <string name="in_work">В РОБОТІ</string>
+    <string name="status_delivered">Доставлено</string>
+    <string name="status_in_transit">В дорозі</string>
+    <string name="status_processing">Обробка</string>
+    <string name="status_new">Нове</string>
+
+    <!-- Shipments Screen -->
+    <string name="shipments_count">%d відвантажень</string>
+    <string name="filter_pending">очікують</string>
+    <string name="filter_shipped">відправлені</string>
+    <string name="shipments_total">відвантажень</string>
+    <string name="shipped">ВІДПРАВЛЕНО</string>
+    <string name="section_shipments">ВІДВАНТАЖЕННЯ</string>
+    <string name="status_shipped">Відправлено</string>
+    <string name="status_packing">Пакування</string>
+    <string name="status_pending">Очікує</string>
+
+    <!-- User Profile Screen -->
+    <string name="user_profile">Профіль користувача</string>
+    <string name="warehouse_manager">Менеджер складу</string>
+    <string name="section_personal_info">ОСОБИСТА ІНФОРМАЦІЯ</string>
+    <string name="email">Електронна пошта</string>
+    <string name="phone">Телефон</string>
+    <string name="location">Місцезнаходження</string>
+    <string name="section_work_info">РОБОЧА ІНФОРМАЦІЯ</string>
+    <string name="employee_id">ID працівника</string>
+    <string name="department">Відділ</string>
+    <string name="join_date">Дата приєднання</string>
+    <string name="section_performance">ПРОДУКТИВНІСТЬ</string>
+    <string name="efficiency">Ефективність</string>
+    <string name="tasks_done">Виконано завдань</string>
+    <string name="rating">Рейтинг</string>
+
+    <!-- Edit Profile Screen -->
+    <string name="edit_profile">Редагувати профіль</string>
+    <string name="change_photo">Змінити фото</string>
+    <string name="full_name">Повне ім\'я</string>
+    <string name="role">Роль</string>
+    <string name="section_notifications">СПОВІЩЕННЯ</string>
+    <string name="email_notifications">Email сповіщення</string>
+    <string name="push_notifications">Push сповіщення</string>
+    <string name="delete_account">Видалити акаунт</string>
+
+    <!-- Warehouse Selection Screen -->
+    <string name="select_warehouse">Вибрати склад</string>
+    <string name="search_warehouses">Пошук складів...</string>
+
+    <!-- Add Warehouse Screen -->
+    <string name="add_new_warehouse">Додати новий склад</string>
+    <string name="section_basic_info">ОСНОВНА ІНФОРМАЦІЯ</string>
+    <string name="warehouse_name">Назва складу *</string>
+    <string name="enter_warehouse_name">Введіть назву складу</string>
+    <string name="warehouse_type">Тип складу *</string>
+    <string name="distribution_center">Дистрибуційний центр</string>
+    <string name="section_location">МІСЦЕЗНАХОДЖЕННЯ</string>
+    <string name="address">Адреса *</string>
+    <string name="enter_address">Введіть адресу</string>
+    <string name="city">Місто *</string>
+    <string name="enter_city">Введіть місто</string>
+    <string name="country">Країна *</string>
+    <string name="section_capacity">МІСТКІСТЬ</string>
+    <string name="total_size">Загальна площа (м²) *</string>
+    <string name="storage_capacity">Місткість (одиниць)</string>
+    <string name="section_manager">ПРИЗНАЧЕННЯ МЕНЕДЖЕРА</string>
+    <string name="warehouse_manager_select">Менеджер складу</string>
+    <string name="select_manager">Вибрати менеджера</string>
+
+    <!-- Calibration Screen -->
+    <string name="calibration">Калібрування</string>
+    <string name="calibration_points">%1$d точок · %2$d маяків</string>
+    <string name="tap_to_calibrate">НАТИСНІТЬ ДЛЯ КАЛІБРУВАННЯ</string>
+    <string name="point_added">Точку додано в (%1$.1f, %2$.1f)</string>
+    <string name="beacons">МАЯКИ</string>
+    <string name="scanning">Сканування...</string>
+    <string name="not_scanning">Не сканує</string>
+    <string name="clear_calibration">Очистити калібрування</string>
+    <string name="calibration_cleared">Калібрування очищено</string>
+    <string name="tap_to_add_point">Натисніть, щоб додати точку калібрування</string>
+</resources>

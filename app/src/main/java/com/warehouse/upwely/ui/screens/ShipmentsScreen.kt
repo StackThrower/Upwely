@@ -17,18 +17,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.warehouse.upwely.R
 import com.warehouse.upwely.data.loadShipmentsConfig
 import com.warehouse.upwely.ui.components.*
 import com.warehouse.upwely.ui.theme.*
 
-private enum class ShipmentStatus(val label: String, val color: androidx.compose.ui.graphics.Color) {
-    DELIVERED("Доставлено", Cyan),
-    SHIPPED("Відправлено", Cyan),
-    PACKING("Пакування", TextSecondary),
-    PENDING("Очікує", TextMuted),
+private enum class ShipmentStatus {
+    DELIVERED, SHIPPED, PACKING, PENDING
 }
 
 private data class ShipmentItem(
@@ -70,6 +69,13 @@ fun ShipmentsScreen(
     var inWorkIds by remember { mutableStateOf(setOf<String>()) }
     val allIds = remember(filteredShipments) { filteredShipments.map { it.id }.toSet() }
 
+    val statusLabels = mapOf(
+        ShipmentStatus.DELIVERED to stringResource(R.string.status_delivered),
+        ShipmentStatus.SHIPPED to stringResource(R.string.status_shipped),
+        ShipmentStatus.PACKING to stringResource(R.string.status_packing),
+        ShipmentStatus.PENDING to stringResource(R.string.status_pending),
+    )
+
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -78,8 +84,8 @@ fun ShipmentsScreen(
                 .verticalScroll(rememberScrollState()),
         ) {
             ScreenHeader(
-                title = "Shipments",
-                subtitle = "${shipments.size} відвантажень",
+                title = stringResource(R.string.shipments),
+                subtitle = stringResource(R.string.shipments_count, shipments.size),
                 actionIcon = Icons.Outlined.LocalShipping,
             )
 
@@ -104,16 +110,16 @@ fun ShipmentsScreen(
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
                     ShipmentMetricCard(
-                        label = "TOTAL",
+                        label = stringResource(R.string.total),
                         value = "${filteredShipments.size}",
-                        subtitle = "відвантажень",
+                        subtitle = stringResource(R.string.shipments_total),
                         highlight = false,
                         modifier = Modifier.weight(1f),
                     )
                     ShipmentMetricCard(
-                        label = "SHIPPED",
+                        label = stringResource(R.string.shipped),
                         value = "${filteredShipments.count { it.status == ShipmentStatus.SHIPPED }}",
-                        subtitle = "в дорозі",
+                        subtitle = stringResource(R.string.on_the_way),
                         highlight = true,
                         modifier = Modifier.weight(1f),
                     )
@@ -127,11 +133,11 @@ fun ShipmentsScreen(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         SectionLabel(
-                            label = "SHIPMENTS",
+                            label = stringResource(R.string.section_shipments),
                             value = "[${filteredShipments.count { it.status == ShipmentStatus.DELIVERED }}/${filteredShipments.size}]",
                         )
                         Text(
-                            text = if (selectedIds.size == allIds.size) "зняти все" else "вибрати все",
+                            text = if (selectedIds.size == allIds.size) stringResource(R.string.deselect_all) else stringResource(R.string.select_all),
                             fontFamily = JetBrainsMonoFamily,
                             fontWeight = FontWeight.Medium,
                             fontSize = 11.sp,
@@ -156,6 +162,7 @@ fun ShipmentsScreen(
                         filteredShipments.forEach { shipment ->
                             ShipmentRow(
                                 shipment = shipment,
+                                statusLabel = statusLabels[shipment.status] ?: "",
                                 isSelected = shipment.id in selectedIds,
                                 isInWork = shipment.id in inWorkIds,
                                 onCheckedChange = { checked ->
@@ -191,7 +198,7 @@ fun ShipmentsScreen(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 Text(
-                    text = "Обрано: ${selectedIds.size}",
+                    text = stringResource(R.string.selected, selectedIds.size),
                     fontFamily = JetBrainsMonoFamily,
                     fontWeight = FontWeight.Medium,
                     fontSize = 13.sp,
@@ -209,7 +216,7 @@ fun ShipmentsScreen(
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        text = "Взяти в роботу",
+                        text = stringResource(R.string.take_to_work),
                         fontFamily = InterFamily,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 14.sp,
@@ -226,7 +233,12 @@ private fun ShipmentSegmentedControl(
     selected: Int,
     onSelectedChange: (Int) -> Unit,
 ) {
-    val segments = listOf("all", "pending", "shipped", "delivered")
+    val segments = listOf(
+        stringResource(R.string.filter_all),
+        stringResource(R.string.filter_pending),
+        stringResource(R.string.filter_shipped),
+        stringResource(R.string.filter_delivered),
+    )
 
     Row(
         modifier = Modifier
@@ -305,17 +317,14 @@ private fun ShipmentMetricCard(
 @Composable
 private fun ShipmentRow(
     shipment: ShipmentItem,
+    statusLabel: String,
     isSelected: Boolean,
     isInWork: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     onClick: () -> Unit = {},
 ) {
-    val (statusChar, statusColor) = when (shipment.status) {
-        ShipmentStatus.DELIVERED -> "✓" to Cyan
-        ShipmentStatus.SHIPPED -> "◐" to Cyan
-        ShipmentStatus.PACKING -> "◐" to TextSecondary
-        ShipmentStatus.PENDING -> "○" to TextMuted
-    }
+    val inWorkLabel = stringResource(R.string.in_work)
+    val positionsLabel = stringResource(R.string.positions)
 
     val rowBackground = when {
         isSelected -> CyanGlow
@@ -337,7 +346,6 @@ private fun ShipmentRow(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        // Checkbox
         Box(
             modifier = Modifier
                 .size(22.dp)
@@ -378,7 +386,7 @@ private fun ShipmentRow(
                 )
                 if (isInWork) {
                     Text(
-                        text = "В РОБОТІ",
+                        text = inWorkLabel,
                         fontFamily = JetBrainsMonoFamily,
                         fontWeight = FontWeight.Bold,
                         fontSize = 9.sp,
@@ -392,7 +400,7 @@ private fun ShipmentRow(
                 }
             }
             Text(
-                text = "${shipment.itemCount} позицій · ${shipment.status.label}",
+                text = "${shipment.itemCount} $positionsLabel · $statusLabel",
                 fontFamily = JetBrainsMonoFamily,
                 fontWeight = FontWeight.Normal,
                 fontSize = 11.sp,

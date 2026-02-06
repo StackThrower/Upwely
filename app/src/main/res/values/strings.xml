@@ -1,3 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Upwely</string>
+
+    <!-- Bottom Navigation -->
+    <string name="nav_map">Map</string>
+    <string name="nav_warehouse">Warehouse</string>
+    <string name="nav_agent">Agent</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Common -->
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="edit">Edit</string>
+    <string name="add">Add</string>
+    <string name="delete">Delete</string>
+    <string name="clear">Clear</string>
+    <string name="search">Search</string>
+    <string name="back">Back</string>
+    <string name="on">on</string>
+    <string name="off">off</string>
+    <string name="select_all">select all</string>
+    <string name="deselect_all">deselect all</string>
+    <string name="selected">Selected: %d</string>
+    <string name="items">items</string>
+    <string name="positions">positions</string>
+    <string name="you">YOU</string>
+
+    <!-- Settings Screen -->
+    <string name="settings">Settings</string>
+    <string name="settings_subtitle">v2.4.1 · warehouse-nav</string>
+    <string name="section_general">GENERAL</string>
+    <string name="section_scanner">SCANNER</string>
+    <string name="section_about">ABOUT</string>
+    <string name="warehouse">Warehouse</string>
+    <string name="language">Language</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="dark_mode_on">on · auto</string>
+    <string name="scanner_mode">Scanner Mode</string>
+    <string name="beacon_calibration">Beacon Calibration</string>
+    <string name="signal_fingerprinting">signal fingerprinting</string>
+    <string name="haptic_feedback">Haptic Feedback</string>
+    <string name="haptic_on">on · scan confirmation</string>
+    <string name="sound_effects">Sound Effects</string>
+    <string name="app_version">App Version</string>
+    <string name="server">Server</string>
+    <string name="log_out">Log Out</string>
+    <string name="warehouse_operator">warehouse operator · shift A</string>
+
+    <!-- Language Selection -->
+    <string name="language_english">English</string>
+    <string name="language_ukrainian">Ukrainian</string>
+    <string name="language_polish">Polish</string>
+    <string name="language_german">German</string>
+    <string name="language_french">French</string>
+    <string name="language_spanish">Spanish</string>
+    <string name="language_romanian">Romanian</string>
+    <string name="language_native_english">English</string>
+    <string name="language_native_ukrainian">Українська</string>
+    <string name="language_native_polish">Polski</string>
+    <string name="language_native_german">Deutsch</string>
+    <string name="language_native_french">Français</string>
+    <string name="language_native_spanish">Español</string>
+    <string name="language_native_romanian">Română</string>
+
+    <!-- Map Screen -->
+    <string name="warehouse_title">Warehouse A-12</string>
+    <string name="plan_overview">Plan overview</string>
+    <string name="map">MAP</string>
+
+    <!-- Warehouse Screen -->
+    <string name="management_center">Management Center</string>
+    <string name="section_operations">OPERATIONS</string>
+    <string name="orders">Orders</string>
+    <string name="active_orders">%d active orders</string>
+    <string name="shipments">Shipments</string>
+    <string name="active_shipments">%d active shipments</string>
+    <string name="warehouse_planning">Warehouse Planning</string>
+    <string name="layout_organization">Layout &amp; organization</string>
+    <string name="section_warehouse_metrics">WAREHOUSE METRICS</string>
+    <string name="total_items">Total Items</string>
+    <string name="utilization">Utilization</string>
+
+    <!-- Agent Screen -->
+    <string name="ai_assistant">AI Assistant</string>
+    <string name="warehouse_agent">Warehouse Agent</string>
+    <string name="welcome_message">Hello! I\'m your AI Warehouse Assistant</string>
+    <string name="welcome_description">I can help you with inventory, navigation, orders, and warehouse operations. How can I assist you today?</string>
+    <string name="ask_anything">Ask me anything...</string>
+    <string name="check_inventory">Check inventory</string>
+    <string name="find_location">Find location</string>
+    <string name="order_status">Order status</string>
+    <string name="agent">Agent</string>
+
+    <!-- Orders Screen -->
+    <string name="active_orders_count">%d active orders</string>
+    <string name="filter_all">all</string>
+    <string name="filter_active">active</string>
+    <string name="filter_delivered">delivered</string>
+    <string name="total">TOTAL</string>
+    <string name="orders_count">orders</string>
+    <string name="in_transit">IN TRANSIT</string>
+    <string name="on_the_way">on the way</string>
+    <string name="section_orders">ORDERS</string>
+    <string name="take_to_work">Take to work</string>
+    <string name="in_work">IN WORK</string>
+    <string name="status_delivered">Delivered</string>
+    <string name="status_in_transit">In transit</string>
+    <string name="status_processing">Processing</string>
+    <string name="status_new">New</string>
+
+    <!-- Shipments Screen -->
+    <string name="shipments_count">%d shipments</string>
+    <string name="filter_pending">pending</string>
+    <string name="filter_shipped">shipped</string>
+    <string name="shipments_total">shipments</string>
+    <string name="shipped">SHIPPED</string>
+    <string name="section_shipments">SHIPMENTS</string>
+    <string name="status_shipped">Shipped</string>
+    <string name="status_packing">Packing</string>
+    <string name="status_pending">Pending</string>
+
+    <!-- User Profile Screen -->
+    <string name="user_profile">User Profile</string>
+    <string name="warehouse_manager">Warehouse Manager</string>
+    <string name="section_personal_info">PERSONAL INFORMATION</string>
+    <string name="email">Email</string>
+    <string name="phone">Phone</string>
+    <string name="location">Location</string>
+    <string name="section_work_info">WORK INFORMATION</string>
+    <string name="employee_id">Employee ID</string>
+    <string name="department">Department</string>
+    <string name="join_date">Join Date</string>
+    <string name="section_performance">PERFORMANCE</string>
+    <string name="efficiency">Efficiency</string>
+    <string name="tasks_done">Tasks Done</string>
+    <string name="rating">Rating</string>
+
+    <!-- Edit Profile Screen -->
+    <string name="edit_profile">Edit Profile</string>
+    <string name="change_photo">Change Photo</string>
+    <string name="full_name">Full Name</string>
+    <string name="role">Role</string>
+    <string name="section_notifications">NOTIFICATIONS</string>
+    <string name="email_notifications">Email Notifications</string>
+    <string name="push_notifications">Push Notifications</string>
+    <string name="delete_account">Delete Account</string>
+
+    <!-- Warehouse Selection Screen -->
+    <string name="select_warehouse">Select Warehouse</string>
+    <string name="search_warehouses">Search warehouses...</string>
+
+    <!-- Add Warehouse Screen -->
+    <string name="add_new_warehouse">Add New Warehouse</string>
+    <string name="section_basic_info">BASIC INFORMATION</string>
+    <string name="warehouse_name">Warehouse Name *</string>
+    <string name="enter_warehouse_name">Enter warehouse name</string>
+    <string name="warehouse_type">Warehouse Type *</string>
+    <string name="distribution_center">Distribution Center</string>
+    <string name="section_location">LOCATION</string>
+    <string name="address">Address *</string>
+    <string name="enter_address">Enter address</string>
+    <string name="city">City *</string>
+    <string name="enter_city">Enter city</string>
+    <string name="country">Country *</string>
+    <string name="section_capacity">CAPACITY</string>
+    <string name="total_size">Total Size (m²) *</string>
+    <string name="storage_capacity">Storage Capacity (units)</string>
+    <string name="section_manager">MANAGER ASSIGNMENT</string>
+    <string name="warehouse_manager_select">Warehouse Manager</string>
+    <string name="select_manager">Select manager</string>
+
+    <!-- Calibration Screen -->
+    <string name="calibration">Calibration</string>
+    <string name="calibration_points">%1$d points · %2$d beacons</string>
+    <string name="tap_to_calibrate">TAP TO CALIBRATE</string>
+    <string name="point_added">Point added at (%1$.1f, %2$.1f)</string>
+    <string name="beacons">BEACONS</string>
+    <string name="scanning">Scanning...</string>
+    <string name="not_scanning">Not scanning</string>
+    <string name="clear_calibration">Clear Calibration</string>
+    <string name="calibration_cleared">Calibration cleared</string>
+    <string name="tap_to_add_point">Tap to add calibration point</string>
 </resources>

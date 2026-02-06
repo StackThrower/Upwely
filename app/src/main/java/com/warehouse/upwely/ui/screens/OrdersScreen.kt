@@ -19,18 +19,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.warehouse.upwely.R
 import com.warehouse.upwely.data.loadOrdersConfig
 import com.warehouse.upwely.ui.components.*
 import com.warehouse.upwely.ui.theme.*
 
-private enum class OrderStatus(val label: String, val color: androidx.compose.ui.graphics.Color) {
-    DELIVERED("Доставлено", Cyan),
-    IN_TRANSIT("В дорозі", Cyan),
-    PROCESSING("Обробка", TextSecondary),
-    NEW("Нове", TextMuted),
+private enum class OrderStatus {
+    DELIVERED, IN_TRANSIT, PROCESSING, NEW
 }
 
 private data class OrderItem(
@@ -77,13 +76,20 @@ fun OrdersScreen(
     }
     val filteredIds = remember(filteredOrders) { filteredOrders.map { it.id }.toSet() }
 
-    // Clear selection when switching tabs
     LaunchedEffect(selectedFilter) {
         selectedIds = emptySet()
     }
 
     val activeCount = orders.count { it.status != OrderStatus.DELIVERED }
     val inTransitCount = filteredOrders.count { it.status == OrderStatus.IN_TRANSIT }
+
+    // Status labels
+    val statusLabels = mapOf(
+        OrderStatus.DELIVERED to stringResource(R.string.status_delivered),
+        OrderStatus.IN_TRANSIT to stringResource(R.string.status_in_transit),
+        OrderStatus.PROCESSING to stringResource(R.string.status_processing),
+        OrderStatus.NEW to stringResource(R.string.status_new),
+    )
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -93,8 +99,8 @@ fun OrdersScreen(
                 .verticalScroll(rememberScrollState()),
         ) {
             ScreenHeader(
-                title = "Orders",
-                subtitle = "$activeCount активних замовлень",
+                title = stringResource(R.string.orders),
+                subtitle = stringResource(R.string.active_orders_count, activeCount),
                 actionIcon = Icons.Outlined.ShoppingCart,
             )
 
@@ -116,16 +122,16 @@ fun OrdersScreen(
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
                     OrderMetricCard(
-                        label = "TOTAL",
+                        label = stringResource(R.string.total),
                         value = "${filteredOrders.size}",
-                        subtitle = "замовлень",
+                        subtitle = stringResource(R.string.orders_count),
                         highlight = false,
                         modifier = Modifier.weight(1f),
                     )
                     OrderMetricCard(
-                        label = "IN TRANSIT",
+                        label = stringResource(R.string.in_transit),
                         value = "$inTransitCount",
-                        subtitle = "в дорозі",
+                        subtitle = stringResource(R.string.on_the_way),
                         highlight = true,
                         modifier = Modifier.weight(1f),
                     )
@@ -139,11 +145,11 @@ fun OrdersScreen(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         SectionLabel(
-                            label = "ORDERS",
+                            label = stringResource(R.string.section_orders),
                             value = "[${filteredOrders.count { it.status == OrderStatus.DELIVERED }}/${filteredOrders.size}]",
                         )
                         Text(
-                            text = if (selectedIds.containsAll(filteredIds)) "зняти все" else "вибрати все",
+                            text = if (selectedIds.containsAll(filteredIds)) stringResource(R.string.deselect_all) else stringResource(R.string.select_all),
                             fontFamily = JetBrainsMonoFamily,
                             fontWeight = FontWeight.Medium,
                             fontSize = 11.sp,
@@ -168,6 +174,7 @@ fun OrdersScreen(
                         filteredOrders.forEach { order ->
                             OrderRow(
                                 order = order,
+                                statusLabel = statusLabels[order.status] ?: "",
                                 isSelected = order.id in selectedIds,
                                 isInWork = order.id in inWorkIds,
                                 onCheckedChange = { checked ->
@@ -203,7 +210,7 @@ fun OrdersScreen(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 Text(
-                    text = "Обрано: ${selectedIds.size}",
+                    text = stringResource(R.string.selected, selectedIds.size),
                     fontFamily = JetBrainsMonoFamily,
                     fontWeight = FontWeight.Medium,
                     fontSize = 13.sp,
@@ -221,7 +228,7 @@ fun OrdersScreen(
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        text = "Взяти в роботу",
+                        text = stringResource(R.string.take_to_work),
                         fontFamily = InterFamily,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 14.sp,
@@ -238,7 +245,11 @@ private fun OrderSegmentedControl(
     selected: Int,
     onSelectedChange: (Int) -> Unit,
 ) {
-    val segments = listOf("all", "active", "delivered")
+    val segments = listOf(
+        stringResource(R.string.filter_all),
+        stringResource(R.string.filter_active),
+        stringResource(R.string.filter_delivered),
+    )
 
     Row(
         modifier = Modifier
@@ -317,17 +328,14 @@ private fun OrderMetricCard(
 @Composable
 private fun OrderRow(
     order: OrderItem,
+    statusLabel: String,
     isSelected: Boolean,
     isInWork: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     onClick: () -> Unit = {},
 ) {
-    val (statusChar, statusColor) = when (order.status) {
-        OrderStatus.DELIVERED -> "✓" to Cyan
-        OrderStatus.IN_TRANSIT -> "◐" to Cyan
-        OrderStatus.PROCESSING -> "◐" to TextSecondary
-        OrderStatus.NEW -> "○" to TextMuted
-    }
+    val inWorkLabel = stringResource(R.string.in_work)
+    val positionsLabel = stringResource(R.string.positions)
 
     val rowBackground = when {
         isSelected -> CyanGlow
@@ -349,7 +357,6 @@ private fun OrderRow(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        // Checkbox
         Box(
             modifier = Modifier
                 .size(22.dp)
@@ -390,7 +397,7 @@ private fun OrderRow(
                 )
                 if (isInWork) {
                     Text(
-                        text = "В РОБОТІ",
+                        text = inWorkLabel,
                         fontFamily = JetBrainsMonoFamily,
                         fontWeight = FontWeight.Bold,
                         fontSize = 9.sp,
@@ -404,7 +411,7 @@ private fun OrderRow(
                 }
             }
             Text(
-                text = "${order.itemCount} позицій · ${order.status.label}",
+                text = "${order.itemCount} $positionsLabel · $statusLabel",
                 fontFamily = JetBrainsMonoFamily,
                 fontWeight = FontWeight.Normal,
                 fontSize = 11.sp,

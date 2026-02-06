@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Upwely</string>
+
+    <!-- Bottom Navigation -->
+    <string name="nav_map">Hartă</string>
+    <string name="nav_warehouse">Depozit</string>
+    <string name="nav_agent">Agent</string>
+    <string name="nav_settings">Setări</string>
+
+    <!-- Common -->
+    <string name="save">Salvează</string>
+    <string name="cancel">Anulează</string>
+    <string name="edit">Editează</string>
+    <string name="add">Adaugă</string>
+    <string name="delete">Șterge</string>
+    <string name="clear">Șterge</string>
+    <string name="search">Caută</string>
+    <string name="back">Înapoi</string>
+    <string name="on">pornit</string>
+    <string name="off">oprit</string>
+    <string name="select_all">selectează tot</string>
+    <string name="deselect_all">deselectează tot</string>
+    <string name="selected">Selectat: %d</string>
+    <string name="items">articole</string>
+    <string name="positions">poziții</string>
+    <string name="you">TU</string>
+
+    <!-- Settings Screen -->
+    <string name="settings">Setări</string>
+    <string name="settings_subtitle">v2.4.1 · warehouse-nav</string>
+    <string name="section_general">GENERAL</string>
+    <string name="section_scanner">SCANNER</string>
+    <string name="section_about">DESPRE</string>
+    <string name="warehouse">Depozit</string>
+    <string name="language">Limbă</string>
+    <string name="dark_mode">Mod întunecat</string>
+    <string name="dark_mode_on">pornit · auto</string>
+    <string name="scanner_mode">Mod scanner</string>
+    <string name="beacon_calibration">Calibrare balize</string>
+    <string name="signal_fingerprinting">amprentă semnal</string>
+    <string name="haptic_feedback">Feedback haptic</string>
+    <string name="haptic_on">pornit · confirmare scanare</string>
+    <string name="sound_effects">Efecte sonore</string>
+    <string name="app_version">Versiunea aplicației</string>
+    <string name="server">Server</string>
+    <string name="log_out">Deconectare</string>
+    <string name="warehouse_operator">operator depozit · schimb A</string>
+
+    <!-- Language Selection -->
+    <string name="language_english">Engleză</string>
+    <string name="language_ukrainian">Ucraineană</string>
+    <string name="language_polish">Poloneză</string>
+    <string name="language_german">Germană</string>
+    <string name="language_french">Franceză</string>
+    <string name="language_spanish">Spaniolă</string>
+    <string name="language_romanian">Română</string>
+    <string name="language_native_english">English</string>
+    <string name="language_native_ukrainian">Українська</string>
+    <string name="language_native_polish">Polski</string>
+    <string name="language_native_german">Deutsch</string>
+    <string name="language_native_french">Français</string>
+    <string name="language_native_spanish">Español</string>
+    <string name="language_native_romanian">Română</string>
+
+    <!-- Map Screen -->
+    <string name="warehouse_title">Depozit A-12</string>
+    <string name="plan_overview">Prezentare plan</string>
+    <string name="map">HARTĂ</string>
+
+    <!-- Warehouse Screen -->
+    <string name="management_center">Centru de management</string>
+    <string name="section_operations">OPERAȚIUNI</string>
+    <string name="orders">Comenzi</string>
+    <string name="active_orders">%d comenzi active</string>
+    <string name="shipments">Expedieri</string>
+    <string name="active_shipments">%d expedieri active</string>
+    <string name="warehouse_planning">Planificare depozit</string>
+    <string name="layout_organization">Aranjament și organizare</string>
+    <string name="section_warehouse_metrics">METRICI DEPOZIT</string>
+    <string name="total_items">Total articole</string>
+    <string name="utilization">Utilizare</string>
+
+    <!-- Agent Screen -->
+    <string name="ai_assistant">Asistent AI</string>
+    <string name="warehouse_agent">Agent depozit</string>
+    <string name="welcome_message">Bună! Sunt asistentul tău AI pentru depozit</string>
+    <string name="welcome_description">Te pot ajuta cu inventarul, navigarea, comenzile și operațiunile de depozit. Cum te pot ajuta astăzi?</string>
+    <string name="ask_anything">Întreabă-mă orice...</string>
+    <string name="check_inventory">Verifică stocul</string>
+    <string name="find_location">Găsește locația</string>
+    <string name="order_status">Starea comenzii</string>
+    <string name="agent">Agent</string>
+
+    <!-- Orders Screen -->
+    <string name="active_orders_count">%d comenzi active</string>
+    <string name="filter_all">toate</string>
+    <string name="filter_active">active</string>
+    <string name="filter_delivered">livrate</string>
+    <string name="total">TOTAL</string>
+    <string name="orders_count">comenzi</string>
+    <string name="in_transit">ÎN TRANZIT</string>
+    <string name="on_the_way">pe drum</string>
+    <string name="section_orders">COMENZI</string>
+    <string name="take_to_work">Ia în lucru</string>
+    <string name="in_work">ÎN LUCRU</string>
+    <string name="status_delivered">Livrat</string>
+    <string name="status_in_transit">În tranzit</string>
+    <string name="status_processing">În procesare</string>
+    <string name="status_new">Nou</string>
+
+    <!-- Shipments Screen -->
+    <string name="shipments_count">%d expedieri</string>
+    <string name="filter_pending">în așteptare</string>
+    <string name="filter_shipped">expediate</string>
+    <string name="shipments_total">expedieri</string>
+    <string name="shipped">EXPEDIAT</string>
+    <string name="section_shipments">EXPEDIERI</string>
+    <string name="status_shipped">Expediat</string>
+    <string name="status_packing">Împachetare</string>
+    <string name="status_pending">În așteptare</string>
+
+    <!-- User Profile Screen -->
+    <string name="user_profile">Profil utilizator</string>
+    <string name="warehouse_manager">Manager depozit</string>
+    <string name="section_personal_info">INFORMAȚII PERSONALE</string>
+    <string name="email">Email</string>
+    <string name="phone">Telefon</string>
+    <string name="location">Locație</string>
+    <string name="section_work_info">INFORMAȚII DE MUNCĂ</string>
+    <string name="employee_id">ID angajat</string>
+    <string name="department">Departament</string>
+    <string name="join_date">Data angajării</string>
+    <string name="section_performance">PERFORMANȚĂ</string>
+    <string name="efficiency">Eficiență</string>
+    <string name="tasks_done">Sarcini finalizate</string>
+    <string name="rating">Rating</string>
+
+    <!-- Edit Profile Screen -->
+    <string name="edit_profile">Editează profilul</string>
+    <string name="change_photo">Schimbă fotografia</string>
+    <string name="full_name">Nume complet</string>
+    <string name="role">Rol</string>
+    <string name="section_notifications">NOTIFICĂRI</string>
+    <string name="email_notifications">Notificări email</string>
+    <string name="push_notifications">Notificări push</string>
+    <string name="delete_account">Șterge contul</string>
+
+    <!-- Warehouse Selection Screen -->
+    <string name="select_warehouse">Selectează depozitul</string>
+    <string name="search_warehouses">Caută depozite...</string>
+
+    <!-- Add Warehouse Screen -->
+    <string name="add_new_warehouse">Adaugă depozit nou</string>
+    <string name="section_basic_info">INFORMAȚII DE BAZĂ</string>
+    <string name="warehouse_name">Numele depozitului *</string>
+    <string name="enter_warehouse_name">Introdu numele depozitului</string>
+    <string name="warehouse_type">Tipul depozitului *</string>
+    <string name="distribution_center">Centru de distribuție</string>
+    <string name="section_location">LOCAȚIE</string>
+    <string name="address">Adresă *</string>
+    <string name="enter_address">Introdu adresa</string>
+    <string name="city">Oraș *</string>
+    <string name="enter_city">Introdu orașul</string>
+    <string name="country">Țară *</string>
+    <string name="section_capacity">CAPACITATE</string>
+    <string name="total_size">Suprafață totală (m²) *</string>
+    <string name="storage_capacity">Capacitate stocare (unități)</string>
+    <string name="section_manager">ATRIBUIRE MANAGER</string>
+    <string name="warehouse_manager_select">Manager depozit</string>
+    <string name="select_manager">Selectează managerul</string>
+
+    <!-- Calibration Screen -->
+    <string name="calibration">Calibrare</string>
+    <string name="calibration_points">%1$d puncte · %2$d balize</string>
+    <string name="tap_to_calibrate">ATINGE PENTRU CALIBRARE</string>
+    <string name="point_added">Punct adăugat la (%1$.1f, %2$.1f)</string>
+    <string name="beacons">BALIZE</string>
+    <string name="scanning">Scanare...</string>
+    <string name="not_scanning">Nu scanează</string>
+    <string name="clear_calibration">Șterge calibrarea</string>
+    <string name="calibration_cleared">Calibrare ștearsă</string>
+    <string name="tap_to_add_point">Atinge pentru a adăuga punct de calibrare</string>
+</resources>

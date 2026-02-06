@@ -21,11 +21,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.warehouse.upwely.R
 import com.warehouse.upwely.ui.theme.*
 
 private data class ChatMessage(
@@ -69,14 +71,14 @@ fun AgentScreen() {
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                 Text(
-                    text = "AI Assistant",
+                    text = stringResource(R.string.ai_assistant),
                     fontFamily = InterFamily,
                     fontWeight = FontWeight.Bold,
                     fontSize = 32.sp,
                     color = White,
                 )
                 Text(
-                    text = "Warehouse Agent",
+                    text = stringResource(R.string.warehouse_agent),
                     fontFamily = InterFamily,
                     fontWeight = FontWeight.Normal,
                     fontSize = 14.sp,
@@ -101,7 +103,7 @@ fun AgentScreen() {
                     modifier = Modifier.size(16.dp),
                 )
                 Text(
-                    text = "Clear",
+                    text = stringResource(R.string.clear),
                     fontFamily = InterFamily,
                     fontWeight = FontWeight.Normal,
                     fontSize = 14.sp,
@@ -146,7 +148,7 @@ fun AgentScreen() {
                         )
                     }
                     Text(
-                        text = "Hello! I'm your AI Warehouse Assistant",
+                        text = stringResource(R.string.welcome_message),
                         fontFamily = InterFamily,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 16.sp,
@@ -154,7 +156,7 @@ fun AgentScreen() {
                         textAlign = TextAlign.Center,
                     )
                     Text(
-                        text = "I can help you with inventory, navigation, orders, and warehouse operations. How can I assist you today?",
+                        text = stringResource(R.string.welcome_description),
                         fontFamily = InterFamily,
                         fontWeight = FontWeight.Normal,
                         fontSize = 14.sp,
@@ -180,9 +182,9 @@ fun AgentScreen() {
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
-                        SuggestionChip("Check inventory") { sendMessage(it) }
-                        SuggestionChip("Find location") { sendMessage(it) }
-                        SuggestionChip("Order status") { sendMessage(it) }
+                        SuggestionChip(stringResource(R.string.check_inventory)) { sendMessage(it) }
+                        SuggestionChip(stringResource(R.string.find_location)) { sendMessage(it) }
+                        SuggestionChip(stringResource(R.string.order_status)) { sendMessage(it) }
                     }
                 }
             }
@@ -203,7 +205,7 @@ fun AgentScreen() {
             Box(modifier = Modifier.weight(1f)) {
                 if (inputText.isEmpty()) {
                     Text(
-                        text = "Ask me anything...",
+                        text = stringResource(R.string.ask_anything),
                         fontFamily = InterFamily,
                         fontWeight = FontWeight.Normal,
                         fontSize = 14.sp,
@@ -255,7 +257,7 @@ private fun UserBubble(text: String) {
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(
-            text = "You",
+            text = stringResource(R.string.you),
             fontFamily = InterFamily,
             fontWeight = FontWeight.SemiBold,
             fontSize = 14.sp,
@@ -283,7 +285,7 @@ private fun AgentBubble(text: String) {
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(
-            text = "Agent",
+            text = stringResource(R.string.agent),
             fontFamily = InterFamily,
             fontWeight = FontWeight.SemiBold,
             fontSize = 14.sp,

@@ -31,9 +31,11 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.warehouse.upwely.R
 import com.warehouse.upwely.data.WarehousePlan
 import com.warehouse.upwely.data.loadWarehousePlan
 import com.warehouse.upwely.ui.BeaconViewModel
@@ -44,6 +46,7 @@ import com.warehouse.upwely.ui.theme.*
 fun MapScreen(beaconViewModel: BeaconViewModel? = null) {
     val context = LocalContext.current
     val plan = remember { loadWarehousePlan(context) }
+    val youLabel = stringResource(R.string.you)
 
     // User position from beacons (fallback to Central Room if no signal)
     val beaconPosition = beaconViewModel?.position?.collectAsState()?.value
@@ -57,8 +60,8 @@ fun MapScreen(beaconViewModel: BeaconViewModel? = null) {
             .verticalScroll(rememberScrollState()),
     ) {
         ScreenHeader(
-            title = "Warehouse A-12",
-            subtitle = "Plan overview",
+            title = stringResource(R.string.warehouse_title),
+            subtitle = stringResource(R.string.plan_overview),
             actionIcon = Icons.Outlined.Notifications,
         )
 
@@ -69,7 +72,7 @@ fun MapScreen(beaconViewModel: BeaconViewModel? = null) {
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Text(
-                text = "MAP",
+                text = stringResource(R.string.map),
                 fontFamily = InterFamily,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 11.sp,
@@ -80,6 +83,7 @@ fun MapScreen(beaconViewModel: BeaconViewModel? = null) {
                 plan = plan,
                 userX = userX,
                 userY = userY,
+                youLabel = youLabel,
             )
         }
 
@@ -94,6 +98,7 @@ private fun WarehouseFloorMap(
     plan: WarehousePlan,
     userX: Float,
     userY: Float,
+    youLabel: String,
 ) {
     var scale by remember { mutableFloatStateOf(1f) }
     var offset by remember { mutableStateOf(Offset.Zero) }
@@ -242,7 +247,7 @@ private fun WarehouseFloorMap(
             drawCircle(color = Color(0xFF080D19), radius = 4.5f, center = userPos)
 
             drawContext.canvas.nativeCanvas.drawText(
-                "YOU",
+                youLabel,
                 mx(userX),
                 my(userY) + 20f,
                 Paint().apply {

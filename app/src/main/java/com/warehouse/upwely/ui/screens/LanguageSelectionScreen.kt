@@ -16,31 +16,23 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.warehouse.upwely.R
+import com.warehouse.upwely.data.AppLanguage
+import com.warehouse.upwely.data.LocaleHelper
 import com.warehouse.upwely.ui.theme.*
-
-private data class LanguageItem(
-    val name: String,
-    val nativeName: String,
-)
-
-private val languages = listOf(
-    LanguageItem("English", "English"),
-    LanguageItem("Ukrainian", "\u0423\u043A\u0440\u0430\u0457\u043D\u0441\u044C\u043A\u0430"),
-    LanguageItem("Polish", "Polski"),
-    LanguageItem("German", "Deutsch"),
-    LanguageItem("French", "Fran\u00E7ais"),
-    LanguageItem("Spanish", "Espa\u00F1ol"),
-    LanguageItem("Romanian", "Rom\u00E2n\u0103"),
-)
 
 @Composable
 fun LanguageSelectionScreen(
     onBack: () -> Unit = {},
 ) {
-    var selectedIndex by remember { mutableIntStateOf(0) }
+    val context = LocalContext.current
+    val currentLanguage = remember { LocaleHelper.getSelectedLanguage(context) }
+    var selectedLanguage by remember { mutableStateOf(currentLanguage) }
 
     Column(
         modifier = Modifier
@@ -69,7 +61,7 @@ fun LanguageSelectionScreen(
                     modifier = Modifier.size(24.dp),
                 )
                 Text(
-                    text = "Language",
+                    text = stringResource(R.string.language),
                     fontFamily = InterFamily,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 20.sp,
@@ -84,8 +76,8 @@ fun LanguageSelectionScreen(
                 .padding(horizontal = 24.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            languages.forEachIndexed { index, language ->
-                val isSelected = index == selectedIndex
+            AppLanguage.entries.forEach { language ->
+                val isSelected = language == selectedLanguage
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -97,14 +89,17 @@ fun LanguageSelectionScreen(
                                 .border(2.dp, Cyan, RoundedCornerShape(12.dp))
                             else Modifier.background(CardBackground)
                         )
-                        .clickable { selectedIndex = index }
+                        .clickable {
+                            selectedLanguage = language
+                            LocaleHelper.setLocale(context, language)
+                        }
                         .padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                         Text(
-                            text = language.name,
+                            text = language.displayName,
                             fontFamily = InterFamily,
                             fontWeight = FontWeight.Medium,
                             fontSize = 15.sp,

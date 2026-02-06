@@ -15,9 +15,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.warehouse.upwely.R
 import com.warehouse.upwely.ui.theme.*
 
 @Composable
@@ -51,7 +53,7 @@ fun AddWarehouseScreen(
                     modifier = Modifier.size(24.dp),
                 )
                 Text(
-                    text = "Add New Warehouse",
+                    text = stringResource(R.string.add_new_warehouse),
                     fontFamily = InterFamily,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 20.sp,
@@ -67,36 +69,36 @@ fun AddWarehouseScreen(
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
             // Basic Information
-            FormSection(label = "BASIC INFORMATION") {
-                FormField(label = "Warehouse Name *", placeholder = "Enter warehouse name")
-                FormDropdown(label = "Warehouse Type *", value = "Distribution Center")
+            FormSection(label = stringResource(R.string.section_basic_info)) {
+                FormField(label = stringResource(R.string.warehouse_name), placeholder = stringResource(R.string.enter_warehouse_name))
+                FormDropdown(label = stringResource(R.string.warehouse_type), value = stringResource(R.string.distribution_center))
             }
 
             // Location
-            FormSection(label = "LOCATION") {
-                FormField(label = "Address *", placeholder = "Enter address")
+            FormSection(label = stringResource(R.string.section_location)) {
+                FormField(label = stringResource(R.string.address), placeholder = stringResource(R.string.enter_address))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
                     Box(modifier = Modifier.weight(1f)) {
-                        FormField(label = "City *", placeholder = "Enter city")
+                        FormField(label = stringResource(R.string.city), placeholder = stringResource(R.string.enter_city))
                     }
                     Box(modifier = Modifier.weight(1f)) {
-                        FormDropdown(label = "Country *", value = "Ukraine")
+                        FormDropdown(label = stringResource(R.string.country), value = "Ukraine")
                     }
                 }
             }
 
             // Capacity
-            FormSection(label = "CAPACITY") {
-                FormField(label = "Total Size (m\u00B2) *", placeholder = "0")
-                FormField(label = "Storage Capacity (units)", placeholder = "0")
+            FormSection(label = stringResource(R.string.section_capacity)) {
+                FormField(label = stringResource(R.string.total_size), placeholder = "0")
+                FormField(label = stringResource(R.string.storage_capacity), placeholder = "0")
             }
 
             // Manager Assignment
-            FormSection(label = "MANAGER ASSIGNMENT") {
-                FormDropdown(label = "Warehouse Manager", value = "Select manager")
+            FormSection(label = stringResource(R.string.section_manager)) {
+                FormDropdown(label = stringResource(R.string.warehouse_manager_select), value = stringResource(R.string.select_manager))
             }
         }
 

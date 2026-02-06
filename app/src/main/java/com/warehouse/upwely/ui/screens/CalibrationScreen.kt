@@ -28,9 +28,11 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.warehouse.upwely.R
 import com.warehouse.upwely.data.WarehousePlan
 import com.warehouse.upwely.data.loadWarehousePlan
 import com.warehouse.upwely.ui.BeaconViewModel
@@ -47,8 +49,11 @@ fun CalibrationScreen(
     val currentRssi by beaconViewModel.currentRssi.collectAsState()
     val isScanning by beaconViewModel.isScanning.collectAsState()
 
-    // Track last added point for feedback
     var lastAddedMessage by remember { mutableStateOf<String?>(null) }
+
+    val pointAddedFormat = stringResource(R.string.point_added)
+    val calibrationClearedMsg = stringResource(R.string.calibration_cleared)
+    val tapToAddLabel = stringResource(R.string.tap_to_add_point)
 
     Column(
         modifier = Modifier
@@ -86,14 +91,14 @@ fun CalibrationScreen(
                 }
                 Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                     Text(
-                        text = "Calibration",
+                        text = stringResource(R.string.calibration),
                         fontFamily = InterFamily,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 24.sp,
                         color = White,
                     )
                     Text(
-                        text = "${calibrationPoints.size} points · ${currentRssi.size} beacons",
+                        text = stringResource(R.string.calibration_points, calibrationPoints.size, currentRssi.size),
                         fontFamily = JetBrainsMonoFamily,
                         fontWeight = FontWeight.Medium,
                         fontSize = 12.sp,
@@ -110,7 +115,7 @@ fun CalibrationScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Text(
-                text = "TAP TO CALIBRATE",
+                text = stringResource(R.string.tap_to_calibrate),
                 fontFamily = InterFamily,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 11.sp,
@@ -121,9 +126,10 @@ fun CalibrationScreen(
             CalibrationFloorMap(
                 plan = plan,
                 calibrationPoints = calibrationPoints,
+                tapToAddLabel = tapToAddLabel,
                 onTap = { x, y ->
                     beaconViewModel.addCalibrationPoint(x, y)
-                    lastAddedMessage = "Point added at (%.1f, %.1f)".format(x, y)
+                    lastAddedMessage = pointAddedFormat.format(x, y)
                 },
             )
 
@@ -140,7 +146,7 @@ fun CalibrationScreen(
 
             // Scanning status
             Text(
-                text = "BEACONS",
+                text = stringResource(R.string.beacons),
                 fontFamily = InterFamily,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 11.sp,
@@ -158,7 +164,7 @@ fun CalibrationScreen(
             ) {
                 if (currentRssi.isEmpty()) {
                     Text(
-                        text = if (isScanning) "Scanning..." else "Not scanning",
+                        text = if (isScanning) stringResource(R.string.scanning) else stringResource(R.string.not_scanning),
                         fontFamily = JetBrainsMonoFamily,
                         fontWeight = FontWeight.Normal,
                         fontSize = 12.sp,
@@ -199,7 +205,7 @@ fun CalibrationScreen(
                     .background(CardBackground)
                     .clickable {
                         beaconViewModel.clearCalibration()
-                        lastAddedMessage = "Calibration cleared"
+                        lastAddedMessage = calibrationClearedMsg
                     },
                 horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
                 verticalAlignment = Alignment.CenterVertically,
@@ -211,7 +217,7 @@ fun CalibrationScreen(
                     modifier = Modifier.size(18.dp),
                 )
                 Text(
-                    text = "Clear Calibration",
+                    text = stringResource(R.string.clear_calibration),
                     fontFamily = InterFamily,
                     fontWeight = FontWeight.Medium,
                     fontSize = 14.sp,
@@ -228,10 +234,10 @@ fun CalibrationScreen(
 private fun CalibrationFloorMap(
     plan: WarehousePlan,
     calibrationPoints: List<com.warehouse.upwely.data.CalibrationPoint>,
+    tapToAddLabel: String,
     onTap: (Float, Float) -> Unit,
 ) {
-    // Mutable holder for transform values (not Compose State to avoid recomposition from draw)
-    val transformData = remember { floatArrayOf(1f, 0f, 0f) } // [scale, ox, oy]
+    val transformData = remember { floatArrayOf(1f, 0f, 0f) }
 
     Box(
         modifier = Modifier
@@ -257,7 +263,6 @@ private fun CalibrationFloorMap(
             val w = size.width
             val h = size.height
 
-            // Calculate bounding box
             val allXCoords = plan.rooms.flatMap { listOf(it.x, it.x + it.width) } +
                 plan.beacons.map { it.x }
             val allYCoords = plan.rooms.flatMap { listOf(it.y, it.y + it.height) } +
@@ -277,7 +282,6 @@ private fun CalibrationFloorMap(
             val ox = (w - contentW * s) / 2f - contentMinX * s
             val oy = (h - contentH * s) / 2f - contentMinY * s
 
-            // Store for tap coordinate conversion
             transformData[0] = s
             transformData[1] = ox
             transformData[2] = oy
@@ -285,7 +289,6 @@ private fun CalibrationFloorMap(
             fun mx(m: Float) = m * s + ox
             fun my(m: Float) = m * s + oy
 
-            // Draw rooms
             plan.rooms.forEach { room ->
                 drawRoundRect(
                     color = room.color,
@@ -302,7 +305,6 @@ private fun CalibrationFloorMap(
                 )
             }
 
-            // Room labels
             val roomLabelPaint = Paint().apply {
                 color = android.graphics.Color.parseColor("#55667788")
                 textSize = (0.35f * s).coerceIn(10f, 22f)
@@ -319,7 +321,6 @@ private fun CalibrationFloorMap(
                 )
             }
 
-            // Draw doors
             plan.doors.forEach { door ->
                 val dx = 0.4f * s
                 drawLine(
@@ -330,7 +331,6 @@ private fun CalibrationFloorMap(
                 )
             }
 
-            // Draw beacons
             val beaconColor = Color(0xFF3B82F6)
             plan.beacons.forEach { beacon ->
                 drawCircle(
@@ -340,7 +340,6 @@ private fun CalibrationFloorMap(
                 )
             }
 
-            // Draw calibration points (green)
             val calColor = Color(0xFF22C55E)
             calibrationPoints.forEach { cp ->
                 drawCircle(
@@ -355,9 +354,8 @@ private fun CalibrationFloorMap(
                 )
             }
 
-            // Label showing tap hint
             drawContext.canvas.nativeCanvas.drawText(
-                "Tap to add calibration point",
+                tapToAddLabel,
                 w / 2f,
                 h - 12f,
                 Paint().apply {

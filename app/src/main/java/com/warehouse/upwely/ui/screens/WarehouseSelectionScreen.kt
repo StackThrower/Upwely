@@ -18,9 +18,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.warehouse.upwely.R
 import com.warehouse.upwely.ui.theme.*
 
 private data class WarehouseItem(
@@ -71,7 +73,7 @@ fun WarehouseSelectionScreen(
                     modifier = Modifier.size(24.dp),
                 )
                 Text(
-                    text = "Select Warehouse",
+                    text = stringResource(R.string.select_warehouse),
                     fontFamily = InterFamily,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 20.sp,
@@ -86,7 +88,7 @@ fun WarehouseSelectionScreen(
                     .padding(horizontal = 16.dp, vertical = 8.dp),
             ) {
                 Text(
-                    text = "Add",
+                    text = stringResource(R.string.add),
                     fontFamily = InterFamily,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 16.sp,
@@ -119,7 +121,7 @@ fun WarehouseSelectionScreen(
                     modifier = Modifier.size(20.dp),
                 )
                 Text(
-                    text = "Search warehouses...",
+                    text = stringResource(R.string.search_warehouses),
                     fontFamily = InterFamily,
                     fontWeight = FontWeight.Normal,
                     fontSize = 14.sp,

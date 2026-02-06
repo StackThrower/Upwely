@@ -4,10 +4,10 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
@@ -44,7 +45,7 @@ import com.warehouse.upwely.ui.BeaconViewModel
 import com.warehouse.upwely.ui.screens.*
 import com.warehouse.upwely.ui.theme.*
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -275,6 +276,7 @@ fun BottomTabBar(navController: NavHostController) {
             BottomNavItem.items.forEach { item ->
                 val selected = currentRoute == item.route ||
                         (item == BottomNavItem.Warehouse && currentRoute in warehouseChildRoutes)
+                val label = stringResource(item.labelResId)
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -297,12 +299,12 @@ fun BottomTabBar(navController: NavHostController) {
                 ) {
                     Icon(
                         imageVector = item.icon,
-                        contentDescription = item.label,
+                        contentDescription = label,
                         tint = if (selected) Cyan else TextMuted,
                         modifier = Modifier.size(22.dp),
                     )
                     Text(
-                        text = item.label,
+                        text = label,
                         fontFamily = JetBrainsMonoFamily,
                         fontSize = 10.sp,
                         fontWeight = if (selected) androidx.compose.ui.text.font.FontWeight.SemiBold

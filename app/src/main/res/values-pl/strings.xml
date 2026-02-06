@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Upwely</string>
+
+    <!-- Bottom Navigation -->
+    <string name="nav_map">Mapa</string>
+    <string name="nav_warehouse">Magazyn</string>
+    <string name="nav_agent">Agent</string>
+    <string name="nav_settings">Ustawienia</string>
+
+    <!-- Common -->
+    <string name="save">Zapisz</string>
+    <string name="cancel">Anuluj</string>
+    <string name="edit">Edytuj</string>
+    <string name="add">Dodaj</string>
+    <string name="delete">Usuń</string>
+    <string name="clear">Wyczyść</string>
+    <string name="search">Szukaj</string>
+    <string name="back">Wstecz</string>
+    <string name="on">wł</string>
+    <string name="off">wył</string>
+    <string name="select_all">zaznacz wszystko</string>
+    <string name="deselect_all">odznacz wszystko</string>
+    <string name="selected">Wybrano: %d</string>
+    <string name="items">pozycji</string>
+    <string name="positions">pozycji</string>
+    <string name="you">TY</string>
+
+    <!-- Settings Screen -->
+    <string name="settings">Ustawienia</string>
+    <string name="settings_subtitle">v2.4.1 · warehouse-nav</string>
+    <string name="section_general">OGÓLNE</string>
+    <string name="section_scanner">SKANER</string>
+    <string name="section_about">O APLIKACJI</string>
+    <string name="warehouse">Magazyn</string>
+    <string name="language">Język</string>
+    <string name="dark_mode">Tryb ciemny</string>
+    <string name="dark_mode_on">wł · auto</string>
+    <string name="scanner_mode">Tryb skanera</string>
+    <string name="beacon_calibration">Kalibracja beaconów</string>
+    <string name="signal_fingerprinting">odcisk sygnału</string>
+    <string name="haptic_feedback">Wibracje</string>
+    <string name="haptic_on">wł · potwierdzenie skanowania</string>
+    <string name="sound_effects">Efekty dźwiękowe</string>
+    <string name="app_version">Wersja aplikacji</string>
+    <string name="server">Serwer</string>
+    <string name="log_out">Wyloguj</string>
+    <string name="warehouse_operator">operator magazynu · zmiana A</string>
+
+    <!-- Language Selection -->
+    <string name="language_english">Angielski</string>
+    <string name="language_ukrainian">Ukraiński</string>
+    <string name="language_polish">Polski</string>
+    <string name="language_german">Niemiecki</string>
+    <string name="language_french">Francuski</string>
+    <string name="language_spanish">Hiszpański</string>
+    <string name="language_romanian">Rumuński</string>
+    <string name="language_native_english">English</string>
+    <string name="language_native_ukrainian">Українська</string>
+    <string name="language_native_polish">Polski</string>
+    <string name="language_native_german">Deutsch</string>
+    <string name="language_native_french">Français</string>
+    <string name="language_native_spanish">Español</string>
+    <string name="language_native_romanian">Română</string>
+
+    <!-- Map Screen -->
+    <string name="warehouse_title">Magazyn A-12</string>
+    <string name="plan_overview">Przegląd planu</string>
+    <string name="map">MAPA</string>
+
+    <!-- Warehouse Screen -->
+    <string name="management_center">Centrum zarządzania</string>
+    <string name="section_operations">OPERACJE</string>
+    <string name="orders">Zamówienia</string>
+    <string name="active_orders">%d aktywnych zamówień</string>
+    <string name="shipments">Wysyłki</string>
+    <string name="active_shipments">%d aktywnych wysyłek</string>
+    <string name="warehouse_planning">Planowanie magazynu</string>
+    <string name="layout_organization">Układ i organizacja</string>
+    <string name="section_warehouse_metrics">METRYKI MAGAZYNU</string>
+    <string name="total_items">Wszystkie produkty</string>
+    <string name="utilization">Wykorzystanie</string>
+
+    <!-- Agent Screen -->
+    <string name="ai_assistant">Asystent AI</string>
+    <string name="warehouse_agent">Agent magazynu</string>
+    <string name="welcome_message">Cześć! Jestem Twoim Asystentem AI magazynu</string>
+    <string name="welcome_description">Mogę pomóc z inwentaryzacją, nawigacją, zamówieniami i operacjami magazynowymi. Jak mogę Ci dzisiaj pomóc?</string>
+    <string name="ask_anything">Zapytaj o cokolwiek...</string>
+    <string name="check_inventory">Sprawdź stan</string>
+    <string name="find_location">Znajdź lokalizację</string>
+    <string name="order_status">Status zamówienia</string>
+    <string name="agent">Agent</string>
+
+    <!-- Orders Screen -->
+    <string name="active_orders_count">%d aktywnych zamówień</string>
+    <string name="filter_all">wszystkie</string>
+    <string name="filter_active">aktywne</string>
+    <string name="filter_delivered">dostarczone</string>
+    <string name="total">RAZEM</string>
+    <string name="orders_count">zamówień</string>
+    <string name="in_transit">W TRANSPORCIE</string>
+    <string name="on_the_way">w drodze</string>
+    <string name="section_orders">ZAMÓWIENIA</string>
+    <string name="take_to_work">Weź do pracy</string>
+    <string name="in_work">W PRACY</string>
+    <string name="status_delivered">Dostarczone</string>
+    <string name="status_in_transit">W transporcie</string>
+    <string name="status_processing">Przetwarzanie</string>
+    <string name="status_new">Nowe</string>
+
+    <!-- Shipments Screen -->
+    <string name="shipments_count">%d wysyłek</string>
+    <string name="filter_pending">oczekujące</string>
+    <string name="filter_shipped">wysłane</string>
+    <string name="shipments_total">wysyłek</string>
+    <string name="shipped">WYSŁANE</string>
+    <string name="section_shipments">WYSYŁKI</string>
+    <string name="status_shipped">Wysłane</string>
+    <string name="status_packing">Pakowanie</string>
+    <string name="status_pending">Oczekuje</string>
+
+    <!-- User Profile Screen -->
+    <string name="user_profile">Profil użytkownika</string>
+    <string name="warehouse_manager">Kierownik magazynu</string>
+    <string name="section_personal_info">DANE OSOBOWE</string>
+    <string name="email">Email</string>
+    <string name="phone">Telefon</string>
+    <string name="location">Lokalizacja</string>
+    <string name="section_work_info">INFORMACJE O PRACY</string>
+    <string name="employee_id">ID pracownika</string>
+    <string name="department">Dział</string>
+    <string name="join_date">Data dołączenia</string>
+    <string name="section_performance">WYDAJNOŚĆ</string>
+    <string name="efficiency">Efektywność</string>
+    <string name="tasks_done">Wykonane zadania</string>
+    <string name="rating">Ocena</string>
+
+    <!-- Edit Profile Screen -->
+    <string name="edit_profile">Edytuj profil</string>
+    <string name="change_photo">Zmień zdjęcie</string>
+    <string name="full_name">Imię i nazwisko</string>
+    <string name="role">Rola</string>
+    <string name="section_notifications">POWIADOMIENIA</string>
+    <string name="email_notifications">Powiadomienia email</string>
+    <string name="push_notifications">Powiadomienia push</string>
+    <string name="delete_account">Usuń konto</string>
+
+    <!-- Warehouse Selection Screen -->
+    <string name="select_warehouse">Wybierz magazyn</string>
+    <string name="search_warehouses">Szukaj magazynów...</string>
+
+    <!-- Add Warehouse Screen -->
+    <string name="add_new_warehouse">Dodaj nowy magazyn</string>
+    <string name="section_basic_info">PODSTAWOWE INFORMACJE</string>
+    <string name="warehouse_name">Nazwa magazynu *</string>
+    <string name="enter_warehouse_name">Wpisz nazwę magazynu</string>
+    <string name="warehouse_type">Typ magazynu *</string>
+    <string name="distribution_center">Centrum dystrybucji</string>
+    <string name="section_location">LOKALIZACJA</string>
+    <string name="address">Adres *</string>
+    <string name="enter_address">Wpisz adres</string>
+    <string name="city">Miasto *</string>
+    <string name="enter_city">Wpisz miasto</string>
+    <string name="country">Kraj *</string>
+    <string name="section_capacity">POJEMNOŚĆ</string>
+    <string name="total_size">Całkowita powierzchnia (m²) *</string>
+    <string name="storage_capacity">Pojemność (jednostek)</string>
+    <string name="section_manager">PRZYPISANIE KIEROWNIKA</string>
+    <string name="warehouse_manager_select">Kierownik magazynu</string>
+    <string name="select_manager">Wybierz kierownika</string>
+
+    <!-- Calibration Screen -->
+    <string name="calibration">Kalibracja</string>
+    <string name="calibration_points">%1$d punktów · %2$d beaconów</string>
+    <string name="tap_to_calibrate">DOTKNIJ ABY SKALIBROWAĆ</string>
+    <string name="point_added">Dodano punkt (%1$.1f, %2$.1f)</string>
+    <string name="beacons">BEACONY</string>
+    <string name="scanning">Skanowanie...</string>
+    <string name="not_scanning">Nie skanuje</string>
+    <string name="clear_calibration">Wyczyść kalibrację</string>
+    <string name="calibration_cleared">Kalibracja wyczyszczona</string>
+    <string name="tap_to_add_point">Dotknij, aby dodać punkt kalibracji</string>
+</resources>

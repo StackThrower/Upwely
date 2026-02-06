@@ -20,9 +20,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.warehouse.upwely.R
 import com.warehouse.upwely.ui.components.ToggleSwitch
 import com.warehouse.upwely.ui.theme.*
 
@@ -60,7 +62,7 @@ fun EditProfileScreen(
                     modifier = Modifier.size(24.dp),
                 )
                 Text(
-                    text = "Edit Profile",
+                    text = stringResource(R.string.edit_profile),
                     fontFamily = InterFamily,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 20.sp,
@@ -68,7 +70,7 @@ fun EditProfileScreen(
                 )
             }
             Text(
-                text = "Save",
+                text = stringResource(R.string.save),
                 fontFamily = InterFamily,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 16.sp,
@@ -124,7 +126,7 @@ fun EditProfileScreen(
                     }
                 }
                 Text(
-                    text = "Change Photo",
+                    text = stringResource(R.string.change_photo),
                     fontFamily = InterFamily,
                     fontWeight = FontWeight.Medium,
                     fontSize = 14.sp,
@@ -133,23 +135,23 @@ fun EditProfileScreen(
             }
 
             // Personal Information
-            EditSection(label = "PERSONAL INFORMATION") {
-                EditTextField(label = "Full Name", value = "Viktor Shevchenko")
-                EditTextField(label = "Email", value = "viktor.shevchenko@warehouse.com")
-                EditTextField(label = "Phone", value = "+380 67 123 4567")
-                EditDropdown(label = "Location", value = "Kyiv, Ukraine")
+            EditSection(label = stringResource(R.string.section_personal_info)) {
+                EditTextField(label = stringResource(R.string.full_name), value = "Viktor Shevchenko")
+                EditTextField(label = stringResource(R.string.email), value = "viktor.shevchenko@warehouse.com")
+                EditTextField(label = stringResource(R.string.phone), value = "+380 67 123 4567")
+                EditDropdown(label = stringResource(R.string.location), value = "Kyiv, Ukraine")
             }
 
             // Work Information
-            EditSection(label = "WORK INFORMATION") {
-                EditDropdown(label = "Role", value = "Warehouse Manager")
-                EditDropdown(label = "Department", value = "Operations Management")
+            EditSection(label = stringResource(R.string.section_work_info)) {
+                EditDropdown(label = stringResource(R.string.role), value = stringResource(R.string.warehouse_manager))
+                EditDropdown(label = stringResource(R.string.department), value = "Operations Management")
             }
 
             // Notifications
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Text(
-                    text = "NOTIFICATIONS",
+                    text = stringResource(R.string.section_notifications),
                     fontFamily = InterFamily,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 11.sp,
@@ -164,8 +166,8 @@ fun EditProfileScreen(
                         .padding(4.dp),
                     verticalArrangement = Arrangement.spacedBy(2.dp),
                 ) {
-                    NotificationRow("Email Notifications", true)
-                    NotificationRow("Push Notifications", false)
+                    NotificationRow(stringResource(R.string.email_notifications), true)
+                    NotificationRow(stringResource(R.string.push_notifications), false)
                 }
             }
 
@@ -187,7 +189,7 @@ fun EditProfileScreen(
                     modifier = Modifier.size(18.dp),
                 )
                 Text(
-                    text = "Delete Account",
+                    text = stringResource(R.string.delete_account),
                     fontFamily = InterFamily,
                     fontWeight = FontWeight.Medium,
                     fontSize = 14.sp,
