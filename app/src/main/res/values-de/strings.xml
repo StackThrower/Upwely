@@ -181,4 +181,24 @@
     <string name="clear_calibration">Kalibrierung löschen</string>
     <string name="calibration_cleared">Kalibrierung gelöscht</string>
     <string name="tap_to_add_point">Tippen Sie, um einen Kalibrierungspunkt hinzuzufügen</string>
+
+    <!-- Picking Map Screen -->
+    <string name="picking_route">Kommissionierroute</string>
+    <string name="shipments_items">%1$d Sendungen · %2$d Artikel</string>
+    <string name="progress">FORTSCHRITT</string>
+    <string name="picking_completed">Kommissionierung abgeschlossen</string>
+    <string name="delivered_canceled_stats">Geliefert: %1$d · Storniert: %2$d</string>
+    <string name="finish">Fertig</string>
+    <string name="delivered">Geliefert</string>
+    <string name="canceled">Storniert</string>
+    <string name="room_row_cell">%1$s · Reihe: %2$s, Zelle: %3$s</string>
+    <string name="pick_list">KOMMISSIONIERLISTE</string>
+
+    <!-- Placing Map Screen -->
+    <string name="placing_route">Einlagerungsroute</string>
+    <string name="orders_items">%1$d Bestellungen · %2$d Artikel</string>
+    <string name="placing_completed">Einlagerung abgeschlossen</string>
+    <string name="placed_canceled_stats">Eingelagert: %1$d · Storniert: %2$d</string>
+    <string name="placed">Eingelagert</string>
+    <string name="place_list">EINLAGERUNGSLISTE</string>
 </resources>

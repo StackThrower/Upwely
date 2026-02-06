@@ -34,9 +34,11 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.warehouse.upwely.R
 import com.warehouse.upwely.data.*
 import com.warehouse.upwely.ui.BeaconViewModel
 import com.warehouse.upwely.ui.components.ScreenHeader
@@ -171,6 +173,7 @@ fun PlacingMapScreen(
     val beaconPosition = beaconViewModel?.position?.collectAsState()?.value
     val userX = beaconPosition?.first ?: 7.0f
     val userY = beaconPosition?.second ?: 19.0f
+    val youLabel = stringResource(R.string.you)
 
     // Build and optimize place list
     val optimizedItems = remember(ordersData, plan, orderIds) {
@@ -230,8 +233,8 @@ fun PlacingMapScreen(
             .verticalScroll(rememberScrollState()),
     ) {
         ScreenHeader(
-            title = "Placing Route",
-            subtitle = "${orderIds.size} orders · $totalCount items",
+            title = stringResource(R.string.placing_route),
+            subtitle = stringResource(R.string.orders_items, orderIds.size, totalCount),
             actionIcon = Icons.Outlined.Inventory2,
         )
 
@@ -248,7 +251,7 @@ fun PlacingMapScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
-                        text = "PROGRESS",
+                        text = stringResource(R.string.progress),
                         fontFamily = InterFamily,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 11.sp,
@@ -284,7 +287,7 @@ fun PlacingMapScreen(
 
             // Map
             Text(
-                text = "MAP",
+                text = stringResource(R.string.map),
                 fontFamily = InterFamily,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 11.sp,
@@ -300,6 +303,7 @@ fun PlacingMapScreen(
                 destRoom = currentItem?.room ?: "",
                 userX = userX,
                 userY = userY,
+                youLabel = youLabel,
             )
         }
 
@@ -339,7 +343,7 @@ fun PlacingMapScreen(
                     }
                     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         Text(
-                            text = "Розміщення завершено",
+                            text = stringResource(R.string.placing_completed),
                             fontFamily = InterFamily,
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 16.sp,
@@ -348,7 +352,7 @@ fun PlacingMapScreen(
                         val placedCount = placeItems.count { it.status == PlaceItemStatus.PLACED }
                         val canceledCount = placeItems.count { it.status == PlaceItemStatus.CANCELED }
                         Text(
-                            text = "Розміщено: $placedCount · Скасовано: $canceledCount",
+                            text = stringResource(R.string.placed_canceled_stats, placedCount, canceledCount),
                             fontFamily = JetBrainsMonoFamily,
                             fontWeight = FontWeight.Normal,
                             fontSize = 12.sp,
@@ -369,7 +373,7 @@ fun PlacingMapScreen(
                     ),
                 ) {
                     Text(
-                        text = "Завершити",
+                        text = stringResource(R.string.finish),
                         fontFamily = InterFamily,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 15.sp,
@@ -421,7 +425,7 @@ fun PlacingMapScreen(
                         color = Cyan,
                     )
                     Text(
-                        text = "${currentItem.room} · row: ${currentItem.row ?: "-"}, cell: ${currentItem.cell ?: "-"}",
+                        text = stringResource(R.string.room_row_cell, currentItem.room, currentItem.row?.toString() ?: "-", currentItem.cell?.toString() ?: "-"),
                         fontFamily = JetBrainsMonoFamily,
                         fontWeight = FontWeight.Normal,
                         fontSize = 11.sp,
@@ -453,7 +457,7 @@ fun PlacingMapScreen(
                     ),
                 ) {
                     Text(
-                        text = "Placed",
+                        text = stringResource(R.string.placed),
                         fontFamily = InterFamily,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 15.sp,
@@ -474,7 +478,7 @@ fun PlacingMapScreen(
                     ),
                 ) {
                     Text(
-                        text = "Canceled",
+                        text = stringResource(R.string.canceled),
                         fontFamily = InterFamily,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 15.sp,
@@ -493,7 +497,7 @@ fun PlacingMapScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Text(
-                text = "PLACE LIST",
+                text = stringResource(R.string.place_list),
                 fontFamily = InterFamily,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 11.sp,
@@ -622,6 +626,7 @@ private fun PlacingWarehouseMap(
     destRoom: String,
     userX: Float,
     userY: Float,
+    youLabel: String,
 ) {
     var scale by remember { mutableFloatStateOf(1f) }
     var offset by remember { mutableStateOf(Offset.Zero) }
@@ -896,7 +901,7 @@ private fun PlacingWarehouseMap(
             drawCircle(color = Color(0xFF080D19), radius = 4.5f, center = userPos)
 
             drawContext.canvas.nativeCanvas.drawText(
-                "YOU",
+                youLabel,
                 mx(userX),
                 my(userY) + 20f,
                 Paint().apply {

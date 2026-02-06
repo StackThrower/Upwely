@@ -181,4 +181,24 @@
     <string name="clear_calibration">Șterge calibrarea</string>
     <string name="calibration_cleared">Calibrare ștearsă</string>
     <string name="tap_to_add_point">Atinge pentru a adăuga punct de calibrare</string>
+
+    <!-- Picking Map Screen -->
+    <string name="picking_route">Rută de preluare</string>
+    <string name="shipments_items">%1$d expedieri · %2$d articole</string>
+    <string name="progress">PROGRES</string>
+    <string name="picking_completed">Preluare finalizată</string>
+    <string name="delivered_canceled_stats">Livrat: %1$d · Anulat: %2$d</string>
+    <string name="finish">Finalizează</string>
+    <string name="delivered">Livrat</string>
+    <string name="canceled">Anulat</string>
+    <string name="room_row_cell">%1$s · rând: %2$s, celulă: %3$s</string>
+    <string name="pick_list">LISTĂ DE PRELUARE</string>
+
+    <!-- Placing Map Screen -->
+    <string name="placing_route">Rută de plasare</string>
+    <string name="orders_items">%1$d comenzi · %2$d articole</string>
+    <string name="placing_completed">Plasare finalizată</string>
+    <string name="placed_canceled_stats">Plasat: %1$d · Anulat: %2$d</string>
+    <string name="placed">Plasat</string>
+    <string name="place_list">LISTĂ DE PLASARE</string>
 </resources>

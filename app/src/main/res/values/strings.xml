@@ -181,4 +181,24 @@
     <string name="clear_calibration">Clear Calibration</string>
     <string name="calibration_cleared">Calibration cleared</string>
     <string name="tap_to_add_point">Tap to add calibration point</string>
+
+    <!-- Picking Map Screen -->
+    <string name="picking_route">Picking Route</string>
+    <string name="shipments_items">%1$d shipments · %2$d items</string>
+    <string name="progress">PROGRESS</string>
+    <string name="picking_completed">Picking completed</string>
+    <string name="delivered_canceled_stats">Delivered: %1$d · Canceled: %2$d</string>
+    <string name="finish">Finish</string>
+    <string name="delivered">Delivered</string>
+    <string name="canceled">Canceled</string>
+    <string name="room_row_cell">%1$s · row: %2$s, cell: %3$s</string>
+    <string name="pick_list">PICK LIST</string>
+
+    <!-- Placing Map Screen -->
+    <string name="placing_route">Placing Route</string>
+    <string name="orders_items">%1$d orders · %2$d items</string>
+    <string name="placing_completed">Placing completed</string>
+    <string name="placed_canceled_stats">Placed: %1$d · Canceled: %2$d</string>
+    <string name="placed">Placed</string>
+    <string name="place_list">PLACE LIST</string>
 </resources>

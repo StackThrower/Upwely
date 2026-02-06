@@ -35,9 +35,11 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.warehouse.upwely.R
 import com.warehouse.upwely.data.*
 import com.warehouse.upwely.ui.BeaconViewModel
 import com.warehouse.upwely.ui.components.ScreenHeader
@@ -174,6 +176,7 @@ fun PickingMapScreen(
     val beaconPosition = beaconViewModel?.position?.collectAsState()?.value
     val userX = beaconPosition?.first ?: 7.0f
     val userY = beaconPosition?.second ?: 19.0f
+    val youLabel = stringResource(R.string.you)
 
     // Build and optimize pick list
     val optimizedItems = remember(shipmentsData, plan, shipmentIds) {
@@ -233,8 +236,8 @@ fun PickingMapScreen(
             .verticalScroll(rememberScrollState()),
     ) {
         ScreenHeader(
-            title = "Picking Route",
-            subtitle = "${shipmentIds.size} shipments · $totalCount items",
+            title = stringResource(R.string.picking_route),
+            subtitle = stringResource(R.string.shipments_items, shipmentIds.size, totalCount),
             actionIcon = Icons.Outlined.Navigation,
         )
 
@@ -251,7 +254,7 @@ fun PickingMapScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
-                        text = "PROGRESS",
+                        text = stringResource(R.string.progress),
                         fontFamily = InterFamily,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 11.sp,
@@ -287,7 +290,7 @@ fun PickingMapScreen(
 
             // Map
             Text(
-                text = "MAP",
+                text = stringResource(R.string.map),
                 fontFamily = InterFamily,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 11.sp,
@@ -303,6 +306,7 @@ fun PickingMapScreen(
                 destRoom = currentItem?.room ?: "",
                 userX = userX,
                 userY = userY,
+                youLabel = youLabel,
             )
         }
 
@@ -342,7 +346,7 @@ fun PickingMapScreen(
                     }
                     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         Text(
-                            text = "Підбір завершено",
+                            text = stringResource(R.string.picking_completed),
                             fontFamily = InterFamily,
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 16.sp,
@@ -351,7 +355,7 @@ fun PickingMapScreen(
                         val deliveredCount = pickItems.count { it.status == PickItemStatus.DELIVERED }
                         val canceledCount = pickItems.count { it.status == PickItemStatus.CANCELED }
                         Text(
-                            text = "Доставлено: $deliveredCount · Скасовано: $canceledCount",
+                            text = stringResource(R.string.delivered_canceled_stats, deliveredCount, canceledCount),
                             fontFamily = JetBrainsMonoFamily,
                             fontWeight = FontWeight.Normal,
                             fontSize = 12.sp,
@@ -372,7 +376,7 @@ fun PickingMapScreen(
                     ),
                 ) {
                     Text(
-                        text = "Завершити",
+                        text = stringResource(R.string.finish),
                         fontFamily = InterFamily,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 15.sp,
@@ -424,7 +428,7 @@ fun PickingMapScreen(
                         color = Cyan,
                     )
                     Text(
-                        text = "${currentItem.room} · row: ${currentItem.row ?: "-"}, cell: ${currentItem.cell ?: "-"}",
+                        text = stringResource(R.string.room_row_cell, currentItem.room, currentItem.row?.toString() ?: "-", currentItem.cell?.toString() ?: "-"),
                         fontFamily = JetBrainsMonoFamily,
                         fontWeight = FontWeight.Normal,
                         fontSize = 11.sp,
@@ -456,7 +460,7 @@ fun PickingMapScreen(
                     ),
                 ) {
                     Text(
-                        text = "Delivered",
+                        text = stringResource(R.string.delivered),
                         fontFamily = InterFamily,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 15.sp,
@@ -477,7 +481,7 @@ fun PickingMapScreen(
                     ),
                 ) {
                     Text(
-                        text = "Canceled",
+                        text = stringResource(R.string.canceled),
                         fontFamily = InterFamily,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 15.sp,
@@ -496,7 +500,7 @@ fun PickingMapScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Text(
-                text = "PICK LIST",
+                text = stringResource(R.string.pick_list),
                 fontFamily = InterFamily,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 11.sp,
@@ -625,6 +629,7 @@ private fun PickingWarehouseMap(
     destRoom: String,
     userX: Float,
     userY: Float,
+    youLabel: String,
 ) {
     var scale by remember { mutableFloatStateOf(1f) }
     var offset by remember { mutableStateOf(Offset.Zero) }
@@ -900,7 +905,7 @@ private fun PickingWarehouseMap(
             drawCircle(color = Color(0xFF080D19), radius = 4.5f, center = userPos)
 
             drawContext.canvas.nativeCanvas.drawText(
-                "YOU",
+                youLabel,
                 mx(userX),
                 my(userY) + 20f,
                 Paint().apply {
