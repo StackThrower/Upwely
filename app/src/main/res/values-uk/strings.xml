@@ -9,6 +9,9 @@
     <string name="nav_settings">Налаштування</string>
 
     <!-- Common -->
+    <string name="loading">Завантаження...</string>
+    <string name="error">Помилка</string>
+    <string name="retry">Повторити</string>
     <string name="save">Зберегти</string>
     <string name="cancel">Скасувати</string>
     <string name="edit">Редагувати</string>
@@ -111,6 +114,12 @@
 
     <!-- Shipments Screen -->
     <string name="shipments_count">%d відвантажень</string>
+    <string name="shipment_number">Відвантаження #</string>
+    <string name="customer">Клієнт</string>
+    <string name="status">Статус</string>
+    <string name="items_count">Товарів</string>
+    <string name="items_list">ТОВАРИ</string>
+    <string name="shipment_not_found">Відвантаження не знайдено</string>
     <string name="filter_pending">очікують</string>
     <string name="filter_shipped">відправлені</string>
     <string name="shipments_total">відвантажень</string>

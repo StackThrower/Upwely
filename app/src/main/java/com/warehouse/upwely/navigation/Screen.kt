@@ -14,6 +14,11 @@ object Screen {
     const val CALIBRATION = "calibration"
     const val PICKING_MAP = "picking_map/{shipmentIds}"
     const val PLACING_MAP = "placing_map/{orderIds}"
+    const val SHIPMENT_DETAIL = "shipment_detail/{shipmentId}"
+
+    fun shipmentDetailRoute(shipmentId: String): String {
+        return "shipment_detail/$shipmentId"
+    }
 
     fun pickingMapRoute(shipmentIds: List<String>): String {
         return "picking_map/${shipmentIds.joinToString(",")}"

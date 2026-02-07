@@ -19,11 +19,38 @@ data class ShipmentConfig(
     val items: List<PickupItemConfig>,
 )
 
+fun ApiShipment.toShipmentConfig(): ShipmentConfig {
+    return ShipmentConfig(
+        id = shipmentNbr,
+        destination = customerId,
+        status = status.lowercase(),
+        items = details.map { detail ->
+            PickupItemConfig(
+                id = detail.id,
+                name = detail.description,
+                sku = detail.inventoryId,
+                quantity = detail.shippedQty,
+                shelfId = detail.locationId,
+            )
+        },
+    )
+}
+
 data class ShipmentsData(
     val shipments: List<ShipmentConfig>,
 )
 
+// Cached API shipments for use in PickingMapScreen
+object ShipmentsCache {
+    var cachedShipments: List<ShipmentConfig> = emptyList()
+}
+
 fun loadShipmentsConfig(context: Context): ShipmentsData {
+    // First check if we have cached API data
+    if (ShipmentsCache.cachedShipments.isNotEmpty()) {
+        return ShipmentsData(ShipmentsCache.cachedShipments)
+    }
+    // Fallback to local file
     val json = try {
         context.assets.open("shipments_config.json").bufferedReader().use { it.readText() }
     } catch (e: IOException) {

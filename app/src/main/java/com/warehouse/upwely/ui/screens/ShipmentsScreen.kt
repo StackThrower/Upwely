@@ -11,18 +11,24 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.LocalShipping
+import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.warehouse.upwely.R
-import com.warehouse.upwely.data.loadShipmentsConfig
+import com.warehouse.upwely.data.toShipmentConfig
+import com.warehouse.upwely.ui.ShipmentsUiState
+import com.warehouse.upwely.ui.ShipmentsViewModel
 import com.warehouse.upwely.ui.components.*
 import com.warehouse.upwely.ui.theme.*
 
@@ -40,19 +46,24 @@ private data class ShipmentItem(
 @Composable
 fun ShipmentsScreen(
     onBack: () -> Unit = {},
-    onShipmentClick: () -> Unit = {},
+    onShipmentClick: (String) -> Unit = {},
     onTakeToWork: (List<String>) -> Unit = {},
+    shipmentsViewModel: ShipmentsViewModel = viewModel(),
 ) {
-    val context = LocalContext.current
-    val shipmentsData = remember { loadShipmentsConfig(context) }
-    val shipments = remember(shipmentsData) {
-        shipmentsData.shipments.map { config ->
-            ShipmentItem(
-                id = config.id,
-                destination = config.destination,
-                itemCount = config.items.size,
-                status = ShipmentStatus.PENDING,
-            )
+    val uiState by shipmentsViewModel.uiState.collectAsState()
+
+    val shipments = remember(uiState) {
+        when (val state = uiState) {
+            is ShipmentsUiState.Success -> state.shipments.map { apiShipment ->
+                val config = apiShipment.toShipmentConfig()
+                ShipmentItem(
+                    id = config.id,
+                    destination = config.destination,
+                    itemCount = config.items.size,
+                    status = ShipmentStatus.PENDING,
+                )
+            }
+            else -> emptyList()
         }
     }
 
@@ -85,24 +96,85 @@ fun ShipmentsScreen(
         ) {
             ScreenHeader(
                 title = stringResource(R.string.shipments),
-                subtitle = stringResource(R.string.shipments_count, shipments.size),
+                subtitle = when (uiState) {
+                    is ShipmentsUiState.Loading -> stringResource(R.string.loading)
+                    is ShipmentsUiState.Error -> stringResource(R.string.error)
+                    is ShipmentsUiState.Success -> stringResource(R.string.shipments_count, shipments.size)
+                },
                 actionIcon = Icons.Outlined.LocalShipping,
             )
 
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
-                verticalArrangement = Arrangement.spacedBy(24.dp),
-            ) {
-                // Segmented Control
-                ShipmentSegmentedControl(
-                    selected = selectedTab,
-                    onSelectedChange = {
-                        selectedTab = it
-                        selectedIds = emptySet()
-                    },
-                )
+            when (uiState) {
+                is ShipmentsUiState.Loading -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 100.dp),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        CircularProgressIndicator(color = Cyan)
+                    }
+                }
+                is ShipmentsUiState.Error -> {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp, vertical = 48.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                    ) {
+                        Text(
+                            text = (uiState as ShipmentsUiState.Error).message,
+                            fontFamily = JetBrainsMonoFamily,
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 14.sp,
+                            color = TextSecondary,
+                            textAlign = TextAlign.Center,
+                        )
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(Cyan)
+                                .clickable { shipmentsViewModel.loadShipments() }
+                                .padding(horizontal = 20.dp, vertical = 12.dp),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Refresh,
+                                    contentDescription = null,
+                                    tint = DarkBackground,
+                                    modifier = Modifier.size(18.dp),
+                                )
+                                Text(
+                                    text = stringResource(R.string.retry),
+                                    fontFamily = InterFamily,
+                                    fontWeight = FontWeight.SemiBold,
+                                    fontSize = 14.sp,
+                                    color = DarkBackground,
+                                )
+                            }
+                        }
+                    }
+                }
+                is ShipmentsUiState.Success -> {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp),
+                        verticalArrangement = Arrangement.spacedBy(24.dp),
+                    ) {
+                        // Segmented Control
+                        ShipmentSegmentedControl(
+                            selected = selectedTab,
+                            onSelectedChange = {
+                                selectedTab = it
+                                selectedIds = emptySet()
+                            },
+                        )
 
                 // Metrics Row
                 Row(
@@ -172,11 +244,13 @@ fun ShipmentsScreen(
                                         selectedIds - shipment.id
                                     }
                                 },
-                                onClick = onShipmentClick,
+                                onClick = { onShipmentClick(shipment.id) },
                             )
                         }
                     }
+                    }
                 }
+            }
             }
 
             Spacer(modifier = Modifier.height(if (selectedIds.isNotEmpty()) 100.dp else 16.dp))

@@ -9,6 +9,9 @@
     <string name="nav_settings">Setări</string>
 
     <!-- Common -->
+    <string name="loading">Se încarcă...</string>
+    <string name="error">Eroare</string>
+    <string name="retry">Reîncearcă</string>
     <string name="save">Salvează</string>
     <string name="cancel">Anulează</string>
     <string name="edit">Editează</string>

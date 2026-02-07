@@ -9,6 +9,9 @@
     <string name="nav_settings">Ajustes</string>
 
     <!-- Common -->
+    <string name="loading">Cargando...</string>
+    <string name="error">Error</string>
+    <string name="retry">Reintentar</string>
     <string name="save">Guardar</string>
     <string name="cancel">Cancelar</string>
     <string name="edit">Editar</string>

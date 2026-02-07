@@ -176,10 +176,24 @@ class MainActivity : AppCompatActivity() {
                         composable(Screen.SHIPMENTS) {
                             ShipmentsScreen(
                                 onBack = { navController.popBackStack() },
-                                onShipmentClick = { navController.navigate(Screen.PICKUP) },
+                                onShipmentClick = { shipmentId ->
+                                    navController.navigate(Screen.shipmentDetailRoute(shipmentId))
+                                },
                                 onTakeToWork = { selectedIds ->
                                     navController.navigate(Screen.pickingMapRoute(selectedIds))
                                 },
+                            )
+                        }
+                        composable(
+                            route = Screen.SHIPMENT_DETAIL,
+                            arguments = listOf(
+                                navArgument("shipmentId") { type = NavType.StringType }
+                            ),
+                        ) { backStackEntry ->
+                            val shipmentId = backStackEntry.arguments?.getString("shipmentId") ?: ""
+                            ShipmentDetailScreen(
+                                shipmentId = shipmentId,
+                                onBack = { navController.popBackStack() },
                             )
                         }
                         composable(Screen.WAREHOUSE_SELECTION) {

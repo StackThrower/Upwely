@@ -27,7 +27,7 @@
     {"id": "rp9", "x": 10.4, "y": 12.4, "room": "Room 1", "rect_x": 9.9, "rect_y": 11.9, "rect_width": 1.0, "rect_height": 1.0, "row": 1, "cell": 2, "color": "#B3C6FF"},
 
     {"id": "rp10", "x": 9.4, "y": 13.9, "room": "Room 1", "rect_x": 8.9, "rect_y": 13.5, "rect_width": 1.0, "rect_height": 1.0, "row": 1, "cell": 2, "color": "#B3C6FF"},
-    {"id": "rp11", "x": 10.4, "y": 13.9, "room": "Room 1", "rect_x": 9.9, "rect_y": 13.5, "rect_width": 1.0, "rect_height": 1.0, "row": 1, "cell": 2, "color": "#B3C6FF"},
+    {"id": "R1S1", "x": 10.4, "y": 13.9, "room": "Room 1", "rect_x": 9.9, "rect_y": 13.5, "rect_width": 1.0, "rect_height": 1.0, "row": 1, "cell": 2, "color": "#B3C6FF"},
 
 
     {"id": "DDDD", "x": 15.0, "y": 12.4, "room": "Room 2", "rect_x": 14.5, "rect_y": 11.9, "rect_width": 1.0, "rect_height": 1.0, "row": 1, "cell": 2, "color": "#B3C6FF"},

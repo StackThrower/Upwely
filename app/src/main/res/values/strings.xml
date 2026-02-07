@@ -9,6 +9,9 @@
     <string name="nav_settings">Settings</string>
 
     <!-- Common -->
+    <string name="loading">Loading...</string>
+    <string name="error">Error</string>
+    <string name="retry">Retry</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="edit">Edit</string>
@@ -111,6 +114,12 @@
 
     <!-- Shipments Screen -->
     <string name="shipments_count">%d shipments</string>
+    <string name="shipment_number">Shipment #</string>
+    <string name="customer">Customer</string>
+    <string name="status">Status</string>
+    <string name="items_count">Items</string>
+    <string name="items_list">ITEMS</string>
+    <string name="shipment_not_found">Shipment not found</string>
     <string name="filter_pending">pending</string>
     <string name="filter_shipped">shipped</string>
     <string name="shipments_total">shipments</string>

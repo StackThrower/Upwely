@@ -9,6 +9,9 @@
     <string name="nav_settings">Einstellungen</string>
 
     <!-- Common -->
+    <string name="loading">Laden...</string>
+    <string name="error">Fehler</string>
+    <string name="retry">Wiederholen</string>
     <string name="save">Speichern</string>
     <string name="cancel">Abbrechen</string>
     <string name="edit">Bearbeiten</string>
