@@ -168,27 +168,28 @@ fun PlacingMapScreen(
 ) {
     val context = LocalContext.current
     val plan = remember { loadWarehousePlan(context) }
-    val ordersData = remember { loadOrdersConfig(context) }
+    val receiptsData = remember { PurchaseReceiptsCache.cachedReceipts }
 
     val beaconPosition = beaconViewModel?.position?.collectAsState()?.value
     val userX = beaconPosition?.first ?: 7.0f
     val userY = beaconPosition?.second ?: 19.0f
     val youLabel = stringResource(R.string.you)
 
-    // Build and optimize place list
-    val optimizedItems = remember(ordersData, plan, orderIds) {
-        val selected = ordersData.orders.filter { it.id in orderIds }
-        val rawItems = selected.flatMap { order ->
-            order.items.mapNotNull { item ->
-                val shelf = plan.shelves.find { it.id == item.shelfId }
+    // Build and optimize place list from PurchaseReceipts
+    val optimizedItems = remember(receiptsData, plan, orderIds) {
+        val selected = receiptsData.filter { it.id in orderIds }
+        val rawItems = selected.flatMap { receipt ->
+            receipt.items.mapNotNull { item ->
+                // Try to find shelf by location
+                val shelf = plan.shelves.find { it.id == item.location }
                 if (shelf != null) {
                     PlaceItem(
                         itemId = item.id,
-                        name = item.name,
+                        name = item.name.ifEmpty { item.sku },
                         sku = item.sku,
                         quantity = item.quantity,
-                        shelfId = item.shelfId,
-                        orderId = order.id,
+                        shelfId = item.location,
+                        orderId = receipt.receiptNbr,
                         room = shelf.room,
                         x = shelf.x,
                         y = shelf.y,
@@ -234,7 +235,7 @@ fun PlacingMapScreen(
     ) {
         ScreenHeader(
             title = stringResource(R.string.placing_route),
-            subtitle = stringResource(R.string.orders_items, orderIds.size, totalCount),
+            subtitle = stringResource(R.string.receipts_items, orderIds.size, totalCount),
             actionIcon = Icons.Outlined.Inventory2,
         )
 

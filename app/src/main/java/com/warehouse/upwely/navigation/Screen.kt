@@ -9,7 +9,8 @@ object Screen {
     const val USER_PROFILE = "user_profile"
     const val EDIT_PROFILE = "edit_profile"
     const val WAREHOUSE_PLANNING = "warehouse_planning"
-    const val ORDERS = "orders"
+    const val PURCHASE_RECEIPTS = "purchase_receipts"
+    const val PURCHASE_RECEIPT_DETAIL = "purchase_receipt_detail/{receiptId}"
     const val SHIPMENTS = "shipments"
     const val CALIBRATION = "calibration"
     const val PICKING_MAP = "picking_map/{shipmentIds}"
@@ -18,6 +19,10 @@ object Screen {
 
     fun shipmentDetailRoute(shipmentId: String): String {
         return "shipment_detail/$shipmentId"
+    }
+
+    fun purchaseReceiptDetailRoute(receiptId: String): String {
+        return "purchase_receipt_detail/$receiptId"
     }
 
     fun pickingMapRoute(shipmentIds: List<String>): String {

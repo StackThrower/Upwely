@@ -120,7 +120,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 val showBottomBar = currentRoute in BottomNavItem.items.map { it.route } +
-                        listOf(Screen.PICKUP, Screen.RECEIVE, Screen.WAREHOUSE_PLANNING, Screen.ORDERS, Screen.SHIPMENTS)
+                        listOf(Screen.PICKUP, Screen.RECEIVE, Screen.WAREHOUSE_PLANNING, Screen.PURCHASE_RECEIPTS, Screen.SHIPMENTS)
 
                 Scaffold(
                     containerColor = DarkBackground,
@@ -141,7 +141,7 @@ class MainActivity : AppCompatActivity() {
                         }
                         composable(BottomNavItem.Warehouse.route) {
                             WarehouseScreen(
-                                onOrdersClick = { navController.navigate(Screen.ORDERS) },
+                                onOrdersClick = { navController.navigate(Screen.PURCHASE_RECEIPTS) },
                                 onPlanningClick = { navController.navigate(Screen.WAREHOUSE_PLANNING) },
                                 onShipmentsClick = { navController.navigate(Screen.SHIPMENTS) },
                             )
@@ -159,13 +159,27 @@ class MainActivity : AppCompatActivity() {
                         // Sub-screens
                         composable(Screen.PICKUP) { PickupScreen() }
                         composable(Screen.RECEIVE) { ReceivingScreen() }
-                        composable(Screen.ORDERS) {
-                            OrdersScreen(
+                        composable(Screen.PURCHASE_RECEIPTS) {
+                            PurchaseReceiptScreen(
                                 onBack = { navController.popBackStack() },
-                                onOrderClick = { navController.navigate(Screen.RECEIVE) },
+                                onReceiptClick = { receiptId ->
+                                    navController.navigate(Screen.purchaseReceiptDetailRoute(receiptId))
+                                },
                                 onTakeToWork = { selectedIds ->
                                     navController.navigate(Screen.placingMapRoute(selectedIds))
                                 },
+                            )
+                        }
+                        composable(
+                            route = Screen.PURCHASE_RECEIPT_DETAIL,
+                            arguments = listOf(
+                                navArgument("receiptId") { type = NavType.StringType }
+                            ),
+                        ) { backStackEntry ->
+                            val receiptId = backStackEntry.arguments?.getString("receiptId") ?: ""
+                            PurchaseReceiptDetailScreen(
+                                receiptId = receiptId,
+                                onBack = { navController.popBackStack() },
                             )
                         }
                         composable(Screen.WAREHOUSE_PLANNING) {
@@ -285,7 +299,7 @@ fun BottomTabBar(navController: NavHostController) {
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            val warehouseChildRoutes = listOf(Screen.PICKUP, Screen.RECEIVE, Screen.ORDERS, Screen.WAREHOUSE_PLANNING, Screen.SHIPMENTS)
+            val warehouseChildRoutes = listOf(Screen.PICKUP, Screen.RECEIVE, Screen.PURCHASE_RECEIPTS, Screen.WAREHOUSE_PLANNING, Screen.SHIPMENTS)
 
             BottomNavItem.items.forEach { item ->
                 val selected = currentRoute == item.route ||

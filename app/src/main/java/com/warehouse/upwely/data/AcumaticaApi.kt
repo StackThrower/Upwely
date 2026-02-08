@@ -8,6 +8,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONArray
 import org.json.JSONObject
+import java.net.URLEncoder
 import java.util.concurrent.TimeUnit
 
 data class ApiShipmentDetail(
@@ -151,5 +152,98 @@ class AcumaticaApi(private val context: Context) {
         }
 
         return shipments
+    }
+
+    suspend fun getPurchaseReceipts(): Result<List<ApiPurchaseReceipt>> = withContext(Dispatchers.IO) {
+        try {
+            val token = accessToken ?: getToken().getOrThrow()
+
+            val request = Request.Builder()
+                .url("$baseUrl/entity/Default/24.200.001/PurchaseReceipt?\$expand=Details&\$filter=Status%20eq%20%27Balanced%27")
+                .addHeader("Authorization", "Bearer $token")
+                .get()
+                .build()
+
+            val response = client.newCall(request).execute()
+            if (response.isSuccessful) {
+                val body = response.body?.string() ?: return@withContext Result.failure(Exception("Empty response"))
+                val receipts = parsePurchaseReceipts(body)
+                Result.success(receipts)
+            } else if (response.code == 401) {
+                accessToken = null
+                val newToken = getToken().getOrThrow()
+                val retryRequest = Request.Builder()
+                    .url("$baseUrl/entity/Default/24.200.001/PurchaseReceipt?\$expand=Details&\$filter=Status%20eq%20%27Balanced%27")
+                    .addHeader("Authorization", "Bearer $newToken")
+                    .get()
+                    .build()
+                val retryResponse = client.newCall(retryRequest).execute()
+                if (retryResponse.isSuccessful) {
+                    val body = retryResponse.body?.string() ?: return@withContext Result.failure(Exception("Empty response"))
+                    val receipts = parsePurchaseReceipts(body)
+                    Result.success(receipts)
+                } else {
+                    Result.failure(Exception("Purchase receipts request failed: ${retryResponse.code}"))
+                }
+            } else {
+                Result.failure(Exception("Purchase receipts request failed: ${response.code}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    private fun parsePurchaseReceipts(json: String): List<ApiPurchaseReceipt> {
+        val arr = JSONArray(json)
+        val receipts = mutableListOf<ApiPurchaseReceipt>()
+
+        for (i in 0 until arr.length()) {
+            val obj = arr.getJSONObject(i)
+            val id = obj.getString("id")
+            val receiptNbr = obj.getJSONObject("ReceiptNbr").getString("value")
+            val vendorId = obj.getJSONObject("VendorID").getString("value")
+            val vendorRef = obj.optJSONObject("VendorRef")?.optString("value", "") ?: ""
+            val status = obj.getJSONObject("Status").getString("value")
+            val date = obj.getJSONObject("Date").getString("value")
+            val totalQty = obj.getJSONObject("TotalQty").getDouble("value")
+            val totalCost = obj.getJSONObject("TotalCost").getDouble("value")
+
+            val detailsArr = obj.optJSONArray("Details") ?: JSONArray()
+            val details = mutableListOf<ApiPurchaseReceiptDetail>()
+
+            for (j in 0 until detailsArr.length()) {
+                val detailObj = detailsArr.getJSONObject(j)
+                details.add(
+                    ApiPurchaseReceiptDetail(
+                        id = detailObj.getString("id"),
+                        inventoryId = detailObj.getJSONObject("InventoryID").getString("value"),
+                        description = detailObj.optJSONObject("TransactionDescription")?.optString("value", "") ?: "",
+                        receiptQty = detailObj.getJSONObject("ReceiptQty").getDouble("value").toInt(),
+                        location = detailObj.getJSONObject("Location").getString("value"),
+                        warehouse = detailObj.getJSONObject("Warehouse").getString("value"),
+                        unitCost = detailObj.getJSONObject("UnitCost").getDouble("value"),
+                        extendedCost = detailObj.getJSONObject("ExtendedCost").getDouble("value"),
+                        poOrderNbr = detailObj.optJSONObject("POOrderNbr")?.optString("value", "") ?: "",
+                        uom = detailObj.getJSONObject("UOM").getString("value"),
+                    )
+                )
+            }
+
+            receipts.add(
+                ApiPurchaseReceipt(
+                    id = id,
+                    receiptNbr = receiptNbr,
+                    vendorId = vendorId,
+                    vendorRef = vendorRef,
+                    status = status,
+                    date = date,
+                    totalQty = totalQty,
+                    totalCost = totalCost,
+                    details = details,
+                )
+            )
+        }
+
+        return receipts
     }
 }

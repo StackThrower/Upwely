@@ -101,18 +101,38 @@
     <string name="order_status">Статус замовлення</string>
     <string name="agent">Агент</string>
 
-    <!-- Orders Screen -->
-    <string name="active_orders_count">%d активних замовлень</string>
+    <!-- Purchase Receipt Screen -->
+    <string name="purchase_receipts">Прибуткові накладні</string>
+    <string name="receipts_count">%d накладних</string>
+    <string name="receipts_total">накладних</string>
+    <string name="section_receipts">НАКЛАДНІ</string>
+    <string name="to_receive">ДО ПРИЙМАННЯ</string>
+    <string name="awaiting">очікує</string>
     <string name="filter_all">всі</string>
-    <string name="filter_active">активні</string>
-    <string name="filter_delivered">доставлені</string>
+    <string name="filter_balanced">збалансовані</string>
+    <string name="filter_released">випущені</string>
     <string name="total">ВСЬОГО</string>
-    <string name="orders_count">замовлень</string>
-    <string name="in_transit">В ДОРОЗІ</string>
-    <string name="on_the_way">в дорозі</string>
-    <string name="section_orders">ЗАМОВЛЕННЯ</string>
     <string name="take_to_work">Взяти в роботу</string>
     <string name="in_work">В РОБОТІ</string>
+    <string name="status_balanced">Збалансовано</string>
+    <string name="status_on_hold">На утриманні</string>
+    <string name="status_released">Випущено</string>
+    <string name="receipt_number">Накладна #</string>
+    <string name="vendor">Постачальник</string>
+    <string name="vendor_ref">Реф. постачальника</string>
+    <string name="total_qty">Загальна к-сть</string>
+    <string name="total_cost">Загальна вартість</string>
+    <string name="items_to_receive">ТОВАРИ ДЛЯ ПРИЙМАННЯ</string>
+    <string name="receipt_not_found">Накладну не знайдено</string>
+
+    <!-- Legacy Orders (not duplicated - only unique strings) -->
+    <string name="active_orders_count">%d активних замовлень</string>
+    <string name="orders_count">замовлень</string>
+    <string name="section_orders">ЗАМОВЛЕННЯ</string>
+    <string name="in_transit">В ДОРОЗІ</string>
+    <string name="on_the_way">в дорозі</string>
+    <string name="filter_active">активні</string>
+    <string name="filter_delivered">доставлені</string>
     <string name="status_delivered">Доставлено</string>
     <string name="status_in_transit">В дорозі</string>
     <string name="status_processing">Обробка</string>
@@ -212,6 +232,7 @@
     <!-- Placing Map Screen -->
     <string name="placing_route">Маршрут розміщення</string>
     <string name="orders_items">%1$d замовлень · %2$d позицій</string>
+    <string name="receipts_items">%1$d накладних · %2$d позицій</string>
     <string name="placing_completed">Розміщення завершено</string>
     <string name="placed_canceled_stats">Розміщено: %1$d · Скасовано: %2$d</string>
     <string name="placed">Розміщено</string>

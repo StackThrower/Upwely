@@ -9,8 +9,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.GridView
+import androidx.compose.material.icons.outlined.Inventory
 import androidx.compose.material.icons.outlined.LocalShipping
-import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -68,9 +68,9 @@ fun WarehouseScreen(
                     verticalArrangement = Arrangement.spacedBy(2.dp),
                 ) {
                     OperationItem(
-                        icon = Icons.Outlined.ShoppingCart,
-                        title = stringResource(R.string.orders),
-                        subtitle = stringResource(R.string.active_orders, 5),
+                        icon = Icons.Outlined.Inventory,
+                        title = stringResource(R.string.purchase_receipts),
+                        subtitle = stringResource(R.string.receipts_count, 0),
                         onClick = onOrdersClick,
                     )
                     OperationItem(

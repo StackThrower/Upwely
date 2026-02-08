@@ -101,18 +101,38 @@
     <string name="order_status">Order status</string>
     <string name="agent">Agent</string>
 
-    <!-- Orders Screen -->
-    <string name="active_orders_count">%d active orders</string>
+    <!-- Purchase Receipt Screen -->
+    <string name="purchase_receipts">Purchase Receipts</string>
+    <string name="receipts_count">%d receipts</string>
+    <string name="receipts_total">receipts</string>
+    <string name="section_receipts">RECEIPTS</string>
+    <string name="to_receive">TO RECEIVE</string>
+    <string name="awaiting">awaiting</string>
     <string name="filter_all">all</string>
-    <string name="filter_active">active</string>
-    <string name="filter_delivered">delivered</string>
+    <string name="filter_balanced">balanced</string>
+    <string name="filter_released">released</string>
     <string name="total">TOTAL</string>
-    <string name="orders_count">orders</string>
-    <string name="in_transit">IN TRANSIT</string>
-    <string name="on_the_way">on the way</string>
-    <string name="section_orders">ORDERS</string>
     <string name="take_to_work">Take to work</string>
     <string name="in_work">IN WORK</string>
+    <string name="status_balanced">Balanced</string>
+    <string name="status_on_hold">On Hold</string>
+    <string name="status_released">Released</string>
+    <string name="receipt_number">Receipt #</string>
+    <string name="vendor">Vendor</string>
+    <string name="vendor_ref">Vendor Ref</string>
+    <string name="total_qty">Total Qty</string>
+    <string name="total_cost">Total Cost</string>
+    <string name="items_to_receive">ITEMS TO RECEIVE</string>
+    <string name="receipt_not_found">Receipt not found</string>
+
+    <!-- Legacy Orders (not duplicated - only unique strings) -->
+    <string name="active_orders_count">%d active orders</string>
+    <string name="orders_count">orders</string>
+    <string name="section_orders">ORDERS</string>
+    <string name="in_transit">IN TRANSIT</string>
+    <string name="on_the_way">on the way</string>
+    <string name="filter_active">active</string>
+    <string name="filter_delivered">delivered</string>
     <string name="status_delivered">Delivered</string>
     <string name="status_in_transit">In transit</string>
     <string name="status_processing">Processing</string>
@@ -212,6 +232,7 @@
     <!-- Placing Map Screen -->
     <string name="placing_route">Placing Route</string>
     <string name="orders_items">%1$d orders · %2$d items</string>
+    <string name="receipts_items">%1$d receipts · %2$d items</string>
     <string name="placing_completed">Placing completed</string>
     <string name="placed_canceled_stats">Placed: %1$d · Canceled: %2$d</string>
     <string name="placed">Placed</string>
