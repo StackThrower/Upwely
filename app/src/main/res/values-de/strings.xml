@@ -47,6 +47,12 @@
     <string name="sound_effects">Soundeffekte</string>
     <string name="app_version">App-Version</string>
     <string name="server">Server</string>
+    <string name="section_server">SERVER</string>
+    <string name="base_url">Server-URL</string>
+    <string name="client_id">Client-ID</string>
+    <string name="username">Benutzername</string>
+    <string name="password">Passwort</string>
+    <string name="client_secret">Client-Geheimnis</string>
     <string name="log_out">Abmelden</string>
     <string name="warehouse_operator">Lagerarbeiter · Schicht A</string>
 

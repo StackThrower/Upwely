@@ -47,6 +47,12 @@
     <string name="sound_effects">Sound Effects</string>
     <string name="app_version">App Version</string>
     <string name="server">Server</string>
+    <string name="section_server">SERVER</string>
+    <string name="base_url">Base URL</string>
+    <string name="client_id">Client ID</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="client_secret">Client Secret</string>
     <string name="log_out">Log Out</string>
     <string name="warehouse_operator">warehouse operator · shift A</string>
 

@@ -47,6 +47,12 @@
     <string name="sound_effects">Efecte sonore</string>
     <string name="app_version">Versiunea aplicației</string>
     <string name="server">Server</string>
+    <string name="section_server">SERVER</string>
+    <string name="base_url">URL server</string>
+    <string name="client_id">ID client</string>
+    <string name="username">Nume utilizator</string>
+    <string name="password">Parolă</string>
+    <string name="client_secret">Secret client</string>
     <string name="log_out">Deconectare</string>
     <string name="warehouse_operator">operator depozit · schimb A</string>
 

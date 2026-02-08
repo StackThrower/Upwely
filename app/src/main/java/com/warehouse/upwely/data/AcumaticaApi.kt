@@ -1,5 +1,6 @@
 package com.warehouse.upwely.data
 
+import android.content.Context
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.FormBody
@@ -26,25 +27,28 @@ data class ApiShipment(
     val details: List<ApiShipmentDetail>,
 )
 
-class AcumaticaApi(
-    private val baseUrl: String = "http://192.168.0.35/AcumaticaERP",
-) {
+class AcumaticaApi(private val context: Context) {
     private val client = OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
         .writeTimeout(30, TimeUnit.SECONDS)
         .build()
 
-    private var accessToken: String? = null
+    private val baseUrl: String
+        get() = SettingsRepository.getBaseUrl(context)
+
+    private var accessToken: String?
+        get() = SettingsRepository.getAccessToken(context)
+        set(value) = SettingsRepository.setAccessToken(context, value)
 
     suspend fun getToken(): Result<String> = withContext(Dispatchers.IO) {
         try {
             val formBody = FormBody.Builder()
-                .add("client_id", "D518FED4-997D-6E2C-1577-FC53E20CCEB2@Company")
-                .add("username", "admin")
-                .add("password", "setup2")
+                .add("client_id", SettingsRepository.getClientId(context))
+                .add("username", SettingsRepository.getUsername(context))
+                .add("password", SettingsRepository.getPassword(context))
                 .add("scope", "api")
-                .add("client_secret", "u0kz1WSHydzlwCmzpzdE3w")
+                .add("client_secret", SettingsRepository.getClientSecret(context))
                 .add("grant_type", "password")
                 .build()
 

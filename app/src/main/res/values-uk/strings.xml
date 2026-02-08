@@ -47,6 +47,12 @@
     <string name="sound_effects">Звукові ефекти</string>
     <string name="app_version">Версія додатку</string>
     <string name="server">Сервер</string>
+    <string name="section_server">СЕРВЕР</string>
+    <string name="base_url">URL сервера</string>
+    <string name="client_id">ID клієнта</string>
+    <string name="username">Ім\'я користувача</string>
+    <string name="password">Пароль</string>
+    <string name="client_secret">Секретний ключ</string>
     <string name="log_out">Вийти</string>
     <string name="warehouse_operator">оператор складу · зміна А</string>
 

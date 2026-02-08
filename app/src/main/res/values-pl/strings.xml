@@ -47,6 +47,12 @@
     <string name="sound_effects">Efekty dźwiękowe</string>
     <string name="app_version">Wersja aplikacji</string>
     <string name="server">Serwer</string>
+    <string name="section_server">SERWER</string>
+    <string name="base_url">URL serwera</string>
+    <string name="client_id">ID klienta</string>
+    <string name="username">Nazwa użytkownika</string>
+    <string name="password">Hasło</string>
+    <string name="client_secret">Sekret klienta</string>
     <string name="log_out">Wyloguj</string>
     <string name="warehouse_operator">operator magazynu · zmiana A</string>
 

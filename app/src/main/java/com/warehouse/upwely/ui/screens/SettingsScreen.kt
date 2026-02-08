@@ -25,12 +25,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.warehouse.upwely.R
 import com.warehouse.upwely.data.AppLanguage
 import com.warehouse.upwely.data.LocaleHelper
+import com.warehouse.upwely.data.SettingsRepository
 import com.warehouse.upwely.ui.components.*
 import com.warehouse.upwely.ui.theme.*
 
@@ -52,26 +55,61 @@ fun SettingsScreen(
     // Editable text states
     var scannerMode by remember { mutableStateOf("camera · auto-detect") }
     var appVersion by remember { mutableStateOf("2.4.1 (build 847)") }
-    var serverAddress by remember { mutableStateOf("api.wh-nav.io · connected") }
+
+    // Server settings from repository
+    var baseUrl by remember { mutableStateOf(SettingsRepository.getBaseUrl(context)) }
+    var clientId by remember { mutableStateOf(SettingsRepository.getClientId(context)) }
+    var username by remember { mutableStateOf(SettingsRepository.getUsername(context)) }
+    var password by remember { mutableStateOf(SettingsRepository.getPassword(context)) }
+    var clientSecret by remember { mutableStateOf(SettingsRepository.getClientSecret(context)) }
 
     // Edit dialog state
     var editDialogField by remember { mutableStateOf<EditField?>(null) }
 
     val scannerModeTitle = stringResource(R.string.scanner_mode)
     val appVersionTitle = stringResource(R.string.app_version)
-    val serverTitle = stringResource(R.string.server)
+    val baseUrlTitle = stringResource(R.string.base_url)
+    val clientIdTitle = stringResource(R.string.client_id)
+    val usernameTitle = stringResource(R.string.username)
+    val passwordTitle = stringResource(R.string.password)
+    val clientSecretTitle = stringResource(R.string.client_secret)
 
     // Show dialog when editing
     editDialogField?.let { field ->
         EditTextDialog(
             title = field.title,
             currentValue = field.value,
+            isPassword = field.isPassword,
             onDismiss = { editDialogField = null },
             onConfirm = { newValue ->
                 when (field.key) {
                     "scannerMode" -> scannerMode = newValue
                     "appVersion" -> appVersion = newValue
-                    "server" -> serverAddress = newValue
+                    "baseUrl" -> {
+                        baseUrl = newValue
+                        SettingsRepository.setBaseUrl(context, newValue)
+                        SettingsRepository.clearAccessToken(context)
+                    }
+                    "clientId" -> {
+                        clientId = newValue
+                        SettingsRepository.setClientId(context, newValue)
+                        SettingsRepository.clearAccessToken(context)
+                    }
+                    "username" -> {
+                        username = newValue
+                        SettingsRepository.setUsername(context, newValue)
+                        SettingsRepository.clearAccessToken(context)
+                    }
+                    "password" -> {
+                        password = newValue
+                        SettingsRepository.setPassword(context, newValue)
+                        SettingsRepository.clearAccessToken(context)
+                    }
+                    "clientSecret" -> {
+                        clientSecret = newValue
+                        SettingsRepository.setClientSecret(context, newValue)
+                        SettingsRepository.clearAccessToken(context)
+                    }
                 }
                 editDialogField = null
             },
@@ -137,6 +175,67 @@ fun SettingsScreen(
                         hasToggle = true,
                         toggleOn = darkModeOn,
                         onToggleChange = { darkModeOn = it },
+                    )
+                }
+            }
+
+            // Server Section
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text(
+                    text = stringResource(R.string.section_server),
+                    fontFamily = InterFamily,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 11.sp,
+                    color = TextSecondary,
+                    letterSpacing = 2.sp,
+                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(CardBackground)
+                        .padding(4.dp),
+                    verticalArrangement = Arrangement.spacedBy(2.dp),
+                ) {
+                    SettingsRow(
+                        icon = Icons.Outlined.Dns,
+                        title = stringResource(R.string.base_url),
+                        value = baseUrl,
+                        onClick = {
+                            editDialogField = EditField("baseUrl", baseUrlTitle, baseUrl)
+                        },
+                    )
+                    SettingsRow(
+                        icon = Icons.Outlined.Key,
+                        title = stringResource(R.string.client_id),
+                        value = clientId.take(20) + if (clientId.length > 20) "..." else "",
+                        onClick = {
+                            editDialogField = EditField("clientId", clientIdTitle, clientId)
+                        },
+                    )
+                    SettingsRow(
+                        icon = Icons.Outlined.Person,
+                        title = stringResource(R.string.username),
+                        value = username,
+                        onClick = {
+                            editDialogField = EditField("username", usernameTitle, username)
+                        },
+                    )
+                    SettingsRow(
+                        icon = Icons.Outlined.Password,
+                        title = stringResource(R.string.password),
+                        value = "••••••••",
+                        onClick = {
+                            editDialogField = EditField("password", passwordTitle, password, isPassword = true)
+                        },
+                    )
+                    SettingsRow(
+                        icon = Icons.Outlined.VpnKey,
+                        title = stringResource(R.string.client_secret),
+                        value = "••••••••",
+                        onClick = {
+                            editDialogField = EditField("clientSecret", clientSecretTitle, clientSecret, isPassword = true)
+                        },
                     )
                 }
             }
@@ -223,16 +322,6 @@ fun SettingsScreen(
                             editDialogField = EditField("appVersion", appVersionTitle, appVersion)
                         },
                     )
-                    SettingsRow(
-                        icon = Icons.Outlined.Dns,
-                        title = stringResource(R.string.server),
-                        value = serverAddress,
-                        valueHighlight = true,
-                        hasChevron = false,
-                        onClick = {
-                            editDialogField = EditField("server", serverTitle, serverAddress)
-                        },
-                    )
                 }
             }
 
@@ -271,16 +360,19 @@ private data class EditField(
     val key: String,
     val title: String,
     val value: String,
+    val isPassword: Boolean = false,
 )
 
 @Composable
 private fun EditTextDialog(
     title: String,
     currentValue: String,
+    isPassword: Boolean = false,
     onDismiss: () -> Unit,
     onConfirm: (String) -> Unit,
 ) {
     var text by remember { mutableStateOf(currentValue) }
+    var showPassword by remember { mutableStateOf(false) }
 
     Dialog(onDismissRequest = onDismiss) {
         Column(
@@ -298,27 +390,48 @@ private fun EditTextDialog(
                 fontSize = 16.sp,
                 color = White,
             )
-            TextField(
-                value = text,
-                onValueChange = { text = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(8.dp)),
-                textStyle = TextStyle(
-                    fontFamily = JetBrainsMonoFamily,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 13.sp,
-                    color = White,
-                ),
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = ItemBackground,
-                    unfocusedContainerColor = ItemBackground,
-                    cursorColor = Cyan,
-                    focusedIndicatorColor = Cyan,
-                    unfocusedIndicatorColor = Color.Transparent,
-                ),
-                singleLine = true,
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                TextField(
+                    value = text,
+                    onValueChange = { text = it },
+                    modifier = Modifier
+                        .weight(1f)
+                        .clip(RoundedCornerShape(8.dp)),
+                    textStyle = TextStyle(
+                        fontFamily = JetBrainsMonoFamily,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 13.sp,
+                        color = White,
+                    ),
+                    visualTransformation = if (isPassword && !showPassword) {
+                        PasswordVisualTransformation()
+                    } else {
+                        VisualTransformation.None
+                    },
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = ItemBackground,
+                        unfocusedContainerColor = ItemBackground,
+                        cursorColor = Cyan,
+                        focusedIndicatorColor = Cyan,
+                        unfocusedIndicatorColor = Color.Transparent,
+                    ),
+                    singleLine = true,
+                )
+                if (isPassword) {
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Icon(
+                        imageVector = if (showPassword) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility,
+                        contentDescription = null,
+                        tint = TextSecondary,
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clickable { showPassword = !showPassword },
+                    )
+                }
+            }
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.End),

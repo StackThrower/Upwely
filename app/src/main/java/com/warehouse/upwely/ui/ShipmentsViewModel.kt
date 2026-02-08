@@ -1,6 +1,7 @@
 package com.warehouse.upwely.ui
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.warehouse.upwely.data.AcumaticaApi
 import com.warehouse.upwely.data.ApiShipment
@@ -17,9 +18,9 @@ sealed class ShipmentsUiState {
     data class Error(val message: String) : ShipmentsUiState()
 }
 
-class ShipmentsViewModel : ViewModel() {
+class ShipmentsViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val api = AcumaticaApi()
+    private val api = AcumaticaApi(application)
 
     private val _uiState = MutableStateFlow<ShipmentsUiState>(ShipmentsUiState.Loading)
     val uiState: StateFlow<ShipmentsUiState> = _uiState.asStateFlow()
