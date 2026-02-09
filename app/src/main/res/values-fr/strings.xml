@@ -193,6 +193,7 @@
 
     <!-- Picking Map Screen -->
     <string name="picking_route">Route de préparation</string>
+    <string name="shipment_label">Expédition: %1$s</string>
     <string name="shipments_items">%1$d expéditions · %2$d articles</string>
     <string name="progress">PROGRESSION</string>
     <string name="picking_completed">Préparation terminée</string>

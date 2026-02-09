@@ -414,6 +414,13 @@ fun PickingMapScreen(
                     modifier = Modifier.weight(1f),
                 ) {
                     Text(
+                        text = stringResource(R.string.shipment_label, currentItem.shipmentId),
+                        fontFamily = JetBrainsMonoFamily,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 13.sp,
+                        color = Cyan,
+                    )
+                    Text(
                         text = currentItem.name,
                         fontFamily = InterFamily,
                         fontWeight = FontWeight.SemiBold,
@@ -421,11 +428,11 @@ fun PickingMapScreen(
                         color = White,
                     )
                     Text(
-                        text = "${currentItem.shipmentId} · ${currentItem.sku} · x${currentItem.quantity}",
+                        text = "${currentItem.sku} · x${currentItem.quantity}",
                         fontFamily = JetBrainsMonoFamily,
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.Normal,
                         fontSize = 12.sp,
-                        color = Cyan,
+                        color = TextSecondary,
                     )
                     Text(
                         text = stringResource(R.string.room_row_cell, currentItem.room, currentItem.row?.toString() ?: "-", currentItem.cell?.toString() ?: "-"),

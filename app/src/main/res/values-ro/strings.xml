@@ -193,6 +193,7 @@
 
     <!-- Picking Map Screen -->
     <string name="picking_route">Rută de preluare</string>
+    <string name="shipment_label">Expediere: %1$s</string>
     <string name="shipments_items">%1$d expedieri · %2$d articole</string>
     <string name="progress">PROGRES</string>
     <string name="picking_completed">Preluare finalizată</string>

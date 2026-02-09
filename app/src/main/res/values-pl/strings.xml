@@ -193,6 +193,7 @@
 
     <!-- Picking Map Screen -->
     <string name="picking_route">Trasa kompletacji</string>
+    <string name="shipment_label">Przesyłka: %1$s</string>
     <string name="shipments_items">%1$d wysyłek · %2$d pozycji</string>
     <string name="progress">POSTĘP</string>
     <string name="picking_completed">Kompletacja zakończona</string>

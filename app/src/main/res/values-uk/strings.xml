@@ -219,6 +219,7 @@
 
     <!-- Picking Map Screen -->
     <string name="picking_route">Маршрут підбору</string>
+    <string name="shipment_label">Відвантаження: %1$s</string>
     <string name="shipments_items">%1$d відвантажень · %2$d позицій</string>
     <string name="progress">ПРОГРЕС</string>
     <string name="picking_completed">Підбір завершено</string>

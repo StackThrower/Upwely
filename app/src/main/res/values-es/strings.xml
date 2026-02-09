@@ -193,6 +193,7 @@
 
     <!-- Picking Map Screen -->
     <string name="picking_route">Ruta de recogida</string>
+    <string name="shipment_label">Envío: %1$s</string>
     <string name="shipments_items">%1$d envíos · %2$d artículos</string>
     <string name="progress">PROGRESO</string>
     <string name="picking_completed">Recogida completada</string>

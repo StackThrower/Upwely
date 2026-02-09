@@ -193,6 +193,7 @@
 
     <!-- Picking Map Screen -->
     <string name="picking_route">Kommissionierroute</string>
+    <string name="shipment_label">Sendung: %1$s</string>
     <string name="shipments_items">%1$d Sendungen · %2$d Artikel</string>
     <string name="progress">FORTSCHRITT</string>
     <string name="picking_completed">Kommissionierung abgeschlossen</string>

@@ -219,6 +219,7 @@
 
     <!-- Picking Map Screen -->
     <string name="picking_route">Picking Route</string>
+    <string name="shipment_label">Shipment: %1$s</string>
     <string name="shipments_items">%1$d shipments · %2$d items</string>
     <string name="progress">PROGRESS</string>
     <string name="picking_completed">Picking completed</string>
