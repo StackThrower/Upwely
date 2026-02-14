@@ -230,6 +230,18 @@
     <string name="room_row_cell">%1$s · row: %2$s, cell: %3$s</string>
     <string name="pick_list">PICK LIST</string>
 
+    <!-- Picking Scan Screen -->
+    <string name="scan_items">Scan Items</string>
+    <string name="scanned_of_total">%1$d / %2$d scanned</string>
+    <string name="tap_to_scan">Tap to scan</string>
+    <string name="items_to_scan">ITEMS TO SCAN</string>
+    <string name="scanned_items">SCANNED ITEMS</string>
+    <string name="continue_picking">Continue Picking</string>
+    <string name="confirm_pick">Confirm Pick</string>
+    <string name="select_box">Select Box</string>
+    <string name="other_boxes">OTHER BOXES</string>
+    <string name="scan_serial_number">Scan serial number</string>
+
     <!-- Placing Map Screen -->
     <string name="placing_route">Placing Route</string>
     <string name="orders_items">%1$d orders · %2$d items</string>

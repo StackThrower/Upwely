@@ -20,6 +20,22 @@ data class ApiShipmentDetail(
     val warehouseId: String,
 )
 
+data class ShippingBox(
+    val id: String,
+    val boxId: String,
+    val description: String,
+    val boxWeight: Double,
+    val height: Double,
+    val length: Double,
+    val width: Double,
+    val linearUOM: String,
+    val maxVolume: Double,
+    val maxWeight: Double,
+    val volumeUOM: String,
+    val weightUOM: String,
+    val activeByDefault: Boolean,
+)
+
 data class ApiShipment(
     val id: String,
     val shipmentNbr: String,
@@ -245,5 +261,72 @@ class AcumaticaApi(private val context: Context) {
         }
 
         return receipts
+    }
+
+    suspend fun getShippingBoxes(): Result<List<ShippingBox>> = withContext(Dispatchers.IO) {
+        try {
+            val token = accessToken ?: getToken().getOrThrow()
+
+            val request = Request.Builder()
+                .url("$baseUrl/entity/Default/24.200.001/ShippingBox")
+                .addHeader("Authorization", "Bearer $token")
+                .get()
+                .build()
+
+            val response = client.newCall(request).execute()
+            if (response.isSuccessful) {
+                val body = response.body?.string() ?: return@withContext Result.failure(Exception("Empty response"))
+                val boxes = parseShippingBoxes(body)
+                Result.success(boxes)
+            } else if (response.code == 401) {
+                accessToken = null
+                val newToken = getToken().getOrThrow()
+                val retryRequest = Request.Builder()
+                    .url("$baseUrl/entity/Default/24.200.001/ShippingBox")
+                    .addHeader("Authorization", "Bearer $newToken")
+                    .get()
+                    .build()
+                val retryResponse = client.newCall(retryRequest).execute()
+                if (retryResponse.isSuccessful) {
+                    val body = retryResponse.body?.string() ?: return@withContext Result.failure(Exception("Empty response"))
+                    val boxes = parseShippingBoxes(body)
+                    Result.success(boxes)
+                } else {
+                    Result.failure(Exception("Shipping boxes request failed: ${retryResponse.code}"))
+                }
+            } else {
+                Result.failure(Exception("Shipping boxes request failed: ${response.code}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    private fun parseShippingBoxes(json: String): List<ShippingBox> {
+        val arr = JSONArray(json)
+        val boxes = mutableListOf<ShippingBox>()
+
+        for (i in 0 until arr.length()) {
+            val obj = arr.getJSONObject(i)
+            boxes.add(
+                ShippingBox(
+                    id = obj.getString("id"),
+                    boxId = obj.getJSONObject("BoxID").getString("value"),
+                    description = obj.getJSONObject("Description").getString("value"),
+                    boxWeight = obj.getJSONObject("BoxWeight").getDouble("value"),
+                    height = obj.getJSONObject("Height").getDouble("value"),
+                    length = obj.getJSONObject("Length").getDouble("value"),
+                    width = obj.getJSONObject("Width").getDouble("value"),
+                    linearUOM = obj.getJSONObject("LinearUOM").getString("value"),
+                    maxVolume = obj.getJSONObject("MaxVolume").getDouble("value"),
+                    maxWeight = obj.getJSONObject("MaxWeight").getDouble("value"),
+                    volumeUOM = obj.getJSONObject("VolumeUOM").getString("value"),
+                    weightUOM = obj.getJSONObject("WeightUOM").getString("value"),
+                    activeByDefault = obj.getJSONObject("ActiveByDefault").getBoolean("value"),
+                )
+            )
+        }
+
+        return boxes
     }
 }

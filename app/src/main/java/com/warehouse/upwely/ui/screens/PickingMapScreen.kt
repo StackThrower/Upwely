@@ -163,11 +163,18 @@ private fun optimizePickRoute(
 
 // ── Main composable ──
 
+// Object to track scanning completion state
+object PickingScanResult {
+    var lastScannedItemIndex: Int = -1
+    var scanCompleted: Boolean = false
+}
+
 @Composable
 fun PickingMapScreen(
     shipmentIds: List<String>,
     beaconViewModel: BeaconViewModel? = null,
     onFinished: () -> Unit = {},
+    onConfirmItem: (itemIndex: Int) -> Unit = {},
 ) {
     val context = LocalContext.current
     val plan = remember { loadWarehousePlan(context) }
@@ -210,6 +217,18 @@ fun PickingMapScreen(
                 item.copy(status = if (i == 0) PickItemStatus.CURRENT else PickItemStatus.PENDING)
             }
         )
+    }
+
+    // Handle scan completion result
+    LaunchedEffect(PickingScanResult.scanCompleted) {
+        if (PickingScanResult.scanCompleted) {
+            val scannedIndex = PickingScanResult.lastScannedItemIndex
+            if (scannedIndex >= 0 && scannedIndex < pickItems.size) {
+                pickItems = advanceToNext(pickItems, PickItemStatus.DELIVERED)
+            }
+            PickingScanResult.scanCompleted = false
+            PickingScanResult.lastScannedItemIndex = -1
+        }
     }
 
     val currentItem = pickItems.firstOrNull { it.status == PickItemStatus.CURRENT }
@@ -455,7 +474,10 @@ fun PickingMapScreen(
             ) {
                 Button(
                     onClick = {
-                        pickItems = advanceToNext(pickItems, PickItemStatus.DELIVERED)
+                        val currentIndex = pickItems.indexOfFirst { it.status == PickItemStatus.CURRENT }
+                        if (currentIndex >= 0) {
+                            onConfirmItem(currentIndex)
+                        }
                     },
                     modifier = Modifier
                         .weight(1f)
@@ -467,7 +489,7 @@ fun PickingMapScreen(
                     ),
                 ) {
                     Text(
-                        text = stringResource(R.string.delivered),
+                        text = stringResource(R.string.confirm_pick),
                         fontFamily = InterFamily,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 15.sp,

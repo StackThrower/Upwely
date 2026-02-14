@@ -44,6 +44,7 @@ import com.warehouse.upwely.navigation.Screen
 import com.warehouse.upwely.ui.BeaconViewModel
 import com.warehouse.upwely.ui.screens.*
 import com.warehouse.upwely.ui.theme.*
+import com.warehouse.upwely.ui.viewmodels.RequiredItem
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -255,6 +256,44 @@ class MainActivity : AppCompatActivity() {
                                 shipmentIds = shipmentIds,
                                 beaconViewModel = beaconViewModel,
                                 onFinished = { navController.popBackStack() },
+                                onConfirmItem = { itemIndex ->
+                                    navController.navigate(Screen.pickingScanRoute(shipmentIds, itemIndex))
+                                },
+                            )
+                        }
+                        composable(
+                            route = Screen.PICKING_SCAN,
+                            arguments = listOf(
+                                navArgument("shipmentIds") { type = NavType.StringType },
+                                navArgument("itemIndex") { type = NavType.IntType }
+                            ),
+                        ) { backStackEntry ->
+                            val shipmentIdsString = backStackEntry.arguments?.getString("shipmentIds") ?: ""
+                            val shipmentIds = shipmentIdsString.split(",").filter { it.isNotBlank() }
+                            val itemIndex = backStackEntry.arguments?.getInt("itemIndex") ?: 0
+
+                            val shipmentsData = com.warehouse.upwely.data.loadShipmentsConfig(context)
+                            val selectedShipments = shipmentsData.shipments.filter { it.id in shipmentIds }
+                            val allItems = selectedShipments.flatMap { shipment ->
+                                shipment.items.map { item ->
+                                    RequiredItem(
+                                        itemId = item.id,
+                                        name = item.name,
+                                        sku = item.sku,
+                                        quantity = item.quantity,
+                                    )
+                                }
+                            }
+
+                            // Get current item to scan
+                            val currentItem = allItems.getOrNull(itemIndex)
+                            val requiredItems = if (currentItem != null) listOf(currentItem) else emptyList()
+
+                            PickingScanScreen(
+                                requiredItems = requiredItems,
+                                itemIndex = itemIndex,
+                                onContinuePicking = { navController.popBackStack() },
+                                onBack = { navController.popBackStack() },
                             )
                         }
                         composable(
